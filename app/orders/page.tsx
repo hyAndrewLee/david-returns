@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation"
+
 import { createClient } from "@/lib/supabase/server"
 import { CustomerOrders } from "@/components/CustomerOrders"
+import { OrdersProvider } from "@/app/orders/OrdersContext"
 
 const OrdersPage = async () => {
   const supabase = await createClient()
@@ -13,17 +15,19 @@ const OrdersPage = async () => {
     redirect("/signin")
   }
 
-  // Fetch user's orders
   const { data: orders } = await supabase
     .from("orders")
     .select("*")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false })
 
-  // Fetch user profile
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).single()
 
-  return <CustomerOrders orders={orders || []} profile={profile} userEmail={user.email || ""} />
+  return (
+    <OrdersProvider initialOrders={orders || []} profile={profile} userEmail={user.email || ""}>
+      <CustomerOrders />
+    </OrdersProvider>
+  )
 }
 
 export default OrdersPage

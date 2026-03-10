@@ -1,6 +1,8 @@
 import { redirect, notFound } from "next/navigation"
+
 import { createClient } from "@/lib/supabase/server"
 import { CustomerOrderDetail } from "@/components/CustomerOrderDetail"
+import { OrderDetailProvider } from "@/app/orders/[id]/OrderDetailContext"
 
 const CustomerOrderDetailPage = async ({
   params,
@@ -34,7 +36,11 @@ const CustomerOrderDetailPage = async ({
     notFound()
   }
 
-  return <CustomerOrderDetail order={order} />
+  return (
+    <OrderDetailProvider initialOrder={order}>
+      <CustomerOrderDetail />
+    </OrderDetailProvider>
+  )
 }
 
 export default CustomerOrderDetailPage

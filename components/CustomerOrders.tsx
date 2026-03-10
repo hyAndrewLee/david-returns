@@ -1,102 +1,17 @@
 "use client"
-import { useRouter } from "next/navigation"
-import { createClient } from "@/lib/supabase/client"
-import { Button } from "@/components/ui/Button"
-import { Card, CardContent } from "@/components/ui/Card"
-import { Badge } from "@/components/ui/Badge"
+
 import Link from "next/link"
 import { format } from "date-fns"
 import { Package, ArrowLeft, LogOut, Clock, MapPin, ChevronRight } from "lucide-react"
-import { useEffect, useState } from "react"
+
+import { Button } from "@/components/ui/Button"
+import { Card, CardContent } from "@/components/ui/Card"
+import { Badge } from "@/components/ui/Badge"
+import { useOrders } from "@/app/orders/OrdersContext"
 import { parseDateET } from "@/lib/timezone"
 
-type Order = {
-  id: string
-  created_at: string
-  pickup_date: string
-  pickup_time: string
-  address: {
-    street: string
-    apt?: string
-    city: string
-    zip: string
-  }
-  items: Array<{
-    retailer: string
-    description?: string
-  }>
-  is_instant: boolean
-  tracking_status: string
-  total_amount: number
-  proof_pickup_url?: string
-  proof_delivery_url?: string
-  proof_return_url?: string
-}
-
-type Profile = {
-  full_name: string
-  email: string
-  phone: string
-} | null
-
-const statusColors: Record<string, string> = {
-  pending: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-  in_progress: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-  completed: "bg-green-500/10 text-green-500 border-green-500/20",
-  cancelled: "bg-red-500/10 text-red-500 border-red-500/20",
-}
-
-const statusLabels: Record<string, string> = {
-  pending: "Pending Pickup",
-  in_progress: "Picked Up", // Changed from "In Progress" to "Picked Up"
-  completed: "Completed",
-  cancelled: "Cancelled",
-}
-
-const statusDescriptions: Record<string, string> = {
-  pending: "Your package is scheduled for pickup",
-  in_progress: "We've picked up your package and are processing your return", // Updated description to match new label
-  completed: "Your return has been completed",
-  cancelled: "This order was cancelled",
-}
-
-export const CustomerOrders = ({
-  orders: initialOrders,
-  profile,
-  userEmail,
-}: { orders: Order[]; profile: Profile; userEmail: string }) => {
-  const router = useRouter()
-  const [orders, setOrders] = useState(initialOrders)
-
-  useEffect(() => {
-    const supabase = createClient()
-
-    const channel = supabase
-      .channel("orders-list")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "orders",
-        },
-        () => {
-          router.refresh()
-        },
-      )
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [router])
-
-  const handleSignOut = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push("/")
-    router.refresh()
-  }
+export const CustomerOrders = () => {
+  const { orders, profile, userEmail, statusColors, statusLabels, statusDescriptions, handleSignOut } = useOrders()
 
   return (
     <div className="min-h-screen bg-background">

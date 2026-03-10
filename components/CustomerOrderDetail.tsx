@@ -1,98 +1,18 @@
 "use client"
 
+import Link from "next/link"
+import { format } from "date-fns"
+import { ArrowLeft, Package, MapPin, Clock, CheckCircle, ExternalLink, Camera, FileText, Download } from "lucide-react"
+
 import { Button } from "@/components/ui/Button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { Badge } from "@/components/ui/Badge"
 import { Label } from "@/components/ui/Label"
-import Link from "next/link"
-import { format } from "date-fns"
-import { ArrowLeft, Package, MapPin, Clock, CheckCircle, ExternalLink, Camera, FileText, Download } from "lucide-react"
-import { useEffect, useState } from "react"
-import { createClient } from "@/lib/supabase/client"
-import { useRouter } from "next/navigation"
+import { useOrderDetail } from "@/app/orders/[id]/OrderDetailContext"
 import { parseDateET } from "@/lib/timezone"
 
-type Order = {
-  id: string
-  created_at: string
-  pickup_date: string
-  pickup_time: string
-  address: {
-    street: string
-    apt?: string
-    city: string
-    zip: string
-    notes?: string
-  }
-  items: Array<{
-    retailer: string
-    description?: string
-    hasLabel: boolean
-    hasBox: boolean
-    returnTo?: string
-    returnToOther?: string
-    labelFileUrl?: string
-    photoUrl?: string
-    labelType?: string
-    notes?: string
-  }>
-  is_instant: boolean
-  tracking_status: string
-  tracking_number?: string
-  total_amount: number
-  proof_pickup_url?: string
-  proof_delivery_url?: string
-  proof_return_url?: string
-  picked_up_at?: string
-  delivered_at?: string
-  return_confirmed_at?: string
-}
-
-const statusColors: Record<string, string> = {
-  pending: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-  in_progress: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-  completed: "bg-green-500/10 text-green-500 border-green-500/20",
-  cancelled: "bg-red-500/10 text-red-500 border-red-500/20",
-}
-
-const statusLabels: Record<string, string> = {
-  pending: "Pending",
-  in_progress: "Picked Up",
-  completed: "Completed",
-  cancelled: "Cancelled",
-}
-
-const statusSteps = ["pending", "in_progress", "completed"]
-
-export const CustomerOrderDetail = ({ order: initialOrder }: { order: Order }) => {
-  const [order, setOrder] = useState(initialOrder)
-  const router = useRouter()
-  const currentStepIndex = statusSteps.indexOf(order.tracking_status || "pending")
-
-  useEffect(() => {
-    const supabase = createClient()
-
-    const channel = supabase
-      .channel(`order-${order.id}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "orders",
-          filter: `id=eq.${order.id}`,
-        },
-        (payload) => {
-          setOrder(payload.new as Order)
-          router.refresh()
-        },
-      )
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [order.id, router])
+export const CustomerOrderDetail = () => {
+  const { order, statusColors, statusLabels, statusSteps, currentStepIndex } = useOrderDetail()
 
   return (
     <div className="min-h-screen bg-background">
