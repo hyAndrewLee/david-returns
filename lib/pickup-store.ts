@@ -1,4 +1,4 @@
-import type { PickupRequest, PickupStatus } from "./types"
+import type { PickupRequest, PickupStatus } from "@/lib/types"
 
 // In-memory store - resets on redeploy
 const pickups: PickupRequest[] = []
