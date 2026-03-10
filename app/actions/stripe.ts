@@ -147,20 +147,21 @@ export async function createCheckoutSession(data: CheckoutSessionData) {
         } else {
           validatedCustomerId = incomingCustomerId
         }
-      } catch (customerError: any) {
+      } catch (customerError: unknown) {
+        const err = customerError as { message?: string; code?: string; statusCode?: number; type?: string }
         const isModeError =
-          customerError?.message?.includes("similar object exists in live mode") ||
-          customerError?.message?.includes("similar object exists in test mode") ||
-          customerError.code === "resource_missing" ||
-          customerError.statusCode === 404 ||
-          customerError.type === "StripeInvalidRequestError"
+          err.message?.includes("similar object exists in live mode") ||
+          err.message?.includes("similar object exists in test mode") ||
+          err.code === "resource_missing" ||
+          err.statusCode === 404 ||
+          err.type === "StripeInvalidRequestError"
 
         if (isModeError) {
           console.log("[v0] Customer ID from different Stripe mode, clearing and will create new customer")
           try {
             await supabase.from("profiles").update({ stripe_customer_id: null }).eq("id", userId)
           } catch (dbError) {
-            // Continue even if clearing fails
+            console.error("[v0] Failed to clear stale stripe_customer_id:", dbError)
           }
         } else {
           throw customerError
@@ -186,7 +187,7 @@ export async function createCheckoutSession(data: CheckoutSessionData) {
       }
     }
 
-    let lineItems: any[] = []
+    let lineItems: { price?: string; price_data?: { currency: string; unit_amount: number; product_data: { name: string; description: string } }; quantity: number }[] = []
     let mode: "subscription" | "payment" = "payment"
 
     if (hasActiveMembership) {
@@ -348,25 +349,22 @@ export async function createCheckoutSession(data: CheckoutSessionData) {
     console.log("[v0] Order created in database with ID:", order.id)
 
     try {
-      const sessionParams: any = {
-        ui_mode: "embedded",
+      const sessionParams = {
+        ui_mode: "embedded" as const,
         return_url: `${baseUrl}/schedule/return?session_id={CHECKOUT_SESSION_ID}`,
         line_items: lineItems,
         mode: mode,
         metadata: {
           user_id: userId,
-          order_id: order.id, // Reference to database order
+          order_id: order.id,
           plan: data.plan,
           is_instant: data.isInstant ? "true" : "false",
           item_count: data.itemCount.toString(),
           total_amount: calculatedTotal.toString(),
         },
-      }
-
-      if (validatedCustomerId && !useCustomerEmail) {
-        sessionParams.customer = validatedCustomerId
-      } else {
-        sessionParams.customer_email = userEmail
+        ...(validatedCustomerId && !useCustomerEmail
+          ? { customer: validatedCustomerId }
+          : { customer_email: userEmail }),
       }
 
       const session = await stripe.checkout.sessions.create(sessionParams)

@@ -11,8 +11,8 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   typescript: true,
 })
 
-export function isCustomerNotFoundError(error: any): boolean {
-  return (
-    error?.type === "StripeInvalidRequestError" && error?.code === "resource_missing" && error?.param === "customer"
-  )
+export function isCustomerNotFoundError(error: unknown): boolean {
+  if (typeof error !== "object" || error === null) return false
+  const err = error as { type?: string; code?: string; param?: string }
+  return err.type === "StripeInvalidRequestError" && err.code === "resource_missing" && err.param === "customer"
 }

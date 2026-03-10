@@ -47,15 +47,17 @@ export async function uploadLabelFile(fileData: {
       })
 
       return { url: blob.url, error: null }
-    } catch (blobError: any) {
-      if (blobError?.message?.includes("401") || blobError?.message?.includes("403")) {
+    } catch (blobError: unknown) {
+      const message = blobError instanceof Error ? blobError.message : "Unknown error"
+
+      if (message.includes("401") || message.includes("403")) {
         return {
           url: null,
           error: "Upload authentication failed. Please contact support to resolve storage configuration.",
         }
       }
 
-      if (blobError?.message?.includes("400")) {
+      if (message.includes("400")) {
         return {
           url: null,
           error: "Upload request was rejected. This may be a file format issue. Please try using a PDF instead.",
@@ -64,7 +66,7 @@ export async function uploadLabelFile(fileData: {
 
       return {
         url: null,
-        error: `Upload failed: ${blobError?.message || "Unknown error"}. Try using a PDF file instead.`,
+        error: `Upload failed: ${message}. Try using a PDF file instead.`,
       }
     }
   } catch (error) {
@@ -124,7 +126,7 @@ export async function uploadFileViaAPI(file: File): Promise<{
     const contentType = response.headers.get("content-type")
     const rawResponse = await response.text()
 
-    let data: any
+    let data: { url?: string; error?: string }
     try {
       data = JSON.parse(rawResponse)
     } catch (parseError) {

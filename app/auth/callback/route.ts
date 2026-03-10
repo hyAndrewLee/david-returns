@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr"
+import type { CookieOptions } from "@supabase/ssr"
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
@@ -57,10 +58,10 @@ export async function GET(request: NextRequest) {
         get(name: string) {
           return cookieStore.get(name)?.value
         },
-        set(name: string, value: string, options: any) {
+        set(name: string, value: string, options: CookieOptions) {
           cookieStore.set({ name, value, ...options })
         },
-        remove(name: string, options: any) {
+        remove(name: string, options: CookieOptions) {
           cookieStore.set({ name, value: "", ...options })
         },
       },
@@ -99,7 +100,7 @@ export async function GET(request: NextRequest) {
 
     const { data, error } = await supabase.auth.verifyOtp({
       token_hash,
-      type: type as any,
+      type: type as "signup" | "recovery" | "magiclink" | "email_change" | "invite" | "email",
     })
 
     if (error) {

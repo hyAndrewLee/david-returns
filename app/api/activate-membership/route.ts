@@ -19,8 +19,9 @@ export async function POST(request: Request) {
       session = await stripe.checkout.sessions.retrieve(sessionId, {
         expand: ["subscription"],
       })
-    } catch (stripeError: any) {
-      return NextResponse.json({ error: `Stripe error: ${stripeError.message}` }, { status: 500 })
+    } catch (stripeError: unknown) {
+      const message = stripeError instanceof Error ? stripeError.message : "Unknown Stripe error"
+      return NextResponse.json({ error: `Stripe error: ${message}` }, { status: 500 })
     }
 
     if (session.mode !== "subscription" || !session.subscription) {
@@ -37,8 +38,9 @@ export async function POST(request: Request) {
     let supabase
     try {
       supabase = await createClient()
-    } catch (supabaseError: any) {
-      return NextResponse.json({ error: `Database connection error: ${supabaseError.message}` }, { status: 500 })
+    } catch (supabaseError: unknown) {
+      const message = supabaseError instanceof Error ? supabaseError.message : "Unknown database error"
+      return NextResponse.json({ error: `Database connection error: ${message}` }, { status: 500 })
     }
 
     const { data: existingSub, error: checkError } = await supabase
@@ -111,7 +113,8 @@ export async function POST(request: Request) {
         status: subscription.status,
       },
     })
-  } catch (error: any) {
-    return NextResponse.json({ error: `Failed to activate membership: ${error.message}` }, { status: 500 })
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error"
+    return NextResponse.json({ error: `Failed to activate membership: ${message}` }, { status: 500 })
   }
 }

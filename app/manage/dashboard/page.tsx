@@ -11,7 +11,9 @@ export default async function ManageDashboardPage() {
     redirect("/manage/login")
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let orders: any[] = []
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let customers: any[] = []
 
   try {
@@ -79,7 +81,7 @@ export default async function ManageDashboardPage() {
     })
 
     console.log("[v0] Admin dashboard - Final orders with profiles:", orders.length)
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[v0] Error fetching admin dashboard data:", error)
   }
 

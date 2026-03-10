@@ -133,7 +133,7 @@ export function OrderDetail({ order: initialOrder }: { order: Order }) {
   console.log("[v0] Order items:", order.items)
   console.log(
     "[v0] Items with files:",
-    order.items?.filter((item: any) => item.labelFileUrl || item.photoUrl),
+    order.items?.filter((item) => item.labelFileUrl || item.photoUrl),
   )
 
   const handleSave = async () => {
