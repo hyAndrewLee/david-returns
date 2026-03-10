@@ -1,7 +1,7 @@
 import { put } from "@vercel/blob"
 import { type NextRequest, NextResponse } from "next/server"
 
-export async function POST(request: NextRequest) {
+export const POST = async (request: NextRequest) => {
   try {
     console.log("[v0] Upload API route called")
 

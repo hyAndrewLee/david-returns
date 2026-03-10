@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
-export default function PrivacyPolicyPage() {
+const PrivacyPolicyPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-stone-50 to-white">
       {/* Header */}
@@ -227,3 +227,5 @@ export default function PrivacyPolicyPage() {
     </div>
   )
 }
+
+export default PrivacyPolicyPage

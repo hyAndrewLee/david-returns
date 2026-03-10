@@ -5,7 +5,7 @@ import Image from "next/image"
 import { Menu, X } from "lucide-react"
 import { useState, useEffect } from "react"
 
-export function Navigation() {
+export const Navigation = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 

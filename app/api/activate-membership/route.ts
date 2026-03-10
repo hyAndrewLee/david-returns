@@ -6,7 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-12-18.acacia",
 })
 
-export async function POST(request: Request) {
+export const POST = async (request: Request) => {
   try {
     const { sessionId } = await request.json()
 

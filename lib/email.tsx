@@ -20,7 +20,7 @@ type OrderConfirmationProps = {
   isInstant: boolean
 }
 
-export async function sendOrderConfirmation({
+export const sendOrderConfirmation = async ({
   customerEmail,
   customerName,
   orderId,
@@ -31,7 +31,7 @@ export async function sendOrderConfirmation({
   itemCount,
   total,
   isInstant,
-}: OrderConfirmationProps) {
+}: OrderConfirmationProps) => {
   const pickupMethodText = pickupMethod === "hand" ? "Hand it to us" : "Leave at my door"
   const formattedDate = new Date(pickupDate).toLocaleDateString("en-US", {
     weekday: "long",
@@ -192,7 +192,7 @@ type AdminNotificationProps = {
   isInstant: boolean
 }
 
-export async function sendAdminOrderNotification({
+export const sendAdminOrderNotification = async ({
   orderId,
   customerName,
   customerEmail,
@@ -204,7 +204,7 @@ export async function sendAdminOrderNotification({
   itemCount,
   total,
   isInstant,
-}: AdminNotificationProps) {
+}: AdminNotificationProps) => {
   const adminEmail = process.env.ADMIN_EMAIL
 
   if (!adminEmail) {

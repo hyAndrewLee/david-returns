@@ -56,7 +56,7 @@ const TIME_WINDOWS: { value: TimeWindow; label: string }[] = [
   { value: "5–8pm", label: "5–8pm" },
 ]
 
-function isTimeWindowPassed(timeWindow: TimeWindow): boolean {
+const isTimeWindowPassed = (timeWindow: TimeWindow): boolean => {
   const { hour, minute } = getCurrentTimeET()
   const currentMinutes = hour * 60 + minute
 
@@ -76,7 +76,7 @@ function isTimeWindowPassed(timeWindow: TimeWindow): boolean {
 // The getDateOffsetET() utility returns dates as YYYY-MM-DD strings (e.g., "2025-12-17")
 // in ET timezone. These date strings are then saved directly to the database without
 // any timezone conversion. DO NOT modify the date format or add time components.
-function generateDates() {
+const generateDates = () => {
   const dates = []
 
   for (let i = 0; i < 7; i++) {
@@ -122,7 +122,7 @@ type SavedAddress = {
   is_default: boolean
 }
 
-export default function SchedulePage() {
+const SchedulePage = () => {
   const DEBUG_UPLOAD = process.env.NEXT_PUBLIC_DEBUG_UPLOAD === "true" // Changed DEBUG_UPLOAD to use environment variable instead of hardcoded value
 
   const router = useRouter()
@@ -2972,3 +2972,5 @@ export default function SchedulePage() {
     </main>
   )
 }
+
+export default SchedulePage

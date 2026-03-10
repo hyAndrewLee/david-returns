@@ -45,7 +45,7 @@ type StripeCheckoutProps = {
   clientSecret?: string | null
 }
 
-export default function StripeCheckout({
+const StripeCheckout = ({
   plan,
   itemCount,
   isInstant,
@@ -55,7 +55,7 @@ export default function StripeCheckout({
   address,
   items,
   clientSecret: propClientSecret,
-}: StripeCheckoutProps) {
+}: StripeCheckoutProps) => {
   const router = useRouter()
   const [isFree, setIsFree] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -220,3 +220,5 @@ export default function StripeCheckout({
     </div>
   )
 }
+
+export default StripeCheckout

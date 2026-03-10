@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { ArrowRight, MapPin, Mail, Package, Linkedin } from "lucide-react"
 
-export function Footer() {
+export const Footer = () => {
   return (
     <footer className="border-t border-border bg-foreground text-background">
       <div className="border-b border-background/10 py-16">

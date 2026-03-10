@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js"
 
 // Admin client with service role - bypasses RLS
 // Only use this for admin operations
-export function createAdminClient() {
+export const createAdminClient = () => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const serviceRoleKey =
     process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_KEY

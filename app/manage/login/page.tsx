@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Package } from "lucide-react"
 
-export default function AdminLoginPage() {
+const AdminLoginPage = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -87,3 +87,5 @@ export default function AdminLoginPage() {
     </div>
   )
 }
+
+export default AdminLoginPage

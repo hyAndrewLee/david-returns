@@ -131,7 +131,7 @@ const statusLabels: Record<string, string> = {
   delivered: "Delivered",
 }
 
-export function AdminDashboard({ orders, userEmail, customers = [], debugInfo }: AdminDashboardProps) {
+export const AdminDashboard = ({ orders, userEmail, customers = [], debugInfo }: AdminDashboardProps) => {
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [isRefreshing, setIsRefreshing] = useState(false)

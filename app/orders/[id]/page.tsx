@@ -2,11 +2,11 @@ import { redirect, notFound } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { CustomerOrderDetail } from "@/components/customer-order-detail"
 
-export default async function CustomerOrderDetailPage({
+const CustomerOrderDetailPage = async ({
   params,
 }: {
   params: Promise<{ id: string }>
-}) {
+}) => {
   const { id } = await params
 
   const supabase = await createClient()
@@ -36,3 +36,5 @@ export default async function CustomerOrderDetailPage({
 
   return <CustomerOrderDetail order={order} />
 }
+
+export default CustomerOrderDetailPage

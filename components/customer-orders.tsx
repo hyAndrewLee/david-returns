@@ -60,11 +60,11 @@ const statusDescriptions: Record<string, string> = {
   cancelled: "This order was cancelled",
 }
 
-export function CustomerOrders({
+export const CustomerOrders = ({
   orders: initialOrders,
   profile,
   userEmail,
-}: { orders: Order[]; profile: Profile; userEmail: string }) {
+}: { orders: Order[]; profile: Profile; userEmail: string }) => {
   const router = useRouter()
   const [orders, setOrders] = useState(initialOrders)
 

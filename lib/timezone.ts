@@ -12,7 +12,7 @@ export const TIMEZONE = "America/New_York"
  * Get current date in Eastern Time as YYYY-MM-DD string
  * This is the canonical way to get "today" for the entire app
  */
-export function getTodayET(): string {
+export const getTodayET = (): string => {
   const now = new Date()
   // Convert to ET and format as YYYY-MM-DD
   const etDate = new Date(now.toLocaleString("en-US", { timeZone: TIMEZONE }))
@@ -25,7 +25,7 @@ export function getTodayET(): string {
 /**
  * Get date N days from now in Eastern Time as YYYY-MM-DD string
  */
-export function getDateOffsetET(daysFromNow: number): string {
+export const getDateOffsetET = (daysFromNow: number): string => {
   const now = new Date()
   const etDate = new Date(now.toLocaleString("en-US", { timeZone: TIMEZONE }))
   etDate.setDate(etDate.getDate() + daysFromNow)
@@ -38,7 +38,7 @@ export function getDateOffsetET(daysFromNow: number): string {
 /**
  * Parse a YYYY-MM-DD date string and return a Date object in ET
  */
-export function parseDateET(dateStr: string): Date {
+export const parseDateET = (dateStr: string): Date => {
   const [year, month, day] = dateStr.split("-").map(Number)
   // Create date at noon ET to avoid timezone edge cases
   const date = new Date(year, month - 1, day, 12, 0, 0)
@@ -48,7 +48,7 @@ export function parseDateET(dateStr: string): Date {
 /**
  * Format a YYYY-MM-DD date string for display
  */
-export function formatDateForDisplay(dateStr: string): string {
+export const formatDateForDisplay = (dateStr: string): string => {
   const date = parseDateET(dateStr)
   return date.toLocaleDateString("en-US", {
     month: "short",
@@ -62,7 +62,7 @@ export function formatDateForDisplay(dateStr: string): string {
  * Format a YYYY-MM-DD date string for display WITHOUT timezone conversion
  * This is the safest way to display dates - no Date object creation
  */
-export function formatDateSimple(dateStr: string | null | undefined): string {
+export const formatDateSimple = (dateStr: string | null | undefined): string => {
   if (!dateStr) {
     return "Date not set"
   }
@@ -75,7 +75,7 @@ export function formatDateSimple(dateStr: string | null | undefined): string {
 /**
  * Format a YYYY-MM-DD date string for short display (MMM d) WITHOUT timezone conversion
  */
-export function formatDateShort(dateStr: string | null | undefined): string {
+export const formatDateShort = (dateStr: string | null | undefined): string => {
   if (!dateStr) {
     return "Date TBD"
   }
@@ -88,21 +88,21 @@ export function formatDateShort(dateStr: string | null | undefined): string {
 /**
  * Check if two YYYY-MM-DD date strings are the same day
  */
-export function isSameDateET(date1: string, date2: string): boolean {
+export const isSameDateET = (date1: string, date2: string): boolean => {
   return date1 === date2
 }
 
 /**
  * Check if a YYYY-MM-DD date string is today in ET
  */
-export function isTodayET(dateStr: string): boolean {
+export const isTodayET = (dateStr: string): boolean => {
   return dateStr === getTodayET()
 }
 
 /**
  * Get current time in ET as 24-hour format
  */
-export function getCurrentTimeET(): { hour: number; minute: number } {
+export const getCurrentTimeET = (): { hour: number; minute: number } => {
   const now = new Date()
   const etTime = new Date(now.toLocaleString("en-US", { timeZone: TIMEZONE }))
   return {

@@ -5,12 +5,12 @@ import { headers } from "next/headers"
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB in bytes
 
-export async function uploadLabelFile(fileData: {
+export const uploadLabelFile = async (fileData: {
   base64: string
   name: string
   type: string
   size: number
-}) {
+}) => {
   try {
     if (fileData.size > MAX_FILE_SIZE) {
       const fileSizeMB = (fileData.size / 1024 / 1024).toFixed(2)
@@ -84,7 +84,7 @@ export async function uploadLabelFile(fileData: {
   }
 }
 
-export async function uploadFileViaAPI(file: File): Promise<{
+export const uploadFileViaAPI = async (file: File): Promise<{
   url: string | null
   error: string | null
   debug?: {
@@ -93,7 +93,7 @@ export async function uploadFileViaAPI(file: File): Promise<{
     rawResponse: string | null
     fetchError?: string
   }
-}> {
+}> => {
   try {
     const formData = new FormData()
     formData.append("file", file)

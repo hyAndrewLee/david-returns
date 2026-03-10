@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client"
 import Image from "next/image"
 import Link from "next/link"
 
-export default function CallbackSuccessPage() {
+const CallbackSuccessPage = () => {
   const router = useRouter()
   const [status, setStatus] = useState<"processing" | "success">("processing")
 
@@ -105,3 +105,5 @@ export default function CallbackSuccessPage() {
     </main>
   )
 }
+
+export default CallbackSuccessPage

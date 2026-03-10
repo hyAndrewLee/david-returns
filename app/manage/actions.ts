@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 import { put } from "@vercel/blob"
 import { cookies } from "next/headers"
 
-async function verifyAdminAccess() {
+const verifyAdminAccess = async () => {
   const cookieStore = await cookies()
   const adminSession = cookieStore.get("admin_session")
 
@@ -13,14 +13,14 @@ async function verifyAdminAccess() {
   }
 }
 
-export async function updateOrderStatus(
+export const updateOrderStatus = async (
   orderId: string,
   data: {
     tracking_status: string
     admin_notes?: string
     tracking_number?: string
   },
-) {
+) => {
   await verifyAdminAccess()
 
   const adminClient = createAdminClient()
@@ -51,7 +51,7 @@ export async function updateOrderStatus(
   revalidatePath("/manage/dashboard")
 }
 
-export async function uploadProofImage(formData: FormData) {
+export const uploadProofImage = async (formData: FormData) => {
   await verifyAdminAccess()
 
   const file = formData.get("file") as File
@@ -99,7 +99,7 @@ export async function uploadProofImage(formData: FormData) {
   }
 }
 
-export async function deleteOrder(orderId: string) {
+export const deleteOrder = async (orderId: string) => {
   await verifyAdminAccess()
 
   const adminClient = createAdminClient()
@@ -114,7 +114,7 @@ export async function deleteOrder(orderId: string) {
   return { success: true }
 }
 
-export async function bulkDeleteOrders(orderIds: string[]) {
+export const bulkDeleteOrders = async (orderIds: string[]) => {
   await verifyAdminAccess()
 
   const adminClient = createAdminClient()

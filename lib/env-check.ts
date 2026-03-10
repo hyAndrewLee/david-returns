@@ -1,5 +1,5 @@
 // Production environment variable validation
-export function validateEnvVars() {
+export const validateEnvVars = () => {
   const required = [
     "NEXT_PUBLIC_SUPABASE_URL",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY",

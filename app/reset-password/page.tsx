@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation"
 import { ArrowRight, Eye, EyeOff, CheckCircle } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 
-export default function ResetPasswordPage() {
+const ResetPasswordPage = () => {
   const router = useRouter()
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -159,3 +159,5 @@ export default function ResetPasswordPage() {
     </main>
   )
 }
+
+export default ResetPasswordPage

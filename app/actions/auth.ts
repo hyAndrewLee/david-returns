@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server"
 
-export async function signUpAction(formData: {
+export const signUpAction = async (formData: {
   email: string
   password: string
   firstName: string
@@ -12,7 +12,7 @@ export async function signUpAction(formData: {
   apt: string
   city: string
   zip: string
-}) {
+}) => {
   const supabase = await createClient()
 
   const { data: authData, error: authError } = await supabase.auth.signUp({

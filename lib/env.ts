@@ -21,7 +21,7 @@ const requiredEnvVars = {
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
 } as const
 
-export function validateEnv() {
+export const validateEnv = () => {
   // Only validate in production or if explicitly enabled
   if (process.env.NODE_ENV !== "production" && process.env.VALIDATE_ENV !== "true") {
     return

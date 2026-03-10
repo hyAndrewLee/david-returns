@@ -2,7 +2,7 @@
 
 import { createAdminClient } from "@/lib/supabase/admin"
 
-export async function deleteCustomer(customerId: string) {
+export const deleteCustomer = async (customerId: string) => {
   const supabase = createAdminClient()
 
   // Delete from addresses table first (foreign key constraint)

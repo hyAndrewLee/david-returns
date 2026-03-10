@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { type NextRequest, NextResponse } from "next/server"
 import { randomUUID } from "crypto"
 
-export async function GET(request: NextRequest) {
+export const GET = async (request: NextRequest) => {
   try {
     const debugId = randomUUID().slice(0, 8)
     const requestUrl = new URL(request.url)

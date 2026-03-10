@@ -20,7 +20,7 @@ const items = [
   },
 ]
 
-export function PackagingSection() {
+export const PackagingSection = () => {
   return (
     <section className="py-20 md:py-28 bg-neutral-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">

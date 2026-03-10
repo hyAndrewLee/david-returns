@@ -8,7 +8,7 @@ export const metadata = {
     "Terms of Service for David Returns - Read our terms and conditions for using our return pickup services.",
 }
 
-export default function TermsPage() {
+const TermsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-stone-50 to-white">
       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-sm">
@@ -299,3 +299,5 @@ export default function TermsPage() {
     </div>
   )
 }
+
+export default TermsPage

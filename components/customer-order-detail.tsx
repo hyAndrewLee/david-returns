@@ -64,7 +64,7 @@ const statusLabels: Record<string, string> = {
 
 const statusSteps = ["pending", "in_progress", "completed"]
 
-export function CustomerOrderDetail({ order: initialOrder }: { order: Order }) {
+export const CustomerOrderDetail = ({ order: initialOrder }: { order: Order }) => {
   const [order, setOrder] = useState(initialOrder)
   const router = useRouter()
   const currentStepIndex = statusSteps.indexOf(order.tracking_status || "pending")

@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Package, Printer, Clock, MapPin, DollarSign, Timer, Home, Smile, TrendingUp } from "lucide-react"
 
-export function ProblemSection() {
+export const ProblemSection = () => {
   const [showToday, setShowToday] = useState(false)
 
   const todaySteps = [

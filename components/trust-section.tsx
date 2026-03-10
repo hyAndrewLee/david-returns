@@ -18,7 +18,7 @@ const features = [
   },
 ]
 
-export function TrustSection() {
+export const TrustSection = () => {
   return (
     <section className="relative overflow-hidden bg-background py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">

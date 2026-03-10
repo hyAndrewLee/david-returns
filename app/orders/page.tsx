@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { CustomerOrders } from "@/components/customer-orders"
 
-export default async function OrdersPage() {
+const OrdersPage = async () => {
   const supabase = await createClient()
   const {
     data: { user },
@@ -25,3 +25,5 @@ export default async function OrdersPage() {
 
   return <CustomerOrders orders={orders || []} profile={profile} userEmail={user.email || ""} />
 }
+
+export default OrdersPage

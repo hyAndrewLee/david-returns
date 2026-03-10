@@ -10,19 +10,19 @@ import { PricingSection } from "@/components/pricing-section"
 import { TestimonialsSection } from "@/components/testimonials-section"
 import { Footer } from "@/components/footer"
 
-export default function HomePage() {
-  return (
-    <main className="min-h-screen">
-      <Navigation />
-      <HeroSection />
-      <ProblemSection />
-      <HowItWorks />
-      <RetailersSection />
-      <TrustSection />
-      <PackagingSection />
-      <PricingSection />
-      <TestimonialsSection />
-      <Footer />
-    </main>
-  )
-}
+const HomePage = () => (
+  <main className="min-h-screen">
+    <Navigation />
+    <HeroSection />
+    <ProblemSection />
+    <HowItWorks />
+    <RetailersSection />
+    <TrustSection />
+    <PackagingSection />
+    <PricingSection />
+    <TestimonialsSection />
+    <Footer />
+  </main>
+)
+
+export default HomePage

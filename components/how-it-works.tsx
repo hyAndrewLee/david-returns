@@ -24,7 +24,7 @@ const steps = [
   },
 ]
 
-export function HowItWorks() {
+export const HowItWorks = () => {
   return (
     <section
       id="how-it-works"

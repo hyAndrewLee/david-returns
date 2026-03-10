@@ -3,11 +3,11 @@ import { cookies } from "next/headers"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { OrderDetail } from "@/components/admin/order-detail"
 
-export default async function OrderDetailPage({
+const OrderDetailPage = async ({
   params,
 }: {
   params: Promise<{ id: string }>
-}) {
+}) => {
   const { id } = await params
 
   const cookieStore = await cookies()
@@ -48,3 +48,5 @@ export default async function OrderDetailPage({
 
   return <OrderDetail order={orderWithProfile} />
 }
+
+export default OrderDetailPage

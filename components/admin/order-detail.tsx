@@ -94,7 +94,7 @@ const statusLabels: Record<string, string> = {
 
 const statusSteps = ["pending", "in_progress", "completed"]
 
-export function OrderDetail({ order: initialOrder }: { order: Order }) {
+export const OrderDetail = ({ order: initialOrder }: { order: Order }) => {
   const [order, setOrder] = useState(initialOrder)
   const [trackingStatus, setTrackingStatus] = useState(order.tracking_status || "pending")
   const [adminNotes, setAdminNotes] = useState(order.admin_notes || "")

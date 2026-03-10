@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation"
 import { ArrowRight, Eye, EyeOff } from "lucide-react"
 import { signUpAction } from "@/app/actions/auth"
 
-export default function SignUpPage() {
+const SignUpPage = () => {
   const router = useRouter()
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
@@ -393,3 +393,5 @@ export default function SignUpPage() {
     </main>
   )
 }
+
+export default SignUpPage

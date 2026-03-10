@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
-export function HeroSection() {
+export const HeroSection = () => {
   return (
     <section className="overflow-hidden border-b border-border bg-background pb-16 pt-16 sm:pb-24 sm:pt-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">

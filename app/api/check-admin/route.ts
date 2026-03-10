@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { createAdminClient } from "@/lib/supabase/admin"
 
-export async function POST(request: Request) {
+export const POST = async (request: Request) => {
   try {
     const { userId } = await request.json()
 

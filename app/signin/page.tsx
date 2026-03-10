@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { ArrowRight, Eye, EyeOff } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 
-export default function SignInPage() {
+const SignInPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [email, setEmail] = useState("")
@@ -160,3 +160,5 @@ export default function SignInPage() {
     </main>
   )
 }
+
+export default SignInPage

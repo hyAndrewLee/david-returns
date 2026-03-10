@@ -34,7 +34,7 @@ type CheckoutSessionData = {
   }>
 }
 
-export async function createCheckoutSession(data: CheckoutSessionData) {
+export const createCheckoutSession = async (data: CheckoutSessionData) => {
   try {
     if (!stripe) {
       return {
@@ -402,7 +402,7 @@ export async function createCheckoutSession(data: CheckoutSessionData) {
   }
 }
 
-export async function checkMembershipStatus() {
+export const checkMembershipStatus = async () => {
   const supabase = await createClient()
   const { data: userData } = await supabase.auth.getUser()
 
@@ -425,7 +425,7 @@ export async function checkMembershipStatus() {
   }
 }
 
-export async function cancelMembership() {
+export const cancelMembership = async () => {
   const supabase = await createClient()
   const { data: userData } = await supabase.auth.getUser()
 

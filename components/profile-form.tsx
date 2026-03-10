@@ -37,7 +37,7 @@ type Subscription = {
   stripe_subscription_id: string
 } | null
 
-export function ProfileForm({
+export const ProfileForm = ({
   profile,
   defaultAddress,
   userEmail,
@@ -47,7 +47,7 @@ export function ProfileForm({
   defaultAddress: Address
   userEmail: string
   subscription?: Subscription
-}) {
+}) => {
   const router = useRouter()
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)

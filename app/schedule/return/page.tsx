@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { CheckCircle2, Loader2 } from "lucide-react"
 
-export default function PaymentReturnPage() {
+const PaymentReturnPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading")
@@ -118,3 +118,5 @@ export default function PaymentReturnPage() {
     </div>
   )
 }
+
+export default PaymentReturnPage

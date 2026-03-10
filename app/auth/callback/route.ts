@@ -6,11 +6,11 @@ import type { NextRequest } from "next/server"
 
 const CANONICAL_DOMAIN = "www.davidreturns.com"
 
-function generateDebugId(): string {
+const generateDebugId = (): string => {
   return `dbg_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
 }
 
-export async function GET(request: NextRequest) {
+export const GET = async (request: NextRequest) => {
   const debugId = generateDebugId()
   const requestUrl = new URL(request.url)
 

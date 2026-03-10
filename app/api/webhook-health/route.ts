@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 
-export async function GET() {
+export const GET = async () => {
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY || ""
   const stripePublishableKey = process.env.STRIPE_PUBLISHABLE_KEY || ""
   const nextPublicStripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""

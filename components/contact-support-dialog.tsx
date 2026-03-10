@@ -25,7 +25,7 @@ type ContactSupportDialogProps = {
   userName: string
 }
 
-export function ContactSupportDialog({ open, onOpenChange, userEmail, userName }: ContactSupportDialogProps) {
+export const ContactSupportDialog = ({ open, onOpenChange, userEmail, userName }: ContactSupportDialogProps) => {
   const [subject, setSubject] = useState("")
   const [message, setMessage] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)

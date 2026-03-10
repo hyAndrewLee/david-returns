@@ -23,7 +23,7 @@ const plans = [
   },
 ]
 
-export function PricingSection() {
+export const PricingSection = () => {
   return (
     <section id="pricing" className="relative overflow-hidden py-20 sm:py-28">
       <div className="absolute left-0 top-1/4 h-96 w-96 -translate-x-1/2 rounded-full bg-emerald-100/30 blur-3xl"></div>

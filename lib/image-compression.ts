@@ -1,4 +1,4 @@
-export async function fileToBase64(file: File): Promise<string> {
+export const fileToBase64 = async (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = () => resolve(reader.result as string)
@@ -7,7 +7,7 @@ export async function fileToBase64(file: File): Promise<string> {
   })
 }
 
-async function readFileToMemory(file: File): Promise<File> {
+const readFileToMemory = async (file: File): Promise<File> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onerror = () => reject(new Error(`Failed to read file: ${file.name}`))
@@ -25,7 +25,7 @@ async function readFileToMemory(file: File): Promise<File> {
   })
 }
 
-export async function compressImage(file: File, maxSizeMB = 4): Promise<File> {
+export const compressImage = async (file: File, maxSizeMB = 4): Promise<File> => {
   return new Promise(async (resolve, reject) => {
     console.log(
       "[v0] Starting compression for:",
@@ -184,7 +184,7 @@ export async function compressImage(file: File, maxSizeMB = 4): Promise<File> {
   })
 }
 
-export function formatFileSize(bytes: number): string {
+export const formatFileSize = (bytes: number): string => {
   if (bytes < 1024) return bytes + " B"
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB"
   return (bytes / 1024 / 1024).toFixed(2) + " MB"

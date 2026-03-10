@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Suspense } from "react"
 
-function ConfirmationFailedContent() {
+const ConfirmationFailedContent = () => {
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6 rounded-lg border bg-card p-8 shadow-sm">
@@ -31,10 +31,10 @@ function ConfirmationFailedContent() {
   )
 }
 
-export default function ConfirmationFailedPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <ConfirmationFailedContent />
-    </Suspense>
-  )
-}
+const ConfirmationFailedPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <ConfirmationFailedContent />
+  </Suspense>
+)
+
+export default ConfirmationFailedPage

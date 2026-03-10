@@ -3,7 +3,7 @@ import { cookies } from "next/headers"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { AdminDashboard } from "@/components/admin/admin-dashboard"
 
-export default async function ManageDashboardPage() {
+const ManageDashboardPage = async () => {
   const cookieStore = await cookies()
   const adminSession = cookieStore.get("admin_session")
 
@@ -87,3 +87,5 @@ export default async function ManageDashboardPage() {
 
   return <AdminDashboard orders={orders} userEmail="Admin" customers={customers} />
 }
+
+export default ManageDashboardPage

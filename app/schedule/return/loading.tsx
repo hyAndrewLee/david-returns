@@ -1,3 +1,3 @@
-export default function Loading() {
-  return null
-}
+const Loading = () => null
+
+export default Loading

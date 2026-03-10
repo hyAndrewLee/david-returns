@@ -35,6 +35,6 @@ export const PRODUCTS: Product[] = [
   },
 ]
 
-export function getProduct(id: string) {
+export const getProduct = (id: string) => {
   return PRODUCTS.find((p) => p.id === id)
 }

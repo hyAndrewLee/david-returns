@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server"
 // Admin email that can access /manage routes
 const ADMIN_EMAIL = "davidqiu202@gmail.com"
 
-export async function updateSession(request: NextRequest) {
+export const updateSession = async (request: NextRequest) => {
   let supabaseResponse = NextResponse.next({
     request,
   })

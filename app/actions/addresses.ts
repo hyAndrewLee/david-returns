@@ -3,7 +3,7 @@
 import { createAdminClient } from "@/lib/supabase/admin"
 import { createClient } from "@/lib/supabase/server"
 
-export async function fetchUserAddresses() {
+export const fetchUserAddresses = async () => {
   const supabase = await createClient()
   const {
     data: { user },
@@ -27,7 +27,7 @@ export async function fetchUserAddresses() {
   return { addresses: addresses || [], error: null }
 }
 
-export async function fetchUserProfile() {
+export const fetchUserProfile = async () => {
   const supabase = await createClient()
   const {
     data: { user },

@@ -27,7 +27,7 @@ const initialFormData: PickupFormData = {
   serviceType: "Standard",
 }
 
-export function PickupForm({ selectedPlan }: PickupFormProps) {
+export const PickupForm = ({ selectedPlan }: PickupFormProps) => {
   const [formData, setFormData] = useState<PickupFormData>(initialFormData)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)

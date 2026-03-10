@@ -29,7 +29,7 @@ const initialFormData: PickupFormData = {
   serviceType: "Standard",
 }
 
-export function PickupFormModal({ isOpen, onClose, selectedPlan }: PickupFormModalProps) {
+export const PickupFormModal = ({ isOpen, onClose, selectedPlan }: PickupFormModalProps) => {
   const [formData, setFormData] = useState<PickupFormData>(initialFormData)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)

@@ -53,17 +53,17 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode
-}>) {
-  return (
-    <html lang="en">
-      <body className={`${geistSans.className} antialiased`}>
-        {children}
-        <Analytics />
-      </body>
-    </html>
-  )
-}
+}>) => (
+  <html lang="en">
+    <body className={`${geistSans.className} antialiased`}>
+      {children}
+      <Analytics />
+    </body>
+  </html>
+)
+
+export default RootLayout

@@ -76,7 +76,7 @@ const faqs = [
   },
 ]
 
-export function FAQSection() {
+export const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (

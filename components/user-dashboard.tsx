@@ -73,7 +73,7 @@ const statusLabels: Record<string, string> = {
   cancelled: "Cancelled",
 }
 
-export function UserDashboard({
+export const UserDashboard = ({
   activeOrders: initialActiveOrders,
   pastOrders: initialPastOrders,
   profile,
@@ -85,7 +85,7 @@ export function UserDashboard({
   profile: Profile
   userEmail: string
   subscription?: Subscription
-}) {
+}) => {
   const router = useRouter()
   const [showPastOrders, setShowPastOrders] = useState(false)
   const [showContactDialog, setShowContactDialog] = useState(false)

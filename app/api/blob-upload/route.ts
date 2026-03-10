@@ -1,7 +1,7 @@
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client"
 import { NextResponse } from "next/server"
 
-export async function POST(request: Request): Promise<NextResponse> {
+export const POST = async (request: Request): Promise<NextResponse> => {
   const body = (await request.json()) as HandleUploadBody
 
   try {

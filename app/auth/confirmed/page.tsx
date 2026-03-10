@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client"
 import Image from "next/image"
 import Link from "next/link"
 
-function ConfirmedPageContent() {
+const ConfirmedPageContent = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [processing, setProcessing] = useState(true)
@@ -140,16 +140,16 @@ function ConfirmedPageContent() {
   )
 }
 
-export default function ConfirmedPage() {
-  return (
-    <Suspense
-      fallback={
-        <main className="flex min-h-screen items-center justify-center">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-muted border-t-foreground" />
-        </main>
-      }
-    >
-      <ConfirmedPageContent />
-    </Suspense>
-  )
-}
+const ConfirmedPage = () => (
+  <Suspense
+    fallback={
+      <main className="flex min-h-screen items-center justify-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-muted border-t-foreground" />
+      </main>
+    }
+  >
+    <ConfirmedPageContent />
+  </Suspense>
+)
+
+export default ConfirmedPage

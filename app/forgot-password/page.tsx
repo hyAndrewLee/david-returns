@@ -8,7 +8,7 @@ import Image from "next/image"
 import { ArrowRight, ArrowLeft, Mail } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 
-export default function ForgotPasswordPage() {
+const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
@@ -128,3 +128,5 @@ export default function ForgotPasswordPage() {
     </main>
   )
 }
+
+export default ForgotPasswordPage

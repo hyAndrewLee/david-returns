@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { ProfileForm } from "@/components/profile-form"
 
-export default async function ProfilePage() {
+const ProfilePage = async () => {
   const supabase = await createClient()
 
   const {
@@ -42,3 +42,5 @@ export default async function ProfilePage() {
     />
   )
 }
+
+export default ProfilePage
