@@ -35,7 +35,7 @@ import { fetchUserAddresses } from "@/app/actions/addresses" // Added fetchUserA
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/Dialog" // Import Dialog components properly
 import { uploadFileViaAPI } from "@/app/actions/upload"
 import { getTodayET, getDateOffsetET, getCurrentTimeET } from "@/lib/timezone" // Imported from updates
-import { compressImage } from "@/lib/image-compression"
+import { compressImage } from "@/lib/imageCompression"
 import { upload } from "@vercel/blob/client"
 
 const DISABLE_IMAGE_COMPRESSION = false
