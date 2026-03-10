@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation"
+
 import { createClient } from "@/lib/supabase/server"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { ProfileForm } from "@/components/ProfileForm"
+import { ProfileProvider } from "@/app/profile/ProfileContext"
 
 const ProfilePage = async () => {
   const supabase = await createClient()
@@ -34,12 +36,14 @@ const ProfilePage = async () => {
     .maybeSingle()
 
   return (
-    <ProfileForm
+    <ProfileProvider
       profile={profile}
       defaultAddress={defaultAddress}
       userEmail={user.email || ""}
       subscription={subscription}
-    />
+    >
+      <ProfileForm />
+    </ProfileProvider>
   )
 }
 

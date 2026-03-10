@@ -1,173 +1,33 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
-import { createClient } from "@/lib/supabase/client"
+import { ArrowLeft, LogOut, Save, Loader2, CheckCircle, Crown, AlertTriangle } from "lucide-react"
+
 import { Button } from "@/components/ui/Button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { Input } from "@/components/ui/Input"
 import { Label } from "@/components/ui/Label"
-import { ArrowLeft, LogOut, Save, Loader2, CheckCircle, Crown, AlertTriangle } from "lucide-react"
-import { cancelMembership } from "@/app/actions/stripe"
+import { useProfile } from "@/app/profile/ProfileContext"
 
-type Profile = {
-  id: string
-  full_name: string
-  phone: string
-  email: string
-} | null
-
-type Address = {
-  id: string
-  street_address: string
-  apt: string | null
-  city: string
-  zip: string
-  building_name: string | null
-  notes: string | null
-} | null
-
-type Subscription = {
-  id: string
-  status: string
-  plan: string
-  current_period_end: string
-  stripe_subscription_id: string
-} | null
-
-export const ProfileForm = ({
-  profile,
-  defaultAddress,
-  userEmail,
-  subscription,
-}: {
-  profile: Profile
-  defaultAddress: Address
-  userEmail: string
-  subscription?: Subscription
-}) => {
-  const router = useRouter()
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
-  const [error, setError] = useState("")
-  const [canceling, setCanceling] = useState(false)
-  const [showCancelConfirm, setShowCancelConfirm] = useState(false)
-
-  const [formData, setFormData] = useState({
-    fullName: profile?.full_name || "",
-    phone: profile?.phone || "",
-    streetAddress: defaultAddress?.street_address || "",
-    apt: defaultAddress?.apt || "",
-    city: defaultAddress?.city || "",
-    zip: defaultAddress?.zip || "",
-    buildingName: defaultAddress?.building_name || "",
-    notes: defaultAddress?.notes || "",
-  })
-
-  const handleSignOut = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push("/")
-    router.refresh()
-  }
-
-  const handleSave = async () => {
-    setSaving(true)
-    setError("")
-    setSaved(false)
-
-    try {
-      const supabase = createClient()
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-
-      if (!user) {
-        setError("Not authenticated")
-        return
-      }
-
-      // Update profile
-      const { error: profileError } = await supabase
-        .from("profiles")
-        .update({
-          full_name: formData.fullName,
-          phone: formData.phone,
-        })
-        .eq("id", user.id)
-
-      if (profileError) throw profileError
-
-      // Update or insert default address
-      if (defaultAddress?.id) {
-        const { error: addressError } = await supabase
-          .from("addresses")
-          .update({
-            full_name: formData.fullName,
-            phone: formData.phone,
-            street_address: formData.streetAddress,
-            apt: formData.apt || null,
-            city: formData.city,
-            zip: formData.zip,
-            building_name: formData.buildingName || null,
-            notes: formData.notes || null,
-          })
-          .eq("id", defaultAddress.id)
-
-        if (addressError) throw addressError
-      } else {
-        // Create new default address
-        const { error: addressError } = await supabase.from("addresses").insert({
-          user_id: user.id,
-          full_name: formData.fullName,
-          phone: formData.phone,
-          street_address: formData.streetAddress,
-          apt: formData.apt || null,
-          city: formData.city,
-          zip: formData.zip,
-          building_name: formData.buildingName || null,
-          notes: formData.notes || null,
-          is_default: true,
-          label: "Home",
-        })
-
-        if (addressError) throw addressError
-      }
-
-      setSaved(true)
-      setTimeout(() => setSaved(false), 3000)
-      router.refresh()
-    } catch (err) {
-      console.error("Save error:", err)
-      setError("Failed to save changes. Please try again.")
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const handleCancelMembership = async () => {
-    setCanceling(true)
-    setError("")
-
-    try {
-      await cancelMembership()
-      setShowCancelConfirm(false)
-      setSaved(true)
-      setTimeout(() => {
-        router.refresh()
-      }, 1500)
-    } catch (err) {
-      console.error("Cancel error:", err)
-      setError("Failed to cancel membership. Please try again.")
-    } finally {
-      setCanceling(false)
-    }
-  }
-
-  const isMember = !!subscription && subscription.status === "active"
-  const isCanceling = subscription?.status === "canceling"
+export const ProfileForm = () => {
+  const {
+    formData,
+    setFormData,
+    saving,
+    saved,
+    error,
+    canceling,
+    showCancelConfirm,
+    setShowCancelConfirm,
+    handleSignOut,
+    handleSave,
+    handleCancelMembership,
+    isMember,
+    isCanceling,
+    userEmail,
+    subscription,
+  } = useProfile()
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-secondary/30 to-background">
@@ -353,7 +213,7 @@ export const ProfileForm = ({
                       <p className="text-sm font-medium text-foreground">Status</p>
                       <p className="text-xs text-muted-foreground mt-0.5">
                         {isCanceling ? "Cancels" : "Renews"} on{" "}
-                        {new Date(subscription.current_period_end).toLocaleDateString("en-US", {
+                        {new Date(subscription!.current_period_end).toLocaleDateString("en-US", {
                           month: "long",
                           day: "numeric",
                           year: "numeric",
@@ -374,7 +234,7 @@ export const ProfileForm = ({
                           <p className="text-sm font-medium text-amber-900">Membership Canceling</p>
                           <p className="text-xs text-amber-700 mt-1">
                             You'll keep your benefits until{" "}
-                            {new Date(subscription.current_period_end).toLocaleDateString()}
+                            {new Date(subscription!.current_period_end).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
