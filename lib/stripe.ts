@@ -6,10 +6,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
 	throw new Error('STRIPE_SECRET_KEY environment variable is not set');
 }
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-	apiVersion: '2026-02-25.clover',
-	typescript: true,
-});
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const isCustomerNotFoundError = (error: unknown): boolean => {
 	if (typeof error !== 'object' || error === null) return false;
