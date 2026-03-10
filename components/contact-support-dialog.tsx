@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input"
 import { Mail, Loader2, CheckCircle2 } from "lucide-react"
 import { toast } from "sonner"
 
-interface ContactSupportDialogProps {
+type ContactSupportDialogProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
   userEmail: string

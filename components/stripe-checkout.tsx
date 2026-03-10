@@ -14,7 +14,7 @@ const pubKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
 const clientStripeMode = pubKey.startsWith("pk_live_") ? "LIVE" : pubKey.startsWith("pk_test_") ? "TEST" : "UNKNOWN"
 console.log("[v0] Client-side Stripe mode:", clientStripeMode, "- Key prefix:", pubKey.substring(0, 15))
 
-interface StripeCheckoutProps {
+type StripeCheckoutProps = {
   plan: "Pay-As-You-Go" | "Membership"
   itemCount: number
   isInstant: boolean
@@ -29,7 +29,7 @@ interface StripeCheckoutProps {
     city: string
     zip: string
     notes?: string
-    pickupInstructions?: string // Added pickupInstructions field
+    pickupInstructions?: string
   }
   items: Array<{
     labelType: string

@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import type { PickupFormData, PlanType, ReturnType, TimeWindow } from "@/lib/types"
 import { CheckCircle, AlertCircle, Loader2 } from "lucide-react"
 
-interface PickupFormProps {
+type PickupFormProps = {
   selectedPlan: PlanType | null
 }
 

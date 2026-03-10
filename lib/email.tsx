@@ -2,7 +2,7 @@ import { Resend } from "resend"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-interface OrderConfirmationProps {
+type OrderConfirmationProps = {
   customerEmail: string
   customerName: string
   orderId: string
@@ -173,7 +173,7 @@ export async function sendOrderConfirmation({
   }
 }
 
-interface AdminNotificationProps {
+type AdminNotificationProps = {
   orderId: string
   customerName: string
   customerEmail: string

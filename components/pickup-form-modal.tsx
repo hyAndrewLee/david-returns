@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import type { PickupFormData, PlanType, ReturnType, TimeWindow } from "@/lib/types"
 import { CheckCircle, AlertCircle, Loader2, X } from "lucide-react"
 
-interface PickupFormModalProps {
+type PickupFormModalProps = {
   isOpen: boolean
   onClose: () => void
   selectedPlan: PlanType | null

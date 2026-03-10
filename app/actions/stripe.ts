@@ -4,7 +4,7 @@ import { stripe } from "@/lib/stripe"
 import { getProduct } from "@/lib/products"
 import { createClient } from "@/lib/supabase/server"
 
-interface CheckoutSessionData {
+type CheckoutSessionData = {
   plan: "Pay-As-You-Go" | "Membership"
   itemCount: number
   isInstant: boolean
@@ -19,7 +19,7 @@ interface CheckoutSessionData {
     city: string
     zip: string
     notes?: string
-    pickupInstructions?: string // Added pickupInstructions field
+    pickupInstructions?: string
   }
   items?: Array<{
     labelType: string
