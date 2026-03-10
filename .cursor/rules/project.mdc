@@ -1,0 +1,65 @@
+---
+description: Project context, tech stack, architecture, and build commands
+alwaysApply: true
+---
+
+# Project: EZR eTurns MVP
+
+A Next.js 16 App Router application for scheduling pickups, managing orders, and handling memberships with Stripe payments.
+
+# Tech Stack
+
+| Layer       | Technology                                  |
+| ----------- | ------------------------------------------- |
+| Framework   | Next.js 16 (App Router)                     |
+| React       | React 19                                    |
+| Database    | Supabase (Postgres + Auth + RLS)            |
+| Payments    | Stripe (Checkout, Webhooks, Subscriptions)  |
+| Styling     | Tailwind CSS 4, PostCSS                     |
+| UI          | Radix UI primitives, shadcn-style components|
+| Forms       | React Hook Form + Zod + @hookform/resolvers |
+| Email       | Resend + @react-email/render                |
+| Storage     | Vercel Blob                                 |
+| Analytics   | Vercel Analytics                            |
+| Pkg Manager | Bun (always use `bun`, never `npm`)         |
+
+# Build & Dev Commands
+
+```bash
+bun run dev        # Start dev server
+bun run build      # Production build
+bun run start      # Start production server
+bun run lint       # ESLint
+```
+
+# Architecture
+
+- `proxy.ts` at root handles auth middleware (Next.js 16 replaces middleware.ts)
+- `lib/supabase/` has `client.ts` (browser), `server.ts` (server components/actions), `admin.ts` (service role)
+- `app/actions/` contains server actions grouped by domain (auth, addresses, admin, stripe, upload)
+- `app/api/` contains API routes for webhooks, admin, uploads
+- `components/ui/` has ~50 Radix-based primitives — always reuse these, never recreate
+- `@/*` path alias maps to project root
+
+# Key Routes
+
+- `/` — Landing page
+- `/signin`, `/signup`, `/forgot-password`, `/reset-password` — Auth flows
+- `/dashboard`, `/profile`, `/orders`, `/orders/[id]` — Customer area
+- `/schedule`, `/schedule/return`, `/schedule/success` — Pickup scheduling
+- `/manage/login`, `/manage/dashboard`, `/manage/orders/[id]` — Admin area
+
+# Supabase Tables
+
+`orders`, `order_items`, `profiles`, `addresses`, `subscriptions`
+
+# Environment Variables
+
+Required: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `BLOB_READ_WRITE_TOKEN`, `RESEND_API_KEY`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`
+
+# Important Patterns
+
+- Admin auth uses both Supabase `profiles.is_admin` flag AND a session cookie (`admin_session`)
+- Stripe webhooks at `/api/webhooks/stripe` handle payment/subscription events
+- Image uploads go through Vercel Blob via `/api/blob-upload`
+- No test framework is configured — do not assume tests exist

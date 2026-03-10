@@ -30,7 +30,7 @@ const SchedulePageContent = () => {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
         <div className="w-full max-w-md text-center">
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-200">
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-200">
             <Check className="h-10 w-10 text-white" strokeWidth={3} />
           </div>
           <h1 className="text-3xl font-semibold text-foreground">You're all set!</h1>
@@ -72,7 +72,7 @@ const SchedulePageContent = () => {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-secondary/30 to-background">
+    <main className="min-h-screen bg-linear-to-b from-secondary/30 to-background">
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="mx-auto max-w-3xl px-4 py-4">
           <div className="flex items-center justify-between">
@@ -135,7 +135,7 @@ const SchedulePageContent = () => {
 
       <div className="mx-auto max-w-3xl px-4 py-8">
         {error && (
-          <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[100] max-w-md w-full mx-4">
+          <div className="fixed top-20 left-1/2 -translate-x-1/2 z-100 max-w-md w-full mx-4">
             <div className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive border border-destructive/20 shadow-lg">
               {error}
             </div>

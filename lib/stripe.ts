@@ -1,18 +1,18 @@
-import "server-only"
+import 'server-only';
 
-import Stripe from "stripe"
+import Stripe from 'stripe';
 
 if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error("STRIPE_SECRET_KEY environment variable is not set")
+	throw new Error('STRIPE_SECRET_KEY environment variable is not set');
 }
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2024-11-20.acacia",
-  typescript: true,
-})
+	apiVersion: '2026-02-25.clover',
+	typescript: true,
+});
 
 export const isCustomerNotFoundError = (error: unknown): boolean => {
-  if (typeof error !== "object" || error === null) return false
-  const err = error as { type?: string; code?: string; param?: string }
-  return err.type === "StripeInvalidRequestError" && err.code === "resource_missing" && err.param === "customer"
-}
+	if (typeof error !== 'object' || error === null) return false;
+	const err = error as { type?: string; code?: string; param?: string };
+	return err.type === 'StripeInvalidRequestError' && err.code === 'resource_missing' && err.param === 'customer';
+};

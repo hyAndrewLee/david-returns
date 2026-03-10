@@ -1,0 +1,39 @@
+---
+description: Verification-first workflow — always verify changes before considering them done
+alwaysApply: true
+---
+
+# Verification
+
+The single most important practice for quality output: **always verify your work.**
+
+## After Every Change
+
+1. **Run lints** — use ReadLints on every file you edited
+2. **Fix what you broke** — if lints were introduced by your changes, fix them immediately
+3. **Check types** — run `bun run build` if the change touches types, exports, or cross-file references
+4. **Test in browser** — for UI changes, use the browser-use subagent to visually verify the result
+
+## Before Considering a Task Done
+
+- Re-read the changed files to confirm correctness
+- Verify imports resolve (no missing modules)
+- Confirm no unused variables or imports were left behind
+- If you modified a server action or API route, trace the data flow end-to-end
+
+## When Things Go Wrong
+
+- If a fix attempt makes things worse, **stop and re-plan** — switch to Plan mode
+- Never stack fix-on-fix more than twice — scrap and implement the clean solution
+- After a mediocre fix: "Knowing everything you know now, scrap this and implement the elegant solution"
+
+## Feedback Loops by Domain
+
+| Domain         | Verification Method                                      |
+| -------------- | -------------------------------------------------------- |
+| UI components  | Browser subagent — navigate and visually inspect         |
+| API routes     | Trace request → handler → database → response           |
+| Server actions | Check Supabase query, error handling, return types       |
+| Styling        | Browser subagent — check responsive, dark mode           |
+| Types          | `bun run build` to catch type errors                     |
+| Lint           | ReadLints on all edited files                            |

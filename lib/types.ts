@@ -45,6 +45,7 @@ export interface ReturnItem {
   file?: File | null
   needsBox?: boolean
   returnTo?: string
+  notes?: string
 }
 
 export interface PickupFormData {

@@ -1,0 +1,136 @@
+---
+description: Project coding standards and conventions
+alwaysApply: true
+---
+
+# General
+
+- Read referenced files fully — never use limit/offset to read partial files
+- Prefer early returns to reduce nesting
+- Handle errors explicitly; never swallow exceptions silently
+
+# Naming Conventions
+
+- Component files: PascalCase (`Button.tsx`, `UserProfile.tsx`)
+- All other files: camelCase (`utils.ts`, `userService.ts`)
+- Variables, functions, methods: camelCase
+- Constants: UPPER_SNAKE_CASE
+- Types and interfaces: PascalCase
+
+# TypeScript
+
+- Avoid `any` — provide explicit types or use generics
+- Prefer `type` over `interface` — use for object shapes, unions, and utility types
+- Prefer `string[]` over `Array<string>`
+- Always use arrow function syntax
+- If a function has more than 2 parameters, extract a named type:
+
+```typescript
+// ✅ 2 or fewer params — inline is fine
+const updateUser = ({ id, name }: { id: string; name: string }) => { ... }
+
+// ✅ 3+ params — extract the type
+type CreateUserParams = {
+  id: string;
+  name: string;
+  email: string;
+};
+const createUser = ({ id, name, email }: CreateUserParams) => { ... }
+
+// ❌ Avoid positional params
+const createUser = (id: string, name: string, email: string) => { ... }
+```
+
+# React & Components
+
+- Components are **dumb** — they render UI and nothing else. No business logic, no data fetching, no complex state.
+- **Never prop drill.** All shared state and logic lives in a Context provider.
+- Each page/feature gets its own Context that wraps the page. Components inside consume it via a custom hook.
+- The `return` statement of a component should be purely rendering — readable at a glance.
+- Use functional components with hooks — never class components
+- Keep components small and single-responsibility
+- Use `useMemo` for expensive calculations, `useCallback` for callbacks passed as props
+
+```
+app/
+  dashboard/
+    page.tsx              ← wraps content in <DashboardProvider>
+    DashboardContext.tsx   ← context + provider + hook (useDashboard)
+    StatCard.tsx           ← dumb component, consumes useDashboard()
+    ActivityFeed.tsx       ← dumb component, consumes useDashboard()
+```
+
+```tsx
+// DashboardContext.tsx — all logic lives here
+type DashboardContextValue = {
+  stats: Stat[];
+  isLoading: boolean;
+  refresh: () => void;
+};
+
+const DashboardContext = createContext<DashboardContextValue | null>(null);
+
+export const useDashboard = () => {
+  const ctx = useContext(DashboardContext);
+  if (!ctx) throw new Error("useDashboard must be used within DashboardProvider");
+  return ctx;
+};
+
+export const DashboardProvider = ({ children }: { children: React.ReactNode }) => {
+  const [stats, setStats] = useState<Stat[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const refresh = () => { /* fetch logic */ };
+
+  useEffect(() => { refresh(); }, []);
+
+  return (
+    <DashboardContext.Provider value={{ stats, isLoading, refresh }}>
+      {children}
+    </DashboardContext.Provider>
+  );
+};
+
+// page.tsx — just wraps in the provider
+export default const DashboardPage = () => (
+  <DashboardProvider>
+    <StatCard />
+    <ActivityFeed />
+  </DashboardProvider>
+);
+
+// StatCard.tsx — dumb component, zero props needed
+export const StatCard = () => {
+  const { stats, isLoading } = useDashboard();
+  return isLoading ? <Spinner /> : <div>{stats.length} items</div>;
+};
+
+// ❌ Never do this — prop drilling
+const Page = () => {
+  const [stats, setStats] = useState([]);
+  return <StatCard stats={stats} onRefresh={() => setStats([])} />;
+};
+```
+
+# Imports
+
+- Use absolute imports via configured path aliases
+- Group: external libs → internal modules → relative imports → types
+- Remove unused imports
+
+# Error Handling
+
+```typescript
+// ❌ Silent failure
+try {
+	await fetchData();
+} catch (e) {}
+
+// ✅ Handle and surface errors
+try {
+	await fetchData();
+} catch (e) {
+	console.error('Failed to fetch data', e);
+	throw e;
+}
+```

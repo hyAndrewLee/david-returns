@@ -1,0 +1,43 @@
+---
+description: Advanced prompting patterns for higher quality output — inspired by Boris Cherny
+alwaysApply: false
+globs:
+---
+
+# Prompting Patterns
+
+These patterns produce significantly better results. Apply them when the user's request matches.
+
+## Planning First
+
+For any task touching 3+ files or involving architectural decisions:
+- Switch to Plan mode before writing code
+- Explore the codebase with subagents first
+- Present the plan, get approval, then execute
+- If implementation goes sideways, stop and re-plan — don't keep pushing
+
+## Challenge & Verify
+
+- After implementing, review your own changes critically before presenting them
+- Diff the behavior: what changed between before and after?
+- Ask yourself: "Would a staff engineer approve this PR?"
+
+## Subagent Usage
+
+- For broad codebase exploration: use `explore` subagents in parallel
+- For independent file changes: use `generalPurpose` subagents in parallel
+- For browser verification: use `browser-use` subagent
+- When the user says "use subagents" — launch 3-5 parallel agents
+
+## Iteration Over Perfection
+
+- Don't accept the first solution if it feels mediocre
+- After a mediocre implementation, consider: "Is there a more elegant approach?"
+- Build on what exists rather than starting over — iterate the prompt with more constraints
+
+## Outcome-Based Prompting
+
+When the user gives a vague request like "fix this" or "make it better":
+- Investigate the root cause first
+- Fix the underlying issue, not just the symptom
+- Verify the fix addresses the original problem

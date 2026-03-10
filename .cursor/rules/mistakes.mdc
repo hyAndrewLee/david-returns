@@ -1,0 +1,26 @@
+---
+description: Accumulated learnings and mistakes to avoid — update this after every correction
+alwaysApply: true
+---
+
+# Learnings & Mistakes
+
+This file tracks mistakes the AI has made and corrections from the developer.
+**After every correction, add a new entry here so the mistake is never repeated.**
+
+Format: `- [CATEGORY] Description of what went wrong and the correct approach`
+
+## Rules
+
+- [PACKAGES] Always use `bun`, never `npm` or `yarn`
+- [IMPORTS] Always use `@/` path alias for imports — never relative paths like `../../`
+- [COMPONENTS] Never put business logic in components — extract to Context providers
+- [TYPES] Prefer `type` over `interface` — never use `enum`, use string literal unions instead
+- [SUPABASE] Always use `createClient()` from `@/lib/supabase/server` in server components/actions, `createBrowserClient()` from `@/lib/supabase/client` in client components
+- [UI] Always check `components/ui/` before creating any new UI primitive — it likely already exists
+- [ENV] Never hardcode secrets or API keys — always use environment variables from `@/lib/env`
+
+<!-- 
+Add new learnings below this line.
+After any correction, ask the AI: "Update mistakes.mdc so you don't make that mistake again."
+-->
