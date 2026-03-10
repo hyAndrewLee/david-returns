@@ -1,7 +1,5 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/Button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { Badge } from "@/components/ui/Badge"
@@ -26,150 +24,27 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { format } from "date-fns"
-import { updateOrderStatus, uploadProofImage } from "@/app/manage/actions"
-import { createClient } from "@/lib/supabase/client"
+import { useAdminOrderDetail } from "@/app/manage/orders/[id]/AdminOrderDetailContext"
 import { parseDateET } from "@/lib/timezone"
 
-type Order = {
-  id: string
-  created_at: string
-  pickup_date: string
-  pickup_time: string
-  pickup_method?: string
-  address: {
-    fullName: string
-    phone: string
-    street: string
-    apt?: string
-    city: string
-    zip: string
-    notes?: string
-    pickupInstructions?: string
-  }
-  items: Array<{
-    retailer: string
-    description?: string
-    hasLabel: boolean
-    hasBox: boolean
-    labelFileUrl?: string
-    photoUrl?: string
-    labelType?: string
-    packageSize?: string
-    notes?: string
-    returnTo?: string
-    returnToOther?: string
-  }>
-  is_instant: boolean
-  status: string
-  tracking_status: string
-  total_amount: number
-  profiles?: {
-    full_name: string
-    email: string
-    phone: string
-  }
-  proof_pickup_url?: string
-  proof_delivery_url?: string
-  proof_return_url?: string
-  picked_up_at?: string
-  delivered_at?: string
-  return_confirmed_at?: string
-  admin_notes?: string
-  tracking_number?: string
-}
-
-const statusColors: Record<string, string> = {
-  pending: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-  in_progress: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-  completed: "bg-green-500/10 text-green-500 border-green-500/20",
-  cancelled: "bg-red-500/10 text-red-500 border-red-500/20",
-}
-
-const statusLabels: Record<string, string> = {
-  pending: "Pending",
-  in_progress: "In Progress",
-  completed: "Completed",
-  cancelled: "Cancelled",
-}
-
-const statusSteps = ["pending", "in_progress", "completed"]
-
-export const OrderDetail = ({ order: initialOrder }: { order: Order }) => {
-  const [order, setOrder] = useState(initialOrder)
-  const [trackingStatus, setTrackingStatus] = useState(order.tracking_status || "pending")
-  const [adminNotes, setAdminNotes] = useState(order.admin_notes || "")
-  const [trackingNumber, setTrackingNumber] = useState(order.tracking_number || "")
-  const [isSaving, setIsSaving] = useState(false)
-  const [uploadingType, setUploadingType] = useState<string | null>(null)
-  const router = useRouter()
-
-  const currentStepIndex = statusSteps.indexOf(trackingStatus)
-
-  useEffect(() => {
-    const supabase = createClient()
-
-    const channel = supabase
-      .channel(`admin-order-${order.id}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "orders",
-          filter: `id=eq.${order.id}`,
-        },
-        (payload) => {
-          setOrder(payload.new as Order)
-          router.refresh()
-        },
-      )
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
-    }
-  }, [order.id, router])
-
-  console.log("[v0] Order items:", order.items)
-  console.log(
-    "[v0] Items with files:",
-    order.items?.filter((item) => item.labelFileUrl || item.photoUrl),
-  )
-
-  const handleSave = async () => {
-    setIsSaving(true)
-    try {
-      await updateOrderStatus(order.id, {
-        tracking_status: trackingStatus,
-        admin_notes: adminNotes,
-        tracking_number: trackingNumber,
-      })
-      router.refresh()
-    } catch (error) {
-      console.error("Error saving:", error)
-    } finally {
-      setIsSaving(false)
-    }
-  }
-
-  const handleUploadProof = async (type: "pickup" | "delivery" | "return", file: File) => {
-    try {
-      setUploadingType(type)
-
-      const formData = new FormData()
-      formData.append("file", file)
-      formData.append("orderId", order.id)
-      formData.append("type", type)
-
-      await uploadProofImage(formData)
-
-      router.refresh()
-    } catch (error) {
-      console.error("Failed to upload proof:", error)
-    } finally {
-      setUploadingType(null)
-    }
-  }
+export const OrderDetail = () => {
+  const {
+    order,
+    currentStepIndex,
+    trackingStatus,
+    adminNotes,
+    trackingNumber,
+    isSaving,
+    uploadingType,
+    setTrackingStatus,
+    setAdminNotes,
+    setTrackingNumber,
+    handleSave,
+    handleUploadProof,
+    statusColors,
+    statusLabels,
+    statusSteps,
+  } = useAdminOrderDetail()
 
   return (
     <div className="container mx-auto space-y-6 p-4">

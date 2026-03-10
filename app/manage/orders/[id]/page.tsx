@@ -1,6 +1,7 @@
 import { redirect, notFound } from "next/navigation"
 import { cookies } from "next/headers"
 import { createAdminClient } from "@/lib/supabase/admin"
+import { AdminOrderDetailProvider } from "@/app/manage/orders/[id]/AdminOrderDetailContext"
 import { OrderDetail } from "@/components/admin/OrderDetail"
 
 const OrderDetailPage = async ({
@@ -46,7 +47,11 @@ const OrderDetailPage = async ({
     profiles: userProfile,
   }
 
-  return <OrderDetail order={orderWithProfile} />
+  return (
+    <AdminOrderDetailProvider initialOrder={orderWithProfile}>
+      <OrderDetail />
+    </AdminOrderDetailProvider>
+  )
 }
 
 export default OrderDetailPage

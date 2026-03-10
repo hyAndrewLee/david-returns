@@ -2,6 +2,7 @@ import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { AdminDashboard } from "@/components/admin/AdminDashboard"
+import { AdminDashboardProvider } from "@/app/manage/dashboard/AdminDashboardContext"
 
 const ManageDashboardPage = async () => {
   const cookieStore = await cookies()
@@ -85,7 +86,11 @@ const ManageDashboardPage = async () => {
     console.error("[v0] Error fetching admin dashboard data:", error)
   }
 
-  return <AdminDashboard orders={orders} userEmail="Admin" customers={customers} />
+  return (
+    <AdminDashboardProvider orders={orders} userEmail="Admin" customers={customers}>
+      <AdminDashboard />
+    </AdminDashboardProvider>
+  )
 }
 
 export default ManageDashboardPage
