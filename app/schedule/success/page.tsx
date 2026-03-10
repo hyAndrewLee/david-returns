@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { CheckCircle2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/Button"
 
 const ScheduleSuccessPage = async () => (
   <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white flex items-center justify-center p-4">

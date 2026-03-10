@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { createAdminClient } from "@/lib/supabase/admin"
-import { ProfileForm } from "@/components/profile-form"
+import { ProfileForm } from "@/components/ProfileForm"
 
 const ProfilePage = async () => {
   const supabase = await createClient()

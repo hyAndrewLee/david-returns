@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
-import { CustomerOrders } from "@/components/customer-orders"
+import { CustomerOrders } from "@/components/CustomerOrders"
 
 const OrdersPage = async () => {
   const supabase = await createClient()

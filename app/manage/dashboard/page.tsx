@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import { createAdminClient } from "@/lib/supabase/admin"
-import { AdminDashboard } from "@/components/admin/admin-dashboard"
+import { AdminDashboard } from "@/components/admin/AdminDashboard"
 
 const ManageDashboardPage = async () => {
   const cookieStore = await cookies()

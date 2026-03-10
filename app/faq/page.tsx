@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowLeft } from "lucide-react"
-import { FAQSection } from "@/components/faq-section"
+import { FAQSection } from "@/components/FaqSection"
 
 const FAQPage = () => (
   <main className="min-h-screen bg-background">

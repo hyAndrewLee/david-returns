@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { createClient } from "@/lib/supabase/client"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/Button"
+import { Card, CardContent } from "@/components/ui/Card"
+import { Badge } from "@/components/ui/Badge"
 import { format } from "date-fns"
 import {
   Package,
@@ -24,7 +24,7 @@ import {
   Mail,
   HelpCircle,
 } from "lucide-react"
-import { ContactSupportDialog } from "@/components/contact-support-dialog"
+import { ContactSupportDialog } from "@/components/ContactSupportDialog"
 import { formatDateShort } from "@/lib/timezone"
 
 type Order = {

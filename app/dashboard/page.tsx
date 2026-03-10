@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
-import { UserDashboard } from "@/components/user-dashboard"
+import { UserDashboard } from "@/components/UserDashboard"
 
 const DashboardPage = async () => {
   const supabase = await createClient()

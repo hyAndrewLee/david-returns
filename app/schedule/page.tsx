@@ -28,11 +28,11 @@ import {
   Crown,
 } from "lucide-react"
 import type { PlanType, LabelType, PickupMethod, ReturnItem, TimeWindow } from "@/lib/types"
-import StripeCheckout from "@/components/stripe-checkout"
+import StripeCheckout from "@/components/StripeCheckout"
 import { createClient } from "@/lib/supabase/client" // Imported from updates
 import { checkMembershipStatus } from "@/app/actions/stripe" // Added membership check import
 import { fetchUserAddresses } from "@/app/actions/addresses" // Added fetchUserAddresses import
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog" // Import Dialog components properly
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/Dialog" // Import Dialog components properly
 import { uploadFileViaAPI } from "@/app/actions/upload"
 import { getTodayET, getDateOffsetET, getCurrentTimeET } from "@/lib/timezone" // Imported from updates
 import { compressImage } from "@/lib/image-compression"

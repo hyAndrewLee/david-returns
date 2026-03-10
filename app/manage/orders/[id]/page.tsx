@@ -1,7 +1,7 @@
 import { redirect, notFound } from "next/navigation"
 import { cookies } from "next/headers"
 import { createAdminClient } from "@/lib/supabase/admin"
-import { OrderDetail } from "@/components/admin/order-detail"
+import { OrderDetail } from "@/components/admin/OrderDetail"
 
 const OrderDetailPage = async ({
   params,
