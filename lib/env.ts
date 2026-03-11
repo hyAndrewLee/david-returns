@@ -10,9 +10,6 @@ const requiredEnvVars = {
   NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
 
-  // Vercel Blob
-  BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
-
   // Resend
   RESEND_API_KEY: process.env.RESEND_API_KEY,
 

@@ -19,7 +19,7 @@ A Next.js 16 App Router application for scheduling pickups, managing orders, and
 | UI          | Radix UI primitives, shadcn-style components|
 | Forms       | React Hook Form + Zod + @hookform/resolvers |
 | Email       | Resend + @react-email/render                |
-| Storage     | Vercel Blob                                 |
+| Storage     | Supabase Storage                            |
 | Analytics   | Vercel Analytics                            |
 | Pkg Manager | Bun (always use `bun`, never `npm`)         |
 
@@ -55,11 +55,11 @@ bun run lint       # ESLint
 
 # Environment Variables
 
-Required: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `BLOB_READ_WRITE_TOKEN`, `RESEND_API_KEY`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`
+Required: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `RESEND_API_KEY`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`
 
 # Important Patterns
 
 - Admin auth uses both Supabase `profiles.is_admin` flag AND a session cookie (`admin_session`)
 - Stripe webhooks at `/api/webhooks/stripe` handle payment/subscription events
-- Image uploads go through Vercel Blob via `/api/blob-upload`
+- Image uploads go through Supabase Storage via `lib/supabase/storage.ts` (server-side, using service role key)
 - No test framework is configured — do not assume tests exist

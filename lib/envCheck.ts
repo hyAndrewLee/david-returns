@@ -7,8 +7,7 @@ export const validateEnvVars = () => {
     "STRIPE_SECRET_KEY",
     "STRIPE_PUBLISHABLE_KEY",
     "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
-    "STRIPE_WEBHOOK_SECRET", // Required for production
-    "BLOB_READ_WRITE_TOKEN",
+    "STRIPE_WEBHOOK_SECRET",
     "RESEND_API_KEY",
   ]
 

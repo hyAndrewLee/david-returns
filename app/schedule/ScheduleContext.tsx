@@ -13,10 +13,9 @@ import type { PlanType, LabelType, PickupMethod, ReturnItem, TimeWindow } from "
 import { createClient } from "@/lib/supabase/client"
 import { checkMembershipStatus } from "@/app/actions/stripe"
 import { fetchUserAddresses } from "@/app/actions/addresses"
-import { uploadFileViaAPI } from "@/app/actions/upload"
+import { uploadFile } from "@/app/actions/upload"
 import { getDateOffsetET, getCurrentTimeET } from "@/lib/timezone"
 import { compressImage } from "@/lib/imageCompression"
-import { upload } from "@vercel/blob/client"
 
 // === Types ===
 
@@ -696,12 +695,11 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
             }
 
             try {
-              const blob = await upload(fileToUpload.name, fileToUpload, {
-                access: "public",
-                handleUploadUrl: "/api/blob-upload",
-                clientPayload: JSON.stringify({ addRandomSuffix: true }),
-              })
-              labelFileUrl = blob.url
+              const result = await uploadFile(fileToUpload)
+              if (result.error || !result.url) {
+                throw new Error(result.error || "Upload returned no URL")
+              }
+              labelFileUrl = result.url
             } catch (uploadError) {
               console.error("Label file upload failed:", uploadError)
               if (DEBUG_UPLOAD) {
@@ -768,12 +766,11 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
             }
 
             try {
-              const photoBlob = await upload(photoToUpload.name, photoToUpload, {
-                access: "public",
-                handleUploadUrl: "/api/blob-upload",
-                clientPayload: JSON.stringify({ addRandomSuffix: true }),
-              })
-              photoFileUrl = photoBlob.url
+              const result = await uploadFile(photoToUpload)
+              if (result.error || !result.url) {
+                throw new Error(result.error || "Upload returned no URL")
+              }
+              photoFileUrl = result.url
             } catch (uploadError) {
               console.error("Photo file upload failed:", uploadError)
               if (DEBUG_UPLOAD) {
@@ -976,12 +973,14 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
           let photoFileUrl = null
 
           if (item.file) {
-            const blob = await uploadFileViaAPI(item.file)
-            labelFileUrl = blob.url
+            const result = await uploadFile(item.file)
+            if (result.error) throw new Error(result.error)
+            labelFileUrl = result.url
           }
           if (item.photoFile) {
-            const blob = await uploadFileViaAPI(item.photoFile)
-            photoFileUrl = blob.url
+            const result = await uploadFile(item.photoFile)
+            if (result.error) throw new Error(result.error)
+            photoFileUrl = result.url
           }
 
           return {

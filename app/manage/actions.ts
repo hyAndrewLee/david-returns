@@ -1,7 +1,7 @@
 "use server"
 import { createAdminClient } from "@/lib/supabase/admin"
 import { revalidatePath } from "next/cache"
-import { put } from "@vercel/blob"
+import { uploadToStorage } from "@/lib/supabase/storage"
 import { cookies } from "next/headers"
 
 const verifyAdminAccess = async () => {
@@ -67,9 +67,11 @@ export const uploadProofImage = async (formData: FormData) => {
   }
 
   try {
-    const blob = await put(`proofs/${orderId}/${type}-${Date.now()}.jpg`, file, {
-      access: "public",
-    })
+    const result = await uploadToStorage(file, `${type}-${Date.now()}.jpg`, file.type, `proofs/${orderId}`)
+
+    if (result.error || !result.url) {
+      throw new Error(result.error || "Upload failed")
+    }
 
     const adminClient = createAdminClient()
     const updateData: Record<string, string> = {
@@ -77,14 +79,14 @@ export const uploadProofImage = async (formData: FormData) => {
     }
 
     if (type === "pickup") {
-      updateData.proof_pickup_url = blob.url
+      updateData.proof_pickup_url = result.url
     } else if (type === "delivery") {
-      updateData.proof_delivery_url = blob.url
+      updateData.proof_delivery_url = result.url
     } else if (type === "return") {
-      updateData.proof_return_url = blob.url
+      updateData.proof_return_url = result.url
     }
 
-    const { data, error } = await adminClient.from("orders").update(updateData).eq("id", orderId).select()
+    const { error } = await adminClient.from("orders").update(updateData).eq("id", orderId).select()
 
     if (error) {
       throw new Error(`Failed to update proof: ${error.message}`)
@@ -92,7 +94,7 @@ export const uploadProofImage = async (formData: FormData) => {
 
     revalidatePath(`/manage/orders/${orderId}`)
 
-    return { url: blob.url }
+    return { url: result.url }
   } catch (error) {
     console.error("Upload failed:", error)
     throw error
