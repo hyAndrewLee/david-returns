@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "doppler run -- next build",
+    "build": "next build",
     "dev": "doppler run -- next dev",
     "lint": "eslint .",
-    "start": "doppler run -- next start",
+    "start": "next start",
     "typecheck": "tsgo --noEmit",
     "db:generate": "doppler run -- drizzle-kit generate",
     "db:migrate": "doppler run -- drizzle-kit migrate",
