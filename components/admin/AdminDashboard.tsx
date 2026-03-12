@@ -3,42 +3,19 @@
 import { Button } from "@/components/ui/Button"
 import { Badge } from "@/components/ui/Badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
-import { Package, LogOut, RefreshCw, Users, AlertTriangle, Calendar } from "lucide-react"
-import { useAdminDashboard } from "@/app/manage/dashboard/AdminDashboardContext"
+import { Package, LogOut, RefreshCw, Users, Calendar } from "lucide-react"
+import { useAdminDashboard } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
 import { AdminStatsCards } from "@/components/admin/AdminStatsCards"
 import { AdminOrdersTab } from "@/components/admin/AdminOrdersTab"
 import { AdminCustomersTab } from "@/components/admin/AdminCustomersTab"
 import { AdminTodaysPickups } from "@/components/admin/AdminTodaysPickups"
 
 export const AdminDashboard = () => {
-  const { userEmail, debugInfo, customers, todaysPickups, activeTab, setActiveTab, isRefreshing, handleRefresh, handleSignOut } =
+  const { userEmail, todaysPickups, activeTab, setActiveTab, isRefreshing, handleRefresh, handleSignOut } =
     useAdminDashboard()
 
   return (
     <div className="min-h-screen bg-background">
-      {debugInfo && (debugInfo.error || debugInfo.ordersError || debugInfo.customersError) && (
-        <div className="bg-red-100 border-b border-red-200 px-4 py-3">
-          <div className="mx-auto max-w-7xl flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-red-600" />
-            <div className="text-sm text-red-800">
-              <strong>Debug Info:</strong> {debugInfo.error || debugInfo.ordersError || debugInfo.customersError}
-              {debugInfo.customersCount !== undefined && ` | Customers fetched: ${debugInfo.customersCount}`}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {debugInfo && !debugInfo.error && !debugInfo.customersError && (
-        <div className="bg-blue-100 border-b border-blue-200 px-4 py-3">
-          <div className="mx-auto max-w-7xl flex items-center gap-2">
-            <div className="text-sm text-blue-800">
-              <strong>Debug:</strong> Customers fetched: {debugInfo.customersCount ?? 0} | Customers prop length:{" "}
-              {customers.length}
-            </div>
-          </div>
-        </div>
-      )}
-
       <header className="border-b bg-card">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">

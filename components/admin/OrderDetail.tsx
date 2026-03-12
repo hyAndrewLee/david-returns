@@ -24,8 +24,9 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { format } from "date-fns"
-import { useAdminOrderDetail } from "@/app/manage/orders/[id]/AdminOrderDetailContext"
+import { useAdminOrderDetail } from "@/app/(admin)/manage/orders/[id]/AdminOrderDetailContext"
 import { parseDateET } from "@/lib/timezone"
+import type { OrderItem } from "@/server/db/schema/orders"
 
 export const OrderDetail = () => {
   const {
@@ -59,7 +60,8 @@ export const OrderDetail = () => {
           <div className="flex-1">
             <h1 className="text-lg font-semibold">Order #{order.id.slice(0, 8)}</h1>
             <p className="text-sm text-muted-foreground">
-              Created {format(new Date(order.created_at), "MMM d, yyyy 'at' h:mm a")}
+              Created{" "}
+              {order.createdAt ? format(new Date(order.createdAt), "MMM d, yyyy 'at' h:mm a") : "N/A"}
             </p>
           </div>
           <Badge variant="outline" className={statusColors[trackingStatus]}>
@@ -149,27 +151,27 @@ export const OrderDetail = () => {
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                     <span>
-                      {order.pickup_date
-                        ? `${format(parseDateET(order.pickup_date.split("T")[0]), "MMM d, yyyy")} at ${order.pickup_time}`
+                      {order.pickupDate
+                        ? `${format(parseDateET(order.pickupDate.split("T")[0]), "MMM d, yyyy")} at ${order.pickupTime}`
                         : "Not scheduled"}
                     </span>
                   </div>
-                  {order.is_instant && <Badge variant="secondary">Instant Delivery</Badge>}
+                  {order.isInstant && <Badge variant="secondary">Instant Delivery</Badge>}
                 </div>
                 {/* Pickup Method */}
-                {order.pickup_method && (
+                {order.pickupMethod && (
                   <div className="flex items-center gap-2">
                     <Package className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm font-medium">
                       Pickup Method:{" "}
                       <span className="font-normal">
-                        {order.pickup_method === "hand-to-me"
+                        {order.pickupMethod === "hand-to-me"
                           ? "Hand to us"
-                          : order.pickup_method === "leave-at-door"
+                          : order.pickupMethod === "leave-at-door"
                             ? "Leave at door"
-                            : order.pickup_method === "leave-with-doorman"
+                            : order.pickupMethod === "leave-with-doorman"
                               ? "Leave with doorman"
-                              : order.pickup_method}
+                              : order.pickupMethod}
                       </span>
                     </span>
                   </div>
@@ -200,7 +202,7 @@ export const OrderDetail = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {order.items?.map((item, index) => (
+                  {order.items?.map((item: OrderItem, index: number) => (
                     <div key={index} className="rounded-lg border bg-muted/30 p-4">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
@@ -287,15 +289,15 @@ export const OrderDetail = () => {
                   {/* Pickup Proof */}
                   <div className="space-y-2">
                     <Label>Pickup Proof</Label>
-                    {order.proof_pickup_url ? (
+                    {order.proofPickupUrl ? (
                       <div className="relative aspect-video overflow-hidden rounded-lg border">
                         <img
-                          src={order.proof_pickup_url || "/placeholder.svg"}
+                          src={order.proofPickupUrl || "/placeholder.svg"}
                           alt="Pickup proof"
                           className="h-full w-full object-cover"
                         />
                         <a
-                          href={order.proof_pickup_url}
+                          href={order.proofPickupUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="absolute right-2 top-2 rounded bg-black/50 p-1"
@@ -326,15 +328,15 @@ export const OrderDetail = () => {
                   {/* Delivery Proof */}
                   <div className="space-y-2">
                     <Label>Delivery Proof</Label>
-                    {order.proof_delivery_url ? (
+                    {order.proofDeliveryUrl ? (
                       <div className="relative aspect-video overflow-hidden rounded-lg border">
                         <img
-                          src={order.proof_delivery_url || "/placeholder.svg"}
+                          src={order.proofDeliveryUrl || "/placeholder.svg"}
                           alt="Delivery proof"
                           className="h-full w-full object-cover"
                         />
                         <a
-                          href={order.proof_delivery_url}
+                          href={order.proofDeliveryUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="absolute right-2 top-2 rounded bg-black/50 p-1"
@@ -365,15 +367,15 @@ export const OrderDetail = () => {
                   {/* Return Proof */}
                   <div className="space-y-2">
                     <Label>Return Confirmation</Label>
-                    {order.proof_return_url ? (
+                    {order.proofReturnUrl ? (
                       <div className="relative aspect-video overflow-hidden rounded-lg border">
                         <img
-                          src={order.proof_return_url || "/placeholder.svg"}
+                          src={order.proofReturnUrl || "/placeholder.svg"}
                           alt="Return proof"
                           className="h-full w-full object-cover"
                         />
                         <a
-                          href={order.proof_return_url}
+                          href={order.proofReturnUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="absolute right-2 top-2 rounded bg-black/50 p-1"
@@ -459,36 +461,36 @@ export const OrderDetail = () => {
                 <CardTitle className="text-base">Payment</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">${((order.total_amount || 0) / 100).toFixed(2)}</div>
+                <div className="text-2xl font-bold">${((order.totalAmount || 0) / 100).toFixed(2)}</div>
                 <p className="text-sm text-muted-foreground">
-                  {order.is_instant ? "Instant delivery" : "Standard pickup"}
+                  {order.isInstant ? "Instant delivery" : "Standard pickup"}
                 </p>
               </CardContent>
             </Card>
 
             {/* Timestamps */}
-            {(order.picked_up_at || order.delivered_at || order.return_confirmed_at) && (
+            {(order.pickedUpAt || order.deliveredAt || order.returnConfirmedAt) && (
               <Card>
                 <CardHeader>
                   <CardTitle className="text-base">Timeline</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
-                  {order.picked_up_at && (
+                  {order.pickedUpAt && (
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Picked up</span>
-                      <span>{format(new Date(order.picked_up_at), "MMM d, h:mm a")}</span>
+                      <span>{format(new Date(order.pickedUpAt), "MMM d, h:mm a")}</span>
                     </div>
                   )}
-                  {order.delivered_at && (
+                  {order.deliveredAt && (
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Delivered</span>
-                      <span>{format(new Date(order.delivered_at), "MMM d, h:mm a")}</span>
+                      <span>{format(new Date(order.deliveredAt), "MMM d, h:mm a")}</span>
                     </div>
                   )}
-                  {order.return_confirmed_at && (
+                  {order.returnConfirmedAt && (
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Return confirmed</span>
-                      <span>{format(new Date(order.return_confirmed_at), "MMM d, h:mm a")}</span>
+                      <span>{format(new Date(order.returnConfirmedAt), "MMM d, h:mm a")}</span>
                     </div>
                   )}
                 </CardContent>

@@ -20,7 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/AlertDialog"
 import { Search, Eye, Truck, Trash2, Check } from "lucide-react"
-import { useAdminDashboard, statusColors, statusLabels } from "@/app/manage/dashboard/AdminDashboardContext"
+import { useAdminDashboard, statusColors, statusLabels } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
 import { formatDateShort } from "@/lib/timezone"
 
 export const AdminOrdersTab = () => {
@@ -133,17 +133,17 @@ export const AdminOrdersTab = () => {
                     </TableCell>
                     <TableCell className="font-mono text-sm">{order.id.slice(0, 8)}</TableCell>
                     <TableCell>
-                      <div className="font-medium">{order.profiles?.full_name || "N/A"}</div>
+                      <div className="font-medium">{order.profiles?.fullName || "N/A"}</div>
                       <div className="text-xs text-muted-foreground">
                         {order.profiles?.phone || order.profiles?.email}
                       </div>
                     </TableCell>
                     <TableCell>
                       <div className="text-sm">
-                        {order.pickup_date ? formatDateShort(order.pickup_date.split("T")[0]) : "N/A"}
+                        {order.pickupDate ? formatDateShort(order.pickupDate.split("T")[0]) : "N/A"}
                       </div>
-                      <div className="text-xs text-muted-foreground">{order.pickup_time}</div>
-                      {order.is_instant && (
+                      <div className="text-xs text-muted-foreground">{order.pickupTime}</div>
+                      {order.isInstant && (
                         <Badge
                           variant="outline"
                           className="mt-1 text-xs bg-purple-500/10 text-purple-600 border-purple-500/30 font-medium"
@@ -153,14 +153,14 @@ export const AdminOrdersTab = () => {
                       )}
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline" className={statusColors[order.tracking_status || "pending"]}>
-                        {statusLabels[order.tracking_status || "pending"]}
+                      <Badge variant="outline" className={statusColors[order.trackingStatus || "pending"]}>
+                        {statusLabels[order.trackingStatus || "pending"]}
                       </Badge>
                     </TableCell>
-                    <TableCell className="font-mono text-sm">${order.total_amount.toFixed(2)}</TableCell>
+                    <TableCell className="font-mono text-sm">${order.totalAmount.toFixed(2)}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        {order.tracking_status === "pending" && (
+                        {order.trackingStatus === "pending" && (
                           <Button
                             size="sm"
                             variant="ghost"
@@ -171,7 +171,7 @@ export const AdminOrdersTab = () => {
                             <Truck className="h-3.5 w-3.5" />
                           </Button>
                         )}
-                        {order.tracking_status === "in_progress" && (
+                        {order.trackingStatus === "in_progress" && (
                           <Button
                             size="sm"
                             variant="ghost"

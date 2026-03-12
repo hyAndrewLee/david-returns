@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/AlertDialog"
 import { Search, MapPin, Trash2 } from "lucide-react"
 import { format } from "date-fns"
-import { useAdminDashboard } from "@/app/manage/dashboard/AdminDashboardContext"
+import { useAdminDashboard } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
 
 export const AdminCustomersTab = () => {
   const { filteredCustomers, customerSearchTerm, setCustomerSearchTerm, deletingCustomerId, handleDeleteCustomer } =
@@ -68,7 +68,7 @@ export const AdminCustomersTab = () => {
                   return (
                     <TableRow key={customer.id}>
                       <TableCell>
-                        <div className="font-medium">{customer.full_name || "N/A"}</div>
+                        <div className="font-medium">{customer.fullName || "N/A"}</div>
                       </TableCell>
                       <TableCell>
                         <div className="text-sm">{customer.email || "N/A"}</div>
@@ -99,7 +99,9 @@ export const AdminCustomersTab = () => {
                         )}
                       </TableCell>
                       <TableCell>
-                        <div className="text-sm">{format(new Date(customer.created_at), "MMM d, yyyy")}</div>
+                        <div className="text-sm">
+                          {customer.createdAt ? format(new Date(customer.createdAt), "MMM d, yyyy") : "N/A"}
+                        </div>
                       </TableCell>
                       <TableCell className="text-right">
                         <AlertDialog>
@@ -118,7 +120,7 @@ export const AdminCustomersTab = () => {
                               <AlertDialogTitle>Delete Customer</AlertDialogTitle>
                               <AlertDialogDescription>
                                 Are you sure you want to delete{" "}
-                                <strong>{customer.full_name || customer.email}</strong>? This will permanently remove
+                                <strong>{customer.fullName || customer.email}</strong>? This will permanently remove
                                 their account, all orders, addresses, and subscription data. This action cannot be
                                 undone.
                               </AlertDialogDescription>

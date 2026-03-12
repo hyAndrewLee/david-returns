@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { Package, Clock, CheckCircle, Truck, Users, Calendar } from "lucide-react"
-import { useAdminDashboard } from "@/app/manage/dashboard/AdminDashboardContext"
+import { useAdminDashboard } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
 
 export const AdminStatsCards = () => {
   const { stats } = useAdminDashboard()

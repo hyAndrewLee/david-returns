@@ -6,8 +6,8 @@ import { Card, CardContent } from "@/components/ui/Card"
 import { Badge } from "@/components/ui/Badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
 import { Clock, Eye, Truck, MapPin, Check, Calendar } from "lucide-react"
-import { useAdminDashboard, statusColors, statusLabels } from "@/app/manage/dashboard/AdminDashboardContext"
-import type { Order } from "@/app/manage/dashboard/AdminDashboardContext"
+import { useAdminDashboard, statusColors, statusLabels } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
+import type { Order } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
 
 const TIME_WINDOWS = ["8-11am", "11am-2pm", "2-5pm", "5-8pm"] as const
 
@@ -18,7 +18,7 @@ const PickupRow = ({ order }: { order: Order }) => {
     <TableRow>
       <TableCell>
         <div className="font-medium">#{order.id.slice(0, 8)}</div>
-        {order.is_instant && (
+        {order.isInstant && (
           <Badge
             variant="outline"
             className="mt-1 text-xs bg-purple-500/10 text-purple-600 border-purple-500/30 font-medium"
@@ -28,7 +28,7 @@ const PickupRow = ({ order }: { order: Order }) => {
         )}
       </TableCell>
       <TableCell>
-        <div className="font-medium">{order.profiles?.full_name || "N/A"}</div>
+        <div className="font-medium">{order.profiles?.fullName || "N/A"}</div>
         <div className="text-xs text-muted-foreground">{order.profiles?.phone}</div>
       </TableCell>
       <TableCell>
@@ -54,13 +54,13 @@ const PickupRow = ({ order }: { order: Order }) => {
         </div>
       </TableCell>
       <TableCell>
-        <Badge variant="outline" className={statusColors[order.tracking_status || "pending"]}>
-          {statusLabels[order.tracking_status || "pending"]}
+        <Badge variant="outline" className={statusColors[order.trackingStatus || "pending"]}>
+          {statusLabels[order.trackingStatus || "pending"]}
         </Badge>
       </TableCell>
       <TableCell>
         <div className="flex items-center justify-end gap-2">
-          {order.tracking_status === "pending" && (
+          {order.trackingStatus === "pending" && (
             <Button
               size="sm"
               variant="outline"
@@ -72,7 +72,7 @@ const PickupRow = ({ order }: { order: Order }) => {
               Start Pickup
             </Button>
           )}
-          {order.tracking_status === "in_progress" && (
+          {order.trackingStatus === "in_progress" && (
             <Button
               size="sm"
               variant="outline"
@@ -164,7 +164,7 @@ const UnassignedPickupsSection = ({ pickups }: { pickups: Order[] }) => {
                 <TableRow key={order.id}>
                   <TableCell>
                     <div className="font-medium">#{order.id.slice(0, 8)}</div>
-                    {order.is_instant && (
+                    {order.isInstant && (
                       <Badge
                         variant="outline"
                         className="mt-1 text-xs bg-purple-500/10 text-purple-600 border-purple-500/30 font-medium"
@@ -174,11 +174,11 @@ const UnassignedPickupsSection = ({ pickups }: { pickups: Order[] }) => {
                     )}
                   </TableCell>
                   <TableCell>
-                    <div className="font-medium">{order.profiles?.full_name || "N/A"}</div>
+                    <div className="font-medium">{order.profiles?.fullName || "N/A"}</div>
                     <div className="text-xs text-muted-foreground">{order.profiles?.phone}</div>
                   </TableCell>
                   <TableCell>
-                    <div className="text-sm font-medium">{order.pickup_time || "Not set"}</div>
+                    <div className="text-sm font-medium">{order.pickupTime || "Not set"}</div>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-start gap-1">
@@ -207,8 +207,8 @@ const UnassignedPickupsSection = ({ pickups }: { pickups: Order[] }) => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline" className={statusColors[order.tracking_status || "pending"]}>
-                      {statusLabels[order.tracking_status || "pending"]}
+                    <Badge variant="outline" className={statusColors[order.trackingStatus || "pending"]}>
+                      {statusLabels[order.trackingStatus || "pending"]}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -229,7 +229,7 @@ const PickupActions = ({ order }: { order: Order }) => {
 
   return (
     <div className="flex items-center justify-end gap-2">
-      {order.tracking_status === "pending" && (
+      {order.trackingStatus === "pending" && (
         <Button
           size="sm"
           variant="outline"
@@ -241,7 +241,7 @@ const PickupActions = ({ order }: { order: Order }) => {
           Start Pickup
         </Button>
       )}
-      {order.tracking_status === "in_progress" && (
+      {order.trackingStatus === "in_progress" && (
         <Button
           size="sm"
           variant="outline"
@@ -279,13 +279,13 @@ export const AdminTodaysPickups = () => {
   }
 
   const unassignedPickups = todaysPickups.filter(
-    (order) => !TIME_WINDOWS.includes(order.pickup_time as (typeof TIME_WINDOWS)[number]),
+    (order) => !TIME_WINDOWS.includes(order.pickupTime as (typeof TIME_WINDOWS)[number]),
   )
 
   return (
     <div className="space-y-6">
       {TIME_WINDOWS.map((timeWindow) => {
-        const pickupsInWindow = todaysPickups.filter((order) => order.pickup_time === timeWindow)
+        const pickupsInWindow = todaysPickups.filter((order) => order.pickupTime === timeWindow)
         return <TimeWindowSection key={timeWindow} timeWindow={timeWindow} pickups={pickupsInWindow} />
       })}
       <UnassignedPickupsSection pickups={unassignedPickups} />

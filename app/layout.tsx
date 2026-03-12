@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { validateEnv } from "@/lib/env"
+import { TRPCProvider } from "@/lib/trpc"
 
 validateEnv()
 
@@ -60,7 +61,9 @@ const RootLayout = ({
 }>) => (
   <html lang="en">
     <body className={`${geistSans.className} antialiased`}>
-      {children}
+      <TRPCProvider>
+        {children}
+      </TRPCProvider>
       <Analytics />
     </body>
   </html>
