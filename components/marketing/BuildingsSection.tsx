@@ -24,12 +24,6 @@ const benefits = [
   },
 ]
 
-const metrics = [
-  { value: "—", label: "buildings partnered" },
-  { value: "—", label: "packages processed" },
-  { value: "—", label: "neighborhoods covered" },
-]
-
 export const BuildingsSection = () => (
   <section className="bg-background-dark py-24 sm:py-32">
     <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -57,19 +51,7 @@ export const BuildingsSection = () => (
         ))}
       </div>
 
-      {/* Metrics strip */}
-      <div className="mt-16 rounded-2xl border border-white/10 bg-white/5 px-8 py-8">
-        <div className="grid gap-8 sm:grid-cols-3">
-          {metrics.map((metric) => (
-            <div key={metric.label} className="text-center">
-              <p className="font-display text-4xl font-normal text-white">{metric.value}</p>
-              <p className="mt-2 text-sm text-white/50">{metric.label}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-12 text-center">
+      <div className="mt-16 text-center">
         <Link
           href="/for-buildings#partner"
           className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-medium text-background-dark transition-all hover:scale-[1.02] hover:shadow-lg"

@@ -29,11 +29,7 @@ export const StatsSection = () => (
         ))}
       </div>
 
-      <p className="mt-12 text-center text-xs text-muted-foreground/70">
-        Source: National Retail Federation, 2024 &middot; Optoro Research
-      </p>
-
-      <p className="mx-auto mt-8 max-w-2xl text-center text-lg text-muted-foreground">
+      <p className="mx-auto mt-12 max-w-2xl text-center text-lg text-muted-foreground">
         Apartment buildings bear the burden &mdash; cluttered package rooms, frustrated tenants, and no infrastructure for outbound returns.
       </p>
     </div>

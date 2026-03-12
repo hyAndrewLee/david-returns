@@ -10,14 +10,6 @@ export const HeroSection = () => (
 
     <div className="mx-auto max-w-6xl px-4 sm:px-6">
       <div className="mx-auto max-w-3xl text-center">
-        <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-sm text-muted-foreground shadow-sm">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-green opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-green" />
-          </span>
-          Trusted by apartment buildings across NYC
-        </div>
-
         <h1 className="font-display text-4xl font-normal tracking-tight text-foreground sm:text-5xl lg:text-6xl xl:text-7xl">
           Return infrastructure for apartment&nbsp;living.
         </h1>
