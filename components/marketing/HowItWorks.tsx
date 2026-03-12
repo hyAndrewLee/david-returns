@@ -1,81 +1,65 @@
-import { Package, Calendar, Truck } from "lucide-react"
+import { Upload, CalendarDays, PackageCheck } from "lucide-react"
 
 const steps = [
   {
-    icon: Package,
+    icon: Upload,
     number: "01",
-    title: "Tell us what you're returning",
-    description: "Enter your details and the items you want to send back.",
-    gradient: "from-stone-400 to-stone-400",
+    title: "Upload your label",
+    description: "Upload or forward your return label in the David Returns platform.",
   },
   {
-    icon: Calendar,
+    icon: CalendarDays,
     number: "02",
-    title: "Select a pickup time",
-    description: "Choose a date and time window that works for you. We offer flexible scheduling.",
-    gradient: "from-neutral-900 to-neutral-700",
+    title: "Schedule pickup",
+    description: "Choose a date and time window. Free for partnered building residents.",
   },
   {
-    icon: Truck,
+    icon: PackageCheck,
     number: "03",
-    title: "Hand to us or leave at door",
-    description: "Meet us at the door or leave your package outside. We'll handle the rest and keep you updated.",
-    gradient: "from-orange-500 to-orange-400",
+    title: "We handle the rest",
+    description: "Packages are picked up and routed to the right carrier — UPS, USPS, FedEx, or Happy Returns.",
   },
 ]
 
-export const HowItWorks = () => {
-  return (
-    <section
-      id="how-it-works"
-      className="relative overflow-hidden bg-gradient-to-b from-secondary/30 to-background py-20 sm:py-28"
-    >
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute left-1/4 top-20 h-64 w-64 rounded-full bg-orange-500/5 blur-3xl" />
-        <div className="absolute right-1/4 bottom-20 h-64 w-64 rounded-full bg-neutral-500/5 blur-3xl" />
+export const HowItWorks = () => (
+  <section id="how-it-works" className="bg-background-alt py-20 sm:py-28">
+    <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-2xl text-center">
+        <span className="text-xs font-semibold uppercase tracking-widest text-accent-warm">
+          How It Works
+        </span>
+        <h2 className="mt-4 font-display text-3xl font-normal tracking-tight sm:text-4xl lg:text-5xl">
+          Three steps. Zero&nbsp;hassle.
+        </h2>
       </div>
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-foreground/5 px-4 py-1.5 text-sm font-medium text-foreground">
-            <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
-            Simple process
-          </span>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">How it works</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Three simple steps to hassle-free returns</p>
-        </div>
+      <div className="mt-16 grid gap-6 sm:grid-cols-3">
+        {steps.map((step) => (
+          <div key={step.number} className="group relative">
+            <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+              <span className="font-display text-5xl font-normal text-border/80">
+                {step.number}
+              </span>
 
-        <div className="relative mt-16">
-          <div className="absolute left-0 right-0 top-24 hidden h-0.5 bg-gradient-to-r from-stone-400 via-neutral-900 to-orange-500 opacity-30 sm:block" />
-
-          <div className="grid gap-8 sm:grid-cols-3">
-            {steps.map((step, index) => (
-              <div key={index} className="group relative">
-                {/* Card */}
-                <div className="relative overflow-hidden rounded-3xl border border-border bg-background p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-                  {/* Gradient accent line at top */}
-                  <div className={`absolute left-0 right-0 top-0 h-1 bg-gradient-to-r ${step.gradient}`} />
-
-                  {/* Number badge */}
-                  <div
-                    className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${step.gradient} text-lg font-bold text-white shadow-lg`}
-                  >
-                    {step.number}
-                  </div>
-
-                  {/* Icon */}
-                  <div className="mt-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary transition-transform duration-300 group-hover:scale-110">
-                    <step.icon className="h-7 w-7 text-foreground" />
-                  </div>
-
-                  <h3 className="mt-5 text-xl font-semibold text-foreground">{step.title}</h3>
-                  <p className="mt-3 leading-relaxed text-muted-foreground">{step.description}</p>
-                </div>
+              <div className="mt-4 flex h-12 w-12 items-center justify-center rounded-xl bg-foreground/5 transition-colors group-hover:bg-accent-warm-light">
+                <step.icon className="h-6 w-6 text-foreground transition-colors group-hover:text-accent-warm" />
               </div>
-            ))}
+
+              <h3 className="mt-5 text-lg font-semibold text-foreground">{step.title}</h3>
+              <p className="mt-3 leading-relaxed text-muted-foreground">{step.description}</p>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
-    </section>
-  )
-}
+
+      {/* Flow diagram */}
+      <div className="mt-16 flex items-center justify-center gap-3 text-sm text-muted-foreground">
+        <span className="rounded-full bg-card px-4 py-2 shadow-sm border border-border">Apartment</span>
+        <span>&rarr;</span>
+        <span className="rounded-full bg-foreground px-4 py-2 text-background font-medium shadow-sm">David Returns</span>
+        <span>&rarr;</span>
+        <span className="rounded-full bg-card px-4 py-2 shadow-sm border border-border">Carrier</span>
+      </div>
+    </div>
+  </section>
+)

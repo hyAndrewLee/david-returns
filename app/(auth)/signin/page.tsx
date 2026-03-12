@@ -6,8 +6,14 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
-import { ArrowRight, Eye, EyeOff } from "lucide-react"
+import { ArrowRight, Eye, EyeOff, Building2, Package, MapPin } from "lucide-react"
 import { createBrowserSupabaseClient } from "@/lib/supabase"
+
+const trustSignals = [
+  { icon: Building2, text: "Partnered with buildings across NYC" },
+  { icon: Package, text: "Thousands of packages processed" },
+  { icon: MapPin, text: "Serving Manhattan & Brooklyn" },
+]
 
 const SignInPage = () => {
   const router = useRouter()
@@ -51,6 +57,7 @@ const SignInPage = () => {
 
       router.push("/dashboard")
     } catch (err) {
+      console.error("Sign in error:", err)
       setError("An unexpected error occurred")
     } finally {
       setIsLoading(false)
@@ -58,35 +65,71 @@ const SignInPage = () => {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
-      <div className="w-full max-w-md">
-        <Link href="/" className="mb-12 flex items-center justify-center">
+    <main className="flex min-h-screen">
+      {/* Brand panel */}
+      <div className="hidden w-1/2 bg-background-dark p-12 lg:flex lg:flex-col lg:justify-between">
+        <Link href="/">
           <Image
             src="/images/david-returns-logo.png"
             alt="David Returns"
-            width={180}
-            height={45}
-            className="h-12 w-auto"
+            width={160}
+            height={40}
+            className="h-10 w-auto brightness-0 invert"
             priority
           />
         </Link>
 
-        <div className="rounded-2xl border border-border bg-card p-8 shadow-sm sm:p-10">
-          <h1 className="text-center text-3xl font-semibold tracking-tight text-foreground">Welcome back</h1>
+        <div>
+          <h2 className="font-display text-4xl font-normal tracking-tight text-white xl:text-5xl">
+            Returns, simplified.
+          </h2>
+          <p className="mt-4 max-w-sm text-lg text-white/60">
+            Schedule a pickup and we handle the rest. No boxes, no lines, no effort.
+          </p>
 
+          <div className="mt-10 space-y-4">
+            {trustSignals.map((signal) => (
+              <div key={signal.text} className="flex items-center gap-3 text-white/50">
+                <signal.icon className="h-5 w-5 shrink-0" />
+                <span className="text-sm">{signal.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <p className="text-sm text-white/30">
+          &copy; {new Date().getFullYear()} David Returns
+        </p>
+      </div>
+
+      {/* Form panel */}
+      <div className="flex w-full flex-col items-center justify-center bg-background px-4 lg:w-1/2">
+        <div className="w-full max-w-md">
+          <Link href="/" className="mb-10 flex items-center justify-center lg:hidden">
+            <Image
+              src="/images/david-returns-logo.png"
+              alt="David Returns"
+              width={180}
+              height={45}
+              className="h-12 w-auto"
+              priority
+            />
+          </Link>
+
+          <h1 className="text-center font-display text-3xl font-normal tracking-tight text-foreground">
+            Welcome back
+          </h1>
           <p className="mt-3 text-center text-muted-foreground">Sign in to manage your returns</p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
             {successMessage && (
-              <div className="rounded-lg bg-green-100 px-4 py-3 text-sm text-green-800">{successMessage}</div>
+              <div className="rounded-xl bg-accent-green-light px-4 py-3 text-sm text-accent-green">{successMessage}</div>
             )}
 
-            {error && <div className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">{error}</div>}
+            {error && <div className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">{error}</div>}
 
             <div>
-              <label htmlFor="email" className="sr-only">
-                Email
-              </label>
+              <label htmlFor="email" className="sr-only">Email</label>
               <input
                 id="email"
                 type="email"
@@ -98,9 +141,7 @@ const SignInPage = () => {
             </div>
 
             <div className="relative">
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
+              <label htmlFor="password" className="sr-only">Password</label>
               <input
                 id="password"
                 type={showPassword ? "text" : "password"}
@@ -119,10 +160,7 @@ const SignInPage = () => {
             </div>
 
             <div className="text-right">
-              <Link
-                href="/forgot-password"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
+              <Link href="/forgot-password" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                 Forgot password?
               </Link>
             </div>
@@ -130,11 +168,9 @@ const SignInPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-foreground py-3.5 text-sm font-medium text-background transition-all hover:opacity-90 disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-foreground py-3.5 text-sm font-medium text-background transition-all hover:shadow-md disabled:opacity-50"
             >
-              {isLoading ? (
-                "Signing in..."
-              ) : (
+              {isLoading ? "Signing in..." : (
                 <>
                   Sign in
                   <ArrowRight className="h-4 w-4" />
@@ -144,18 +180,18 @@ const SignInPage = () => {
           </form>
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/signup" className="font-medium text-foreground hover:underline">
               Create account
             </Link>
           </p>
-        </div>
 
-        <p className="mt-8 text-center text-sm text-muted-foreground">
-          <Link href="/" className="hover:text-foreground transition-colors">
-            ← Back to home
-          </Link>
-        </p>
+          <p className="mt-8 text-center text-sm text-muted-foreground lg:hidden">
+            <Link href="/" className="hover:text-foreground transition-colors">
+              &larr; Back to home
+            </Link>
+          </p>
+        </div>
       </div>
     </main>
   )

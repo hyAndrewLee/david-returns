@@ -4,26 +4,30 @@ import Link from "next/link"
 import Image from "next/image"
 import { Menu, X } from "lucide-react"
 import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
+
+const navLinks = [
+  { label: "How It Works", href: "/#how-it-works" },
+  { label: "For Buildings", href: "/for-buildings" },
+  { label: "For Residents", href: "/for-residents" },
+  { label: "Coverage", href: "/coverage" },
+  { label: "About", href: "/about" },
+]
 
 export const Navigation = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10)
-    }
+    const handleScroll = () => setScrolled(window.scrollY > 10)
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const scrollTo = (id: string) => {
-    const element = document.getElementById(id)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
+  useEffect(() => {
     setMobileMenuOpen(false)
-  }
+  }, [pathname])
 
   return (
     <header
@@ -31,7 +35,7 @@ export const Navigation = () => {
         scrolled ? "border-border shadow-sm" : "border-transparent"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center">
           <Image
             src="/images/david-returns-logo.png"
@@ -43,57 +47,71 @@ export const Navigation = () => {
           />
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 md:flex">
-          <button
-            onClick={() => scrollTo("how-it-works")}
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            How it works
-          </button>
-          <button
-            onClick={() => scrollTo("pricing")}
-            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Pricing
-          </button>
-          <Link href="/faq" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-            FAQ
-          </Link>
+        <nav className="hidden items-center gap-1 lg:flex">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`rounded-lg px-3 py-2 text-sm transition-colors ${
+                pathname === link.href
+                  ? "font-medium text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="hidden items-center gap-3 lg:flex">
           <Link
             href="/signin"
+            className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Schedule Pickup
+          </Link>
+          <Link
+            href="/for-buildings#partner"
             className="rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
           >
-            Schedule pickup
+            Partner Your Building
           </Link>
-        </nav>
+        </div>
 
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="rounded-md p-2 text-muted-foreground hover:bg-secondary md:hidden"
+          className="rounded-md p-2 text-muted-foreground hover:bg-secondary lg:hidden"
         >
           {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
       {mobileMenuOpen && (
-        <div className="border-t border-border bg-background px-4 py-4 md:hidden">
-          <div className="flex flex-col gap-3">
-            <button onClick={() => scrollTo("how-it-works")} className="text-left text-sm text-muted-foreground">
-              How it works
-            </button>
-            <button onClick={() => scrollTo("pricing")} className="text-left text-sm text-muted-foreground">
-              Pricing
-            </button>
-            <Link href="/faq" className="text-sm text-muted-foreground">
-              FAQ
-            </Link>
-            <Link
-              href="/signin"
-              className="mt-2 w-full rounded-full bg-foreground py-2.5 text-center text-sm font-medium text-background transition-all duration-200 hover:shadow-md"
-            >
-              Schedule pickup
-            </Link>
+        <div className="border-t border-border bg-background px-4 py-4 lg:hidden">
+          <div className="flex flex-col gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <div className="mt-3 flex flex-col gap-2 border-t border-border pt-3">
+              <Link
+                href="/signin"
+                className="rounded-full border border-border py-2.5 text-center text-sm font-medium text-foreground transition-all hover:bg-secondary"
+              >
+                Schedule Pickup
+              </Link>
+              <Link
+                href="/for-buildings#partner"
+                className="rounded-full bg-foreground py-2.5 text-center text-sm font-medium text-background transition-all hover:shadow-md"
+              >
+                Partner Your Building
+              </Link>
+            </div>
           </div>
         </div>
       )}
