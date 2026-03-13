@@ -36,7 +36,7 @@ export const HowItWorks = () => (
       <div className="mt-16 grid gap-6 sm:grid-cols-3">
         {steps.map((step) => (
           <div key={step.number} className="group relative">
-            <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+            <div className="relative h-full overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
               <span className="font-display text-5xl font-normal text-border/80">
                 {step.number}
               </span>

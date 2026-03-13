@@ -40,7 +40,7 @@ export const TestimonialsSection = () => (
         {testimonials.map((testimonial) => (
           <div
             key={testimonial.name}
-            className="rounded-2xl border border-border bg-card p-8 shadow-sm"
+            className="flex flex-col rounded-2xl border border-border bg-card p-8 shadow-sm"
           >
             <div className="flex gap-0.5">
               {Array.from({ length: testimonial.rating }).map((_, i) => (
@@ -48,7 +48,7 @@ export const TestimonialsSection = () => (
               ))}
             </div>
 
-            <blockquote className="mt-4">
+            <blockquote className="mt-4 flex-1">
               <p className="leading-relaxed text-foreground">
                 &ldquo;{testimonial.text}&rdquo;
               </p>
