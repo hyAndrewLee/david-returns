@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, Package, Home, Zap, BarChart3 } from "lucide-react"
+import { ArrowRight, Package, Home, Zap, Heart } from "lucide-react"
 
 const benefits = [
   {
@@ -18,9 +18,9 @@ const benefits = [
     description: "No lockers. No kiosks. No staff burden. We handle everything.",
   },
   {
-    icon: BarChart3,
-    title: "Operational Insights",
-    description: "Track return volume, pickup frequency, and tenant engagement.",
+    icon: Heart,
+    title: "One More Reason to Stay In",
+    description: "Tenants love buildings that simplify their lives. Add return pickups to the amenities they never want to leave behind.",
   },
 ]
 

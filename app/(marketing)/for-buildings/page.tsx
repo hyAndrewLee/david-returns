@@ -1,7 +1,6 @@
-import Link from "next/link"
 import { Navigation } from "@/components/layout/Navigation"
 import { Footer } from "@/components/layout/Footer"
-import { ArrowRight, Package, Smile, Zap, DollarSign, Building2, Users, ShieldCheck } from "lucide-react"
+import { ArrowRight, Package, Smile, Zap, Heart, Building2, Users, ShieldCheck } from "lucide-react"
 
 const benefits = [
   {
@@ -20,9 +19,9 @@ const benefits = [
     description: "No lockers. No kiosks. No dedicated staff. We handle everything from scheduling to carrier routing.",
   },
   {
-    icon: DollarSign,
-    title: "No Cost to the Building",
-    description: "David Returns is completely free for the building. Revenue comes from the consumer service model.",
+    icon: Heart,
+    title: "One More Reason to Stay In",
+    description: "Gyms, lounges, rooftops — tenants love buildings that simplify their lives. Add return pickups to the list of amenities they never want to leave behind.",
   },
 ]
 
@@ -66,7 +65,7 @@ const ForBuildingsPage = () => (
             Upgrade your building&apos;s package&nbsp;experience.
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground sm:text-xl">
-            David Returns provides seamless return logistics for residents &mdash; at no cost and zero infrastructure to&nbsp;the&nbsp;building.
+            David Returns provides seamless return logistics for residents &mdash; zero infrastructure, minimal effort, and happier&nbsp;tenants.
           </p>
           <div className="mt-10">
             <a
@@ -158,32 +157,6 @@ const ForBuildingsPage = () => (
               <span className="font-medium text-foreground">{item.text}</span>
             </div>
           ))}
-        </div>
-      </div>
-    </section>
-
-    {/* CTA / Contact */}
-    <section id="partner" className="bg-background-dark py-24 sm:py-32">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-3xl font-normal tracking-tight text-white sm:text-4xl lg:text-5xl">
-            Ready to bring David Returns to your&nbsp;building?
-          </h2>
-          <p className="mt-6 text-lg text-white/70">
-            Get in touch and we&apos;ll have your building set up within the&nbsp;week.
-          </p>
-          <div className="mt-10">
-            <a
-              href="mailto:hello@davidreturns.com?subject=Building Partnership Inquiry"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-medium text-background-dark transition-all hover:scale-[1.02] hover:shadow-lg"
-            >
-              Get in Touch
-              <ArrowRight className="h-4 w-4" />
-            </a>
-          </div>
-          <p className="mt-6 text-sm text-white/50">
-            Or email us directly at hello@davidreturns.com
-          </p>
         </div>
       </div>
     </section>

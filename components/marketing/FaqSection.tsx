@@ -66,7 +66,7 @@ const faqsByCategory: Record<FaqCategory, { question: string; answer: string }[]
     {
       question: "What does it cost for the building?",
       answer:
-        "Nothing. David Returns is completely free for the building. Revenue comes from the consumer service model for non-partnered users.",
+        "We work with each building to find a partnership model that fits. Reach out to learn more about pricing and how we can work together.",
     },
     {
       question: "What infrastructure is required?",

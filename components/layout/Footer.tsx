@@ -6,7 +6,7 @@ import { ArrowRight, MapPin, Mail, Linkedin } from "lucide-react"
 export const Footer = () => (
   <footer>
     {/* Final CTA */}
-    <div className="bg-background-dark py-20 sm:py-24">
+    <div id="partner" className="bg-background-dark py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="flex flex-col items-center gap-6 text-center">
           <h2 className="font-display text-3xl font-normal tracking-tight text-white sm:text-4xl lg:text-5xl">
