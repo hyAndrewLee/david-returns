@@ -36,6 +36,7 @@
 - **Fraud prevention focus**: Their AI-powered Return Vision product gives them a technology angle that makes them feel like more than a logistics company.
 
 **Key takeaways for David Returns**:
+
 - Use statistics everywhere, even early-stage pilot numbers
 - Cite sources for any data claims
 - Use category labels above section headlines
@@ -54,11 +55,12 @@
 - **Interactive product demo in hero**: The hero shows an actual product interface mockup — a return portal with selectable items, tabs (Custom portal / Analytics / Exchanges / Shop Now / Drop off / Order tracking). This makes the product feel real and tangible.
 - **"All-in-one platform" framing**: Products are presented as parts of a unified system (Checkout+, Returns, Tracking, Fraud Solutions), each with its own card and "Discover product" CTA.
 - **Workflow builder visualization**: A visual no-code workflow editor with conditions and actions. Even if decorative, it communicates sophistication.
-- **Scale metrics**: "$2.4B+ in sales retained", "2M+ returns per month", "5k brands", "18 countries" — these are displayed in a horizontal row with large numbers.
+- **Scale metrics**: "$1.4B+ in sales retained", "2M+ returns per month", "5k brands", "18 countries" — these are displayed in a horizontal row with large numbers.
 - **Enterprise trust signals**: "<2 Hours response time", "24/7 Support", "98% satisfaction", SSO, 2FA, SOC2 compliance badges.
 - **Clean, modern aesthetic**: Generous whitespace used well (not excessive), clean card designs with subtle shadows, a blue-purple accent palette.
 
 **Key takeaways for David Returns**:
+
 - Show the product/platform interface in the hero or early on the page
 - Use "all-in-one" or "one platform" framing when possible
 - Display scale metrics in a horizontal strip with large numbers
@@ -82,6 +84,7 @@
 - **Strong visual hierarchy**: Dramatic size differences between headline levels. Hero headlines are 48–72px, section headlines 32–48px, body 16–18px.
 
 **Key takeaways for David Returns**:
+
 - Place a "Trusted by X buildings across NYC" line above the fold
 - Use problem-first framing before presenting solutions
 - Add CTAs after every section, not just at the top and bottom
@@ -103,6 +106,7 @@
 - **Typography as design**: Large, elegant headlines that are themselves the visual interest — no need for decorative icons.
 
 **Key takeaways for David Returns**:
+
 - Swap pure white (#fff) backgrounds for warm off-white/cream tones
 - Consider a serif or semi-serif display font for headlines (not for everything)
 - Use warm-toned photography of real NYC apartments, buildings, neighborhoods
@@ -121,7 +125,7 @@
 5. **RetailersSection** — FedEx/UPS/USPS logos + store logos (Zara, BR, Aritzia, etc.) — **to be simplified: carriers only**
 6. **TrustSection** — Verified Pickups, Tracking, Secure Drop-offs + mock tracking card
 7. **PackagingSection** — "No printer? No box? No tape?" + 3 cards
-8. **PricingSection** — Pay-As-You-Go ($5) vs Membership ($14.99/mo)
+8. **PricingSection** — Pay-As-You-Go ($7) vs Membership ($14.99/mo)
 9. **TestimonialsSection** — Carousel with customer quotes
 10. **Footer** — "Ready to simplify your returns?" CTA + links
 
@@ -143,36 +147,43 @@
 ### Critical Design Problems
 
 #### 1. "One Long White Blob"
+
 The entire page is white (`oklch(0.99 0 0)`) with almost no visual differentiation between sections. Only `PackagingSection` uses a different background (`bg-neutral-50`). Scrolling feels like dragging through an infinite white void.
 
 **Fix**: Alternate section backgrounds. Use cream/warm gray (`#F9F7F4` or `#F5F3EF`), subtle warm tints, and the occasional dark section to create rhythm.
 
 #### 2. PowerPoint Graphics
+
 Icons are generic Lucide icons (Printer, Package, Scissors, Camera, MapPin) with basic colored circle backgrounds. No custom illustrations, no depth, no texture. The circular orange backgrounds behind icons (`bg-orange-100 text-orange-600`) feel like a default template.
 
 **Fix**: Replace icon-in-circle patterns with either (a) custom illustrations, (b) real photography, or (c) more sophisticated icon treatments with shadows, gradients, or outlined styles.
 
 #### 3. Typography Lacks Personality
+
 Geist is a good engineering font but it's too neutral for a consumer-facing brand site. Every line of text looks the same weight and style. No contrast between display headlines and body text. The only typographic flourish is `italic` on "Not your problem" — which is good but isolated.
 
 **Fix**: Add a distinctive display font for headlines (e.g., `DM Serif Display`, `Playfair Display`, or `Fraunces` for warmth). Keep Geist for body text and UI. This immediately creates visual hierarchy and personality.
 
 #### 4. Consumer-Only Positioning
+
 Every piece of copy speaks to individual consumers: "Return right from your doorstep", "Schedule a pickup", "You have better things to do than making returns." There is zero mention of apartment buildings, property managers, or B2B partnerships.
 
 **Fix**: Complete copy overhaul. The hero must immediately communicate the building partnership model. Consumers should feel they're accessing a network, not hiring a freelance courier.
 
 #### 5. No Data / Statistics
+
 Zero statistics on the homepage. No "X packages processed", no "Y buildings served", no industry data about return volumes. This makes the company feel pre-launch and unproven.
 
 **Fix**: Add an industry stats section with cited data points. Add operational metrics (even early pilot numbers). Display them in large typography.
 
 #### 6. Weak Trust Signals
+
 The only trust signals are carrier logos (FedEx, UPS, USPS). No "trusted by" statement, no building partnerships mentioned, no press coverage, no operational statistics.
 
 **Fix**: Add "Trusted by apartment buildings across NYC" above the fold. Add a metrics strip. Add partner building logos (even anonymized). Add any press or blog mentions.
 
 #### 7. No Visual Rhythm
+
 Sections have massive vertical padding (`py-20 sm:py-28`) but identical backgrounds, making the page feel like disconnected content islands floating in white space. The connecting line in HowItWorks (`h-0.5 bg-gradient-to-r`) is the only attempt at visual flow.
 
 **Fix**: Alternate backgrounds, use overlapping elements, add section-level dividers, vary padding sizes to create visual rhythm.
@@ -190,6 +201,7 @@ David Returns    How It Works    For Buildings    For Residents    Coverage    A
 ```
 
 **Details**:
+
 - Keep sticky behavior with scroll-based shadow
 - Left: Logo (larger, more prominent)
 - Center: `How It Works` | `For Buildings` | `For Residents` | `Coverage` | `About`
@@ -200,19 +212,19 @@ David Returns    How It Works    For Buildings    For Residents    Coverage    A
 
 ### Route Structure
 
-| Route | Status | Purpose |
-|-------|--------|---------|
-| `/` | **Redesign** | Homepage — apartment-centric landing |
-| `/for-buildings` | **New** | B2B page for property managers |
-| `/for-residents` | **New** | Resident-facing explainer |
-| `/coverage` | **New** | Network map of partnered buildings/neighborhoods |
-| `/about` | **New** | Company story, mission, team |
-| `/how-it-works` | **New** (or keep as homepage section) | Detailed process breakdown |
-| `/faq` | **Redesign** | Updated with building + resident questions |
-| `/signin` | **Redesign** | Updated visual design |
-| `/signup` | **Redesign** | Updated visual design |
-| `/privacy` | Keep | Legal |
-| `/terms` | Keep | Legal |
+| Route            | Status                                | Purpose                                          |
+| ---------------- | ------------------------------------- | ------------------------------------------------ |
+| `/`              | **Redesign**                          | Homepage — apartment-centric landing             |
+| `/for-buildings` | **New**                               | B2B page for property managers                   |
+| `/for-residents` | **New**                               | Resident-facing explainer                        |
+| `/coverage`      | **New**                               | Network map of partnered buildings/neighborhoods |
+| `/about`         | **New**                               | Company story, mission, team                     |
+| `/how-it-works`  | **New** (or keep as homepage section) | Detailed process breakdown                       |
+| `/faq`           | **Redesign**                          | Updated with building + resident questions       |
+| `/signin`        | **Redesign**                          | Updated visual design                            |
+| `/signup`        | **Redesign**                          | Updated visual design                            |
+| `/privacy`       | Keep                                  | Legal                                            |
+| `/terms`         | Keep                                  | Legal                                            |
 
 ---
 
@@ -224,22 +236,22 @@ Replace the pure monochrome palette with a warm, professional palette:
 
 ```css
 :root {
-  /* Warm backgrounds instead of pure white */
-  --background: oklch(0.98 0.005 80);        /* Warm off-white / cream */
-  --background-alt: oklch(0.95 0.008 75);    /* Warm light gray for alternating sections */
-  --background-dark: oklch(0.15 0.01 250);   /* Deep navy-charcoal for dark sections */
+	/* Warm backgrounds instead of pure white */
+	--background: oklch(0.98 0.005 80); /* Warm off-white / cream */
+	--background-alt: oklch(0.95 0.008 75); /* Warm light gray for alternating sections */
+	--background-dark: oklch(0.15 0.01 250); /* Deep navy-charcoal for dark sections */
 
-  /* Text */
-  --foreground: oklch(0.18 0.01 250);        /* Near-black with warmth */
-  --muted-foreground: oklch(0.45 0.01 250);  /* Warm gray for secondary text */
+	/* Text */
+	--foreground: oklch(0.18 0.01 250); /* Near-black with warmth */
+	--muted-foreground: oklch(0.45 0.01 250); /* Warm gray for secondary text */
 
-  /* Accent: Warm terracotta-orange (not neon) */
-  --accent-warm: oklch(0.65 0.18 45);        /* Terracotta / warm orange */
-  --accent-warm-light: oklch(0.92 0.04 60);  /* Light warm tint for backgrounds */
+	/* Accent: Warm terracotta-orange (not neon) */
+	--accent-warm: oklch(0.65 0.18 45); /* Terracotta / warm orange */
+	--accent-warm-light: oklch(0.92 0.04 60); /* Light warm tint for backgrounds */
 
-  /* Secondary: Sage green for trust/security feel */
-  --accent-green: oklch(0.55 0.10 155);      /* Sage green */
-  --accent-green-light: oklch(0.93 0.03 155); /* Light sage for backgrounds */
+	/* Secondary: Sage green for trust/security feel */
+	--accent-green: oklch(0.55 0.1 155); /* Sage green */
+	--accent-green-light: oklch(0.93 0.03 155); /* Light sage for backgrounds */
 }
 ```
 
@@ -249,18 +261,19 @@ Replace the pure monochrome palette with a warm, professional palette:
 
 ```css
 /* Display font — for headlines, hero text, section titles */
---font-display: "DM Serif Display", Georgia, serif;
+--font-display: 'DM Serif Display', Georgia, serif;
 
 /* Body font — keep Geist for readability */
---font-sans: "Geist", system-ui, sans-serif;
+--font-sans: 'Geist', system-ui, sans-serif;
 
 /* Mono — keep for any code/data */
---font-mono: "Geist Mono", monospace;
+--font-mono: 'Geist Mono', monospace;
 ```
 
 **Font pairing**: `DM Serif Display` for all h1/h2 headlines gives warmth and authority. `Geist` for body text, navigation, CTAs, and all UI elements keeps it modern and readable. This serif + sans-serif pairing mirrors what Sotheby's does and instantly elevates the feel from "startup template" to "established brand."
 
 **Alternative display fonts** (if DM Serif Display doesn't resonate):
+
 - `Fraunces` — optical sizing, warm and modern
 - `Lora` — elegant, readable
 - `Playfair Display` — high contrast, editorial
@@ -282,26 +295,26 @@ Background alternation pattern:
 ```css
 /* Primary card — warm shadow, rounded */
 .card-primary {
-  background: white;
-  border: 1px solid oklch(0.90 0.01 80);
-  border-radius: 16px;
-  box-shadow: 0 4px 24px oklch(0 0 0 / 0.06);
+	background: white;
+	border: 1px solid oklch(0.9 0.01 80);
+	border-radius: 16px;
+	box-shadow: 0 4px 24px oklch(0 0 0 / 0.06);
 }
 
 /* Elevated card — for featured items */
 .card-elevated {
-  background: white;
-  border: 1px solid oklch(0.88 0.01 80);
-  border-radius: 20px;
-  box-shadow: 0 8px 40px oklch(0 0 0 / 0.08);
+	background: white;
+	border: 1px solid oklch(0.88 0.01 80);
+	border-radius: 20px;
+	box-shadow: 0 8px 40px oklch(0 0 0 / 0.08);
 }
 
 /* Dark card — for contrast sections */
 .card-dark {
-  background: oklch(0.18 0.01 250);
-  border: 1px solid oklch(0.25 0.01 250);
-  border-radius: 16px;
-  color: oklch(0.95 0 0);
+	background: oklch(0.18 0.01 250);
+	border: 1px solid oklch(0.25 0.01 250);
+	border-radius: 16px;
+	color: oklch(0.95 0 0);
 }
 ```
 
@@ -325,6 +338,7 @@ Warm CTA:       bg-accent-warm text-white rounded-full px-8 py-3.5
 ### Homepage (`/`)
 
 The homepage must communicate three things immediately:
+
 1. A return network exists across NYC apartment buildings
 2. Buildings partner with David Returns
 3. Tenants benefit automatically
@@ -336,11 +350,13 @@ The homepage must communicate three things immediately:
 ---
 
 #### Section 1: Navigation Bar
-*(See architecture section above)*
+
+_(See architecture section above)_
 
 ---
 
 #### Section 2: Hero
+
 **Background**: Warm off-white with subtle gradient
 
 ```
@@ -361,6 +377,7 @@ The homepage must communicate three things immediately:
 ```
 
 **Key changes from current**:
+
 - Remove "Return right from your doorstep" (too consumer-only)
 - Add "Trusted by apartment buildings across NYC" badge
 - Hero headline frames the company as infrastructure, not a service
@@ -370,6 +387,7 @@ The homepage must communicate three things immediately:
 ---
 
 #### Section 3: The Problem (Industry Data)
+
 **Background**: Warm gray (`--background-alt`)
 
 ```
@@ -391,6 +409,7 @@ The homepage must communicate three things immediately:
 ```
 
 **Key changes from current**:
+
 - Replace the "Today vs David Returns" toggle with industry statistics
 - Use cited data to build credibility
 - Frame the problem around buildings, not individual consumers
@@ -399,6 +418,7 @@ The homepage must communicate three things immediately:
 ---
 
 #### Section 4: The Solution
+
 **Background**: Warm white
 
 ```
@@ -424,6 +444,7 @@ The homepage must communicate three things immediately:
 ---
 
 #### Section 5: How It Works
+
 **Background**: Warm gray
 
 ```
@@ -444,6 +465,7 @@ The homepage must communicate three things immediately:
 ```
 
 **Key changes from current**:
+
 - Mention "Free for partnered building residents" in step 2
 - Add the flow diagram to visualize the logistics chain
 - Cleaner card design with more visual weight
@@ -451,6 +473,7 @@ The homepage must communicate three things immediately:
 ---
 
 #### Section 6: Built for Apartment Buildings
+
 **Background**: Dark navy/charcoal (`--background-dark`) — **this is the visual break point**
 
 ```
@@ -482,6 +505,7 @@ The homepage must communicate three things immediately:
 ---
 
 #### Section 7: Coverage Map
+
 **Background**: Warm white
 
 ```
@@ -504,6 +528,7 @@ The homepage must communicate three things immediately:
 ---
 
 #### Section 8: Carrier & Drop-off Partners
+
 **Background**: Warm gray
 
 ```
@@ -524,6 +549,7 @@ The homepage must communicate three things immediately:
 ---
 
 #### Section 9: How Residents Use It
+
 **Background**: Warm white
 
 ```
@@ -536,12 +562,12 @@ The homepage must communicate three things immediately:
   If Your Building Partners With Us     If Your Building Doesn't Yet
   ─────────────────────────────────     ──────────────────────────────
   ✓ Free unlimited pickups              Pricing:
-  ✓ Scheduled returns                   • $5 per pickup
-  ✓ No trips to UPS                     • +$2 per additional package
+  ✓ Scheduled returns                   • $7 per pickup
+  ✓ No trips to UPS                     • +$1 per additional package
   ✓ No packaging needed                 • $14.99/mo unlimited
-                                        
+
   [Schedule Free Pickup]                [Schedule Pickup]
-                                        
+
                                         Want free pickups?
                                         Request David Returns
                                         for your building →
@@ -552,6 +578,7 @@ The homepage must communicate three things immediately:
 ---
 
 #### Section 10: Testimonials / Social Proof
+
 **Background**: Warm gray
 
 ```
@@ -570,6 +597,7 @@ The homepage must communicate three things immediately:
 ```
 
 **Key changes from current**:
+
 - Show all testimonials at once (no carousel — carousels hide content)
 - Add at least one building manager testimonial
 - Include building name and neighborhood for specificity
@@ -578,6 +606,7 @@ The homepage must communicate three things immediately:
 ---
 
 #### Section 11: Final CTA
+
 **Background**: Dark navy/charcoal
 
 ```
@@ -593,6 +622,7 @@ The homepage must communicate three things immediately:
 ---
 
 #### Section 12: Footer
+
 **Background**: Darker shade of dark section (seamless transition from CTA)
 
 ```
@@ -688,7 +718,7 @@ SECTION: IF YOUR BUILDING IS PARTNERED
 SECTION: IF YOUR BUILDING ISN'T PARTNERED YET
 ────────
   You can still use David Returns:
-  • $5 per pickup, +$2 per additional package
+  • $7 per pickup, +$1 per additional package
   • $14.99/month unlimited
   [Schedule Pickup]
 
@@ -801,88 +831,90 @@ Visual update:
 
 ## 6. What to Remove
 
-| Current Element | Why Remove |
-|----------------|-----------|
-| "Return right from your doorstep" hero headline | Consumer-only positioning |
-| "You have better things to do" subheadline | Doesn't communicate building model |
-| "Now serving NYC" badge (current style) | Replace with "Trusted by apartment buildings across NYC" |
-| "Limited pilot — expanding soon to SF, DC, and Atlanta" | Premature; focus on NYC dominance first |
-| ProblemSection "Today vs David Returns" toggle | Replace with industry statistics section |
-| PackagingSection as standalone section | Fold into "For Residents" or "How It Works" as a sub-point |
-| PricingSection as a major standalone section | Fold into "For Residents" section; pricing is secondary to the building model |
-| TestimonialsSection carousel format | Replace with static 3-card grid; carousels hide content |
-| Individual pricing-focused CTAs | Replace with dual CTAs (Partner + Schedule) |
-| Pure white backgrounds everywhere | Replace with warm off-white and alternating sections |
-| Geist as the only font | Add display serif font for headlines |
-| All retailer/store logos (Zara, Banana Republic, Aritzia, Rag & Bone, Abercrombie) | Clutters the brand; direct-to-store model is being dropped |
-| "Plus direct-to-store returns" badge and messaging | No longer part of the service model |
-| "We take it all the way. Straight back to the store." copy | Removed with direct-to-retail pivot |
-| "...and anywhere else you need / Just let us know" badge | Unnecessary; simplify to 4 carrier partners only |
-| Orange as the only accent | Add warm palette (terracotta, sage, navy) |
+| Current Element                                                                    | Why Remove                                                                    |
+| ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| "Return right from your doorstep" hero headline                                    | Consumer-only positioning                                                     |
+| "You have better things to do" subheadline                                         | Doesn't communicate building model                                            |
+| "Now serving NYC" badge (current style)                                            | Replace with "Trusted by apartment buildings across NYC"                      |
+| "Limited pilot — expanding soon to SF, DC, and Atlanta"                            | Premature; focus on NYC dominance first                                       |
+| ProblemSection "Today vs David Returns" toggle                                     | Replace with industry statistics section                                      |
+| PackagingSection as standalone section                                             | Fold into "For Residents" or "How It Works" as a sub-point                    |
+| PricingSection as a major standalone section                                       | Fold into "For Residents" section; pricing is secondary to the building model |
+| TestimonialsSection carousel format                                                | Replace with static 3-card grid; carousels hide content                       |
+| Individual pricing-focused CTAs                                                    | Replace with dual CTAs (Partner + Schedule)                                   |
+| Pure white backgrounds everywhere                                                  | Replace with warm off-white and alternating sections                          |
+| Geist as the only font                                                             | Add display serif font for headlines                                          |
+| All retailer/store logos (Zara, Banana Republic, Aritzia, Rag & Bone, Abercrombie) | Clutters the brand; direct-to-store model is being dropped                    |
+| "Plus direct-to-store returns" badge and messaging                                 | No longer part of the service model                                           |
+| "We take it all the way. Straight back to the store." copy                         | Removed with direct-to-retail pivot                                           |
+| "...and anywhere else you need / Just let us know" badge                           | Unnecessary; simplify to 4 carrier partners only                              |
+| Orange as the only accent                                                          | Add warm palette (terracotta, sage, navy)                                     |
 
 ---
 
 ## 7. What to Add
 
-| New Element | Purpose |
-|------------|---------|
-| "Trusted by apartment buildings across NYC" badge | Above-the-fold credibility |
-| Industry statistics section (30% return rate, $816B, 21 returns/year) | Data-driven credibility |
-| "Built for Apartment Buildings" dark section | B2B positioning, visual break |
-| Coverage / network map | Network credibility |
-| Metrics strip (buildings served, packages processed, neighborhoods) | Operational proof |
-| `/for-buildings` page | Primary B2B conversion page |
-| `/for-residents` page | Consumer-facing with building request funnel |
-| `/coverage` page | Network visualization |
-| `/about` page | Company story and mission |
-| Display serif font for headlines | Warmth and authority |
-| Warm color palette (cream, terracotta, sage, navy) | Eliminate clinical white feel |
-| Alternating section backgrounds | Visual rhythm and separation |
-| Category labels above sections ("THE PROBLEM", "THE SOLUTION", etc.) | Organization and clarity |
-| Source citations for statistics | Trust signal |
-| Building manager testimonial | B2B social proof |
-| Section-level CTAs (after every major section) | Conversion opportunities |
-| Carrier/partner logos: Happy Returns, FedEx, UPS, USPS (clean 4-logo strip) | Trust signal — no retailer logos |
-| Dark sections for visual breaks | Rhythm and contrast |
-| Split-layout auth pages | Brand presence in login/signup flow |
+| New Element                                                                 | Purpose                                      |
+| --------------------------------------------------------------------------- | -------------------------------------------- |
+| "Trusted by apartment buildings across NYC" badge                           | Above-the-fold credibility                   |
+| Industry statistics section (30% return rate, $816B, 21 returns/year)       | Data-driven credibility                      |
+| "Built for Apartment Buildings" dark section                                | B2B positioning, visual break                |
+| Coverage / network map                                                      | Network credibility                          |
+| Metrics strip (buildings served, packages processed, neighborhoods)         | Operational proof                            |
+| `/for-buildings` page                                                       | Primary B2B conversion page                  |
+| `/for-residents` page                                                       | Consumer-facing with building request funnel |
+| `/coverage` page                                                            | Network visualization                        |
+| `/about` page                                                               | Company story and mission                    |
+| Display serif font for headlines                                            | Warmth and authority                         |
+| Warm color palette (cream, terracotta, sage, navy)                          | Eliminate clinical white feel                |
+| Alternating section backgrounds                                             | Visual rhythm and separation                 |
+| Category labels above sections ("THE PROBLEM", "THE SOLUTION", etc.)        | Organization and clarity                     |
+| Source citations for statistics                                             | Trust signal                                 |
+| Building manager testimonial                                                | B2B social proof                             |
+| Section-level CTAs (after every major section)                              | Conversion opportunities                     |
+| Carrier/partner logos: Happy Returns, FedEx, UPS, USPS (clean 4-logo strip) | Trust signal — no retailer logos             |
+| Dark sections for visual breaks                                             | Rhythm and contrast                          |
+| Split-layout auth pages                                                     | Brand presence in login/signup flow          |
 
 ---
 
 ## 8. What to Change
 
-| Current | Change To |
-|---------|----------|
-| Navigation: How it works / Pricing / FAQ / Schedule pickup | How It Works / For Buildings / For Residents / Coverage / About + dual CTAs |
-| Hero: "Return right from your doorstep" | "Return infrastructure for apartment living" |
-| Hero visual: Delivery worker photo grid | NYC map with building markers, or apartment building photography |
-| Hero CTA: "Schedule a pickup" only | Dual: "Partner Your Building" (primary) + "Schedule a Pickup" (secondary) |
-| Problem section: Consumer toggle comparison | Industry statistics with cited data |
-| How It Works: Current 3 cards | Same 3 steps but mention "Free for partnered buildings" |
+| Current                                                                    | Change To                                                                                                                                |
+| -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Navigation: How it works / Pricing / FAQ / Schedule pickup                 | How It Works / For Buildings / For Residents / Coverage / About + dual CTAs                                                              |
+| Hero: "Return right from your doorstep"                                    | "Return infrastructure for apartment living"                                                                                             |
+| Hero visual: Delivery worker photo grid                                    | NYC map with building markers, or apartment building photography                                                                         |
+| Hero CTA: "Schedule a pickup" only                                         | Dual: "Partner Your Building" (primary) + "Schedule a Pickup" (secondary)                                                                |
+| Problem section: Consumer toggle comparison                                | Industry statistics with cited data                                                                                                      |
+| How It Works: Current 3 cards                                              | Same 3 steps but mention "Free for partnered buildings"                                                                                  |
 | Retailers section: Full section with store logos (Zara, BR, Aritzia, etc.) | **Remove all retailer logos.** Replace with clean 4-logo carrier strip: Happy Returns, FedEx, UPS, USPS. No "direct-to-store" messaging. |
-| Trust section: Mock tracking card | Keep but reframe around "Your package, our priority" |
-| Packaging section: Standalone section | Fold into How It Works or For Residents |
-| Pricing section: Full standalone section | Move into For Residents page; homepage shows "Free for partnered buildings" |
-| Testimonials: Single-card carousel | 3-card static grid with building + resident quotes |
-| Footer CTA: "Ready to simplify your returns?" | "Bring David Returns to your building" |
-| Footer links: How it works / Pricing / FAQ | For Buildings / For Residents / Coverage / About / FAQ |
-| Background: Pure white throughout | Warm off-white with alternating cream/gray sections |
-| Typography: Geist only | DM Serif Display for headlines + Geist for body |
-| Colors: Black + orange | Deep navy + terracotta + sage + warm neutrals |
-| Border radius: 0.5rem (8px) | 12–20px for cards, keep 0.5rem for inputs |
-| Shadows: Minimal/none | Warm, soft shadows on cards (`0 4px 24px rgba(0,0,0,0.06)`) |
-| Section padding: Uniform `py-20 sm:py-28` | Varied: `py-16` to `py-32` based on section importance |
+| Trust section: Mock tracking card                                          | Keep but reframe around "Your package, our priority"                                                                                     |
+| Packaging section: Standalone section                                      | Fold into How It Works or For Residents                                                                                                  |
+| Pricing section: Full standalone section                                   | Move into For Residents page; homepage shows "Free for partnered buildings"                                                              |
+| Testimonials: Single-card carousel                                         | 3-card static grid with building + resident quotes                                                                                       |
+| Footer CTA: "Ready to simplify your returns?"                              | "Bring David Returns to your building"                                                                                                   |
+| Footer links: How it works / Pricing / FAQ                                 | For Buildings / For Residents / Coverage / About / FAQ                                                                                   |
+| Background: Pure white throughout                                          | Warm off-white with alternating cream/gray sections                                                                                      |
+| Typography: Geist only                                                     | DM Serif Display for headlines + Geist for body                                                                                          |
+| Colors: Black + orange                                                     | Deep navy + terracotta + sage + warm neutrals                                                                                            |
+| Border radius: 0.5rem (8px)                                                | 12–20px for cards, keep 0.5rem for inputs                                                                                                |
+| Shadows: Minimal/none                                                      | Warm, soft shadows on cards (`0 4px 24px rgba(0,0,0,0.06)`)                                                                              |
+| Section padding: Uniform `py-20 sm:py-28`                                  | Varied: `py-16` to `py-32` based on section importance                                                                                   |
 
 ---
 
 ## 9. Implementation Priority
 
 ### Phase 1: Foundation (Do First)
+
 1. **Design system update** — Colors, typography, spacing in `globals.css`
 2. **Navigation overhaul** — New nav structure with For Buildings / For Residents / Coverage / About
 3. **Homepage hero** — New headline, subheadline, dual CTAs, trust badge
 4. **Section backgrounds** — Alternate between warm-white, warm-gray, and dark sections
 
 ### Phase 2: Core Pages
+
 5. **Industry stats section** — Replace ProblemSection toggle with data-driven section
 6. **"Built for Apartment Buildings" dark section** — New B2B positioning section
 7. **For Buildings page** — Full B2B conversion page
@@ -890,6 +922,7 @@ Visual update:
 9. **Coverage page** — Network map
 
 ### Phase 3: Polish
+
 10. **Testimonials redesign** — 3-card grid, building manager quotes
 11. **Footer overhaul** — New structure, links, and CTA
 12. **Auth pages** — Split layout with brand panel
@@ -898,6 +931,7 @@ Visual update:
 15. **How It Works update** — Mention free for partnered buildings, flow diagram
 
 ### Phase 4: Ongoing
+
 16. Add real metrics as they accumulate
 17. Add case studies from building partnerships
 18. Add press/media coverage when available
@@ -909,15 +943,15 @@ Visual update:
 
 These are real, citable industry statistics:
 
-| Stat | Source |
-|------|--------|
-| 30% of online purchases are returned | National Retail Federation |
-| $816B in returned goods annually (US) | NRF, 2022 |
-| Average US household makes 21 returns per year | Optoro Research |
-| 86% of shoppers prefer retailers offering free, convenient returns | NRF + Happy Returns, 2025 |
-| 9% of all returns are fraudulent | NRF, 2025 |
-| Return deliveries cost retailers $7–$10 per item | Optoro |
-| 58% of consumers delay returns due to inconvenience | Narvar, 2023 |
-| Package theft costs Americans $12B annually | Security.org, 2023 |
+| Stat                                                               | Source                     |
+| ------------------------------------------------------------------ | -------------------------- |
+| 30% of online purchases are returned                               | National Retail Federation |
+| $816B in returned goods annually (US)                              | NRF, 2022                  |
+| Average US household makes 21 returns per year                     | Optoro Research            |
+| 86% of shoppers prefer retailers offering free, convenient returns | NRF + Happy Returns, 2025  |
+| 9% of all returns are fraudulent                                   | NRF, 2025                  |
+| Return deliveries cost retailers $7–$10 per item                   | Optoro                     |
+| 58% of consumers delay returns due to inconvenience                | Narvar, 2023               |
+| Package theft costs Americans $12B annually                        | Security.org, 2023         |
 
 Use these with source citations for maximum credibility.
