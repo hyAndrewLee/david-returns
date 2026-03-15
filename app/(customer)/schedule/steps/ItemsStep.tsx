@@ -34,7 +34,10 @@ export const ItemsStep = () => {
           {formData.items.map((item, index) => (
             <div
               key={item.id}
+              role="button"
+              tabIndex={0}
               onClick={() => editItem(item)}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); editItem(item) } }}
               className="flex items-center justify-between rounded-xl border border-border bg-card p-4 cursor-pointer hover:border-primary/50 hover:bg-accent/50 transition-colors"
             >
               <div className="flex items-center gap-4">
@@ -264,10 +267,11 @@ type ItemDetailWithFileProps = ItemDetailProps & {
 
 const DropOffSelect = ({ newItem, setNewItem }: ItemDetailProps) => (
   <div>
-    <label className="text-sm font-medium text-foreground">
+    <label htmlFor="dropoff-location" className="text-sm font-medium text-foreground">
       Where should we drop it off? <span className="text-red-500">*</span>
     </label>
     <select
+      id="dropoff-location"
       value={newItem.returnTo}
       onChange={(e) =>
         setNewItem((prev) => ({
@@ -299,9 +303,9 @@ const DropOffSelect = ({ newItem, setNewItem }: ItemDetailProps) => (
 
 const PackageSizeSelect = ({ newItem, setNewItem }: ItemDetailProps) => (
   <div>
-    <label className="text-sm font-medium text-foreground">
+    <p className="text-sm font-medium text-foreground">
       Package size <span className="text-red-500">*</span>
-    </label>
+    </p>
     <div className="mt-2 grid grid-cols-3 gap-3">
       {(["small", "medium", "large"] as const).map((size) => (
         <button
@@ -326,13 +330,14 @@ const PackageSizeSelect = ({ newItem, setNewItem }: ItemDetailProps) => (
 
 const NotesField = ({ newItem, setNewItem, placeholder }: ItemDetailProps & { placeholder: string }) => (
   <div>
-    <label className="text-sm font-medium text-foreground">
+    <label htmlFor="item-notes" className="text-sm font-medium text-foreground">
       Additional notes <span className="text-muted-foreground">(optional)</span>
     </label>
     <p className="text-xs text-muted-foreground mt-1 mb-2">
       Order number, return code, account number, or special instructions
     </p>
     <textarea
+      id="item-notes"
       value={newItem.notes}
       onChange={(e) => setNewItem((prev) => ({ ...prev, notes: e.target.value }))}
       placeholder={placeholder}
@@ -361,16 +366,16 @@ const HasLabelDetails = ({ newItem, setNewItem }: ItemDetailProps) => (
     </div>
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <label htmlFor="has-label-description" className="text-sm font-medium text-foreground">
         What are you returning? <span className="text-red-500">*</span>
       </label>
       <input
+        id="has-label-description"
         type="text"
         value={newItem.description}
         onChange={(e) => setNewItem((prev) => ({ ...prev, description: e.target.value }))}
         placeholder="e.g. Blue sneakers, size 10"
         className="mt-1.5 w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition-all"
-        autoFocus
       />
     </div>
 
@@ -379,7 +384,7 @@ const HasLabelDetails = ({ newItem, setNewItem }: ItemDetailProps) => (
     <NotesField newItem={newItem} setNewItem={setNewItem} placeholder="e.g., Order #12345, Handle with care, Amazon account: john@email.com" />
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <label htmlFor="photo-upload" className="text-sm font-medium text-foreground">
         Upload photo of package <span className="text-muted-foreground">(optional)</span>
       </label>
       <p className="text-xs text-muted-foreground mt-0.5 mb-2">Recommended so we can identify your package</p>
@@ -453,7 +458,7 @@ const EmailPdfDetails = ({ newItem, setNewItem, validateFileSize, setError }: It
     </div>
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <label htmlFor="label-upload-digital" className="text-sm font-medium text-foreground">
         Upload your label <span className="text-red-500">*</span>
       </label>
       <p className="text-xs text-muted-foreground mt-0.5 mb-2">PNG, JPG, PDF, or iPhone photos • Max 5MB</p>
@@ -518,10 +523,11 @@ const EmailPdfDetails = ({ newItem, setNewItem, validateFileSize, setError }: It
     </div>
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <label htmlFor="email-pdf-description" className="text-sm font-medium text-foreground">
         What are you returning? <span className="text-red-500">*</span>
       </label>
       <input
+        id="email-pdf-description"
         type="text"
         value={newItem.description}
         onChange={(e) => setNewItem((prev) => ({ ...prev, description: e.target.value }))}
@@ -533,9 +539,9 @@ const EmailPdfDetails = ({ newItem, setNewItem, validateFileSize, setError }: It
     <DropOffSelect newItem={newItem} setNewItem={setNewItem} />
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <p className="text-sm font-medium text-foreground">
         Package size <span className="text-red-500">*</span>
-      </label>
+      </p>
       <div className="mt-2 grid grid-cols-3 gap-3">
         {(["small", "medium", "large"] as const).map((size) => (
           <button
@@ -568,24 +574,25 @@ const NoLabelDetails = ({ newItem, setNewItem }: ItemDetailProps) => (
     </div>
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <label htmlFor="no-label-retailer" className="text-sm font-medium text-foreground">
         Retailer name <span className="text-red-500">*</span>
       </label>
       <input
+        id="no-label-retailer"
         type="text"
         value={newItem.retailer}
         onChange={(e) => setNewItem((prev) => ({ ...prev, retailer: e.target.value }))}
         placeholder="e.g. Nike, Zara, Nordstrom"
         className="mt-1.5 w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition-all"
-        autoFocus
       />
     </div>
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <label htmlFor="no-label-order" className="text-sm font-medium text-foreground">
         Order number <span className="text-muted-foreground">(optional)</span>
       </label>
       <input
+        id="no-label-order"
         type="text"
         value={newItem.orderNumber}
         onChange={(e) => setNewItem((prev) => ({ ...prev, orderNumber: e.target.value }))}
@@ -595,7 +602,7 @@ const NoLabelDetails = ({ newItem, setNewItem }: ItemDetailProps) => (
     </div>
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <label htmlFor="proof-upload" className="text-sm font-medium text-foreground">
         Upload proof of purchase <span className="text-muted-foreground">(optional)</span>
       </label>
       <p className="text-xs text-muted-foreground mt-0.5 mb-2">Receipt, order confirmation, or packing slip</p>
@@ -646,10 +653,11 @@ const NoLabelDetails = ({ newItem, setNewItem }: ItemDetailProps) => (
     </div>
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <label htmlFor="no-label-portal" className="text-sm font-medium text-foreground">
         Return portal link <span className="text-muted-foreground">(optional)</span>
       </label>
       <input
+        id="no-label-portal"
         type="url"
         value={newItem.returnPortalLink}
         onChange={(e) => setNewItem((prev) => ({ ...prev, returnPortalLink: e.target.value }))}
@@ -659,9 +667,9 @@ const NoLabelDetails = ({ newItem, setNewItem }: ItemDetailProps) => (
     </div>
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <p className="text-sm font-medium text-foreground">
         Do you want us to request a return label for you?
-      </label>
+      </p>
       <div className="mt-2 grid grid-cols-2 gap-3">
         <button
           type="button"
@@ -689,10 +697,11 @@ const NoLabelDetails = ({ newItem, setNewItem }: ItemDetailProps) => (
     </div>
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <label htmlFor="no-label-description" className="text-sm font-medium text-foreground">
         What are you returning? <span className="text-red-500">*</span>
       </label>
       <input
+        id="no-label-description"
         type="text"
         value={newItem.description}
         onChange={(e) => setNewItem((prev) => ({ ...prev, description: e.target.value }))}
@@ -704,9 +713,9 @@ const NoLabelDetails = ({ newItem, setNewItem }: ItemDetailProps) => (
     <PackageSizeSelect newItem={newItem} setNewItem={setNewItem} />
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <p className="text-sm font-medium text-foreground">
         Additional notes <span className="text-muted-foreground">(optional)</span>
-      </label>
+      </p>
       <p className="text-xs text-muted-foreground mt-1 mb-2">
         Order number, account number, return reason, or any info we need to get your label
       </p>
@@ -730,21 +739,21 @@ const AmazonQrDetails = ({ newItem, setNewItem, validateFileSize, setError }: It
     </div>
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <label htmlFor="qr-retailer" className="text-sm font-medium text-foreground">
         Retailer <span className="text-red-500">*</span>
       </label>
       <input
+        id="qr-retailer"
         type="text"
         value={newItem.retailer}
         onChange={(e) => setNewItem((prev) => ({ ...prev, retailer: e.target.value }))}
         placeholder="e.g. Amazon, Zappos, Nordstrom"
         className="mt-1.5 w-full rounded-xl border border-border bg-card px-4 py-3 text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition-all"
-        autoFocus
       />
     </div>
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <label htmlFor="qr-code-upload" className="text-sm font-medium text-foreground">
         Upload your QR code <span className="text-red-500">*</span>
       </label>
       <p className="text-xs text-muted-foreground mt-0.5 mb-2">PNG, JPG, PDF, or iPhone photos • Max 5MB</p>
@@ -806,10 +815,11 @@ const AmazonQrDetails = ({ newItem, setNewItem, validateFileSize, setError }: It
     </div>
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <label htmlFor="qr-description" className="text-sm font-medium text-foreground">
         What are you returning? <span className="text-red-500">*</span>
       </label>
       <input
+        id="qr-description"
         type="text"
         value={newItem.description}
         onChange={(e) => setNewItem((prev) => ({ ...prev, description: e.target.value }))}
@@ -819,9 +829,9 @@ const AmazonQrDetails = ({ newItem, setNewItem, validateFileSize, setError }: It
     </div>
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <p className="text-sm font-medium text-foreground">
         Package size <span className="text-red-500">*</span>
-      </label>
+      </p>
       <div className="mt-2 grid grid-cols-3 gap-3">
         {(["small", "medium", "large"] as const).map((size) => (
           <button
@@ -841,13 +851,14 @@ const AmazonQrDetails = ({ newItem, setNewItem, validateFileSize, setError }: It
     </div>
 
     <div>
-      <label className="text-sm font-medium text-foreground">
+      <label htmlFor="qr-notes" className="text-sm font-medium text-foreground">
         Additional notes <span className="text-muted-foreground">(optional)</span>
       </label>
       <p className="text-xs text-muted-foreground mt-1 mb-2">
         Order number, account number, or any info we need to process your return
       </p>
       <textarea
+        id="qr-notes"
         value={newItem.notes}
         onChange={(e) => setNewItem((prev) => ({ ...prev, notes: e.target.value }))}
         placeholder="e.g., Order #12345, Customer ID: ABC123"

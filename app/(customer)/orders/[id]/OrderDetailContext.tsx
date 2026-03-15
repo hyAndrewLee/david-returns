@@ -35,10 +35,6 @@ export const OrderDetailProvider = ({ children, initialOrder }: OrderDetailProvi
   )
 
   useEffect(() => {
-    setOrder(initialOrder)
-  }, [initialOrder])
-
-  useEffect(() => {
     const supabase = createBrowserSupabaseClient()
 
     const channel = supabase

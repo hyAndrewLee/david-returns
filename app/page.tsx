@@ -1,3 +1,5 @@
+import type { Metadata } from "next"
+
 import { Navigation } from "@/components/layout/Navigation"
 import { HeroSection } from "@/components/marketing/HeroSection"
 import { StatsSection } from "@/components/marketing/StatsSection"
@@ -8,6 +10,17 @@ import { CarrierPartners } from "@/components/marketing/CarrierPartners"
 import { ResidentsSection } from "@/components/marketing/ResidentsSection"
 import { TestimonialsSection } from "@/components/marketing/TestimonialsSection"
 import { Footer } from "@/components/layout/Footer"
+
+export const metadata: Metadata = {
+  title: "David Returns — Effortless Return Pickups for NYC Apartments",
+  description:
+    "Schedule a return pickup from your apartment building. We collect your packages and drop them off at UPS, USPS, FedEx, or Happy Returns. No boxes, no lines, no effort.",
+  openGraph: {
+    title: "David Returns — Effortless Return Pickups for NYC Apartments",
+    description:
+      "Schedule a return pickup from your apartment building. We collect your packages and drop them off at the right carrier.",
+  },
+}
 
 const HomePage = () => (
   <main className="min-h-screen">

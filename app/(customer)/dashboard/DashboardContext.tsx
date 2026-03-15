@@ -54,11 +54,6 @@ export const DashboardProvider = ({
   const [showContactDialog, setShowContactDialog] = useState(false)
 
   useEffect(() => {
-    setActiveOrders(initialActiveOrders)
-    setPastOrders(initialPastOrders)
-  }, [initialActiveOrders, initialPastOrders])
-
-  useEffect(() => {
     const supabase = createBrowserSupabaseClient()
 
     const channel = supabase

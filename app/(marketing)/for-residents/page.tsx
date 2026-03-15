@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navigation } from '@/components/layout/Navigation';
 import { Footer } from '@/components/layout/Footer';
@@ -26,6 +27,12 @@ const steps = [
 		description: 'We pick up and route to UPS, USPS, FedEx, or Happy Returns.',
 	},
 ];
+
+export const metadata: Metadata = {
+	title: 'For Residents — Free Return Pickups | David Returns',
+	description:
+		'Schedule free return pickups from your apartment. Upload your label, pick a time, and we handle the rest — UPS, USPS, FedEx, or Happy Returns.',
+};
 
 const ForResidentsPage = () => (
 	<main className='min-h-screen'>

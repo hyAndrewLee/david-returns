@@ -279,9 +279,9 @@ const SignUpPage = () => {
                 className="mt-1 h-4 w-4 rounded border-border text-foreground focus:ring-foreground" />
               <label htmlFor="terms" className="text-sm text-muted-foreground">
                 I agree to the{" "}
-                <a href="/terms" className="text-foreground underline underline-offset-2 hover:no-underline">Terms of Service</a>
+                <Link href="/terms" className="text-foreground underline underline-offset-2 hover:no-underline">Terms of Service</Link>
                 {" "}and{" "}
-                <a href="/privacy" className="text-foreground underline underline-offset-2 hover:no-underline">Privacy Policy</a>
+                <Link href="/privacy" className="text-foreground underline underline-offset-2 hover:no-underline">Privacy Policy</Link>
               </label>
             </div>
 

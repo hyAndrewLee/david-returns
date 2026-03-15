@@ -16,13 +16,13 @@ export const Footer = () => (
             Join the growing network of apartment buildings offering effortless returns for their residents.
           </p>
           <div className="mt-2 flex flex-col items-center gap-3 sm:flex-row">
-            <Link
-              href="/for-buildings#partner"
+            <a
+              href="mailto:hello@davidreturns.com"
               className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-medium text-background-dark transition-all hover:scale-[1.02] hover:shadow-lg"
             >
               Partner Your Building
               <ArrowRight className="h-4 w-4" />
-            </Link>
+            </a>
             <Link
               href="/signin"
               className="inline-flex items-center gap-2 rounded-full border border-white/20 px-8 py-3.5 text-sm font-medium text-white transition-all hover:border-white/40 hover:bg-white/5"
@@ -54,9 +54,9 @@ export const Footer = () => (
                 </Link>
               </li>
               <li>
-                <Link href="/for-buildings#partner" className="transition-colors hover:text-white">
+                <a href="mailto:hello@davidreturns.com" className="transition-colors hover:text-white">
                   Partner with us
-                </Link>
+                </a>
               </li>
               <li>
                 <Link href="/faq" className="transition-colors hover:text-white">

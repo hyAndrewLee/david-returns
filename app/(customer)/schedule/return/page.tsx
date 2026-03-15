@@ -1,11 +1,11 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { CheckCircle2, Loader2 } from "lucide-react"
 import { trpc } from "@/lib/trpc"
 
-const PaymentReturnPage = () => {
+const PaymentReturnPageContent = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading")
@@ -116,5 +116,18 @@ const PaymentReturnPage = () => {
     </div>
   )
 }
+
+const PaymentReturnPage = () => (
+  <Suspense fallback={
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="text-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    </div>
+  }>
+    <PaymentReturnPageContent />
+  </Suspense>
+)
 
 export default PaymentReturnPage

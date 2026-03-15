@@ -36,10 +36,6 @@ export const OrdersProvider = ({ children, initialOrders, profile, userEmail }: 
   const [orders, setOrders] = useState(initialOrders)
 
   useEffect(() => {
-    setOrders(initialOrders)
-  }, [initialOrders])
-
-  useEffect(() => {
     const supabase = createBrowserSupabaseClient()
 
     const channel = supabase

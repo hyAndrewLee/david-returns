@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 
 import { createServerSupabaseClient } from "@/server/auth/supabase"
@@ -11,6 +12,11 @@ import {
 } from "@/server/db/schema"
 import { eq, and } from "drizzle-orm"
 
+export const metadata: Metadata = {
+  title: "Profile Settings | David Returns",
+  description: "Manage your profile, default pickup address, and membership settings.",
+}
+
 const ProfilePage = async () => {
   const supabase = await createServerSupabaseClient()
 
@@ -22,29 +28,29 @@ const ProfilePage = async () => {
     redirect("/signin")
   }
 
-  const [profile] = await adminDb
-    .select()
-    .from(profilesTable)
-    .where(eq(profilesTable.id, user.id))
-    .limit(1)
-
-  const [defaultAddress] = await adminDb
-    .select()
-    .from(addressesTable)
-    .where(and(eq(addressesTable.userId, user.id), eq(addressesTable.isDefault, true)))
-    .limit(1)
-
-  const [subscription] = await adminDb
-    .select()
-    .from(subscriptionsTable)
-    .where(
-      and(
-        eq(subscriptionsTable.userId, user.id),
-        eq(subscriptionsTable.status, "active"),
-        eq(subscriptionsTable.plan, "membership"),
-      ),
-    )
-    .limit(1)
+  const [[profile], [defaultAddress], [subscription]] = await Promise.all([
+    adminDb
+      .select()
+      .from(profilesTable)
+      .where(eq(profilesTable.id, user.id))
+      .limit(1),
+    adminDb
+      .select()
+      .from(addressesTable)
+      .where(and(eq(addressesTable.userId, user.id), eq(addressesTable.isDefault, true)))
+      .limit(1),
+    adminDb
+      .select()
+      .from(subscriptionsTable)
+      .where(
+        and(
+          eq(subscriptionsTable.userId, user.id),
+          eq(subscriptionsTable.status, "active"),
+          eq(subscriptionsTable.plan, "membership"),
+        ),
+      )
+      .limit(1),
+  ])
 
   return (
     <ProfileProvider

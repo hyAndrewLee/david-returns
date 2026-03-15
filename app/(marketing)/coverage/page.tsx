@@ -1,3 +1,5 @@
+import type { Metadata } from "next"
+
 import { Navigation } from "@/components/layout/Navigation"
 import { Footer } from "@/components/layout/Footer"
 import { MapPin } from "lucide-react"
@@ -16,6 +18,12 @@ const neighborhoods = [
     areas: ["Hoboken", "Jersey City", "Long Island City", "Astoria"],
   },
 ]
+
+export const metadata: Metadata = {
+  title: "Coverage Area — NYC Neighborhoods | David Returns",
+  description:
+    "David Returns serves apartment buildings across Manhattan, Brooklyn, and expanding to NJ. Check if your neighborhood is covered.",
+}
 
 const CoveragePage = () => (
   <main className="min-h-screen">

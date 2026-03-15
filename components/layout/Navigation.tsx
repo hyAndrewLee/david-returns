@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Menu, X } from "lucide-react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
 
 const navLinks = [
@@ -21,13 +21,15 @@ export const Navigation = () => {
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10)
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  useEffect(() => {
-    setMobileMenuOpen(false)
-  }, [pathname])
+  const prevPathname = useRef(pathname)
+  if (prevPathname.current !== pathname) {
+    prevPathname.current = pathname
+    if (mobileMenuOpen) setMobileMenuOpen(false)
+  }
 
   return (
     <header

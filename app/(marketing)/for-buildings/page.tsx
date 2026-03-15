@@ -1,3 +1,5 @@
+import type { Metadata } from "next"
+
 import { Navigation } from "@/components/layout/Navigation"
 import { Footer } from "@/components/layout/Footer"
 import { ArrowRight, Package, Smile, Zap, Heart, Building2, Users, ShieldCheck } from "lucide-react"
@@ -50,6 +52,12 @@ const idealBuilding = [
   { icon: Package, text: "NYC metro area" },
 ]
 
+export const metadata: Metadata = {
+  title: "For Buildings — Partner with David Returns",
+  description:
+    "Reduce package room clutter and improve tenant satisfaction. Partner your building with David Returns for seamless return logistics — zero infrastructure required.",
+}
+
 const ForBuildingsPage = () => (
   <main className="min-h-screen">
     <Navigation />
@@ -69,7 +77,7 @@ const ForBuildingsPage = () => (
           </p>
           <div className="mt-10">
             <a
-              href="#partner"
+              href="mailto:hello@davidreturns.com"
               className="inline-flex items-center gap-2 rounded-full bg-foreground px-8 py-3.5 text-sm font-medium text-background transition-all hover:scale-[1.02] hover:shadow-lg"
             >
               Partner Your Building

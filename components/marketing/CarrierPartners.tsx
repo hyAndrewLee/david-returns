@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 const carriers = [
 	{ src: '/images/happy-returns-logo.svg', alt: 'Happy Returns', height: 'h-8 sm:h-10' },
 	{ src: '/images/fedex-logo.svg', alt: 'FedEx', height: 'h-8 sm:h-10' },
@@ -14,10 +16,12 @@ export const CarrierPartners = () => (
 
 			<div className="flex flex-wrap items-center justify-center gap-10 sm:gap-16">
 				{carriers.map((carrier) => (
-					<img
+					<Image
 						key={carrier.alt}
 						src={carrier.src}
 						alt={carrier.alt}
+						width={120}
+						height={48}
 						className={`${carrier.height} w-auto object-contain`}
 					/>
 				))}

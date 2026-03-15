@@ -1,6 +1,13 @@
+import type { Metadata } from "next"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
+
+export const metadata: Metadata = {
+  title: "Privacy Policy | David Returns",
+  description:
+    "Learn how David Returns collects, uses, and protects your personal information. We never sell your data.",
+}
 
 const PrivacyPolicyPage = () => {
   return (

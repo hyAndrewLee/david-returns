@@ -147,7 +147,7 @@ export const FAQSection = () => {
 				<div className='mt-10 space-y-3'>
 					{activeFaqs.map((faq, index) => (
 						<div
-							key={`${activeCategory}-${index}`}
+							key={faq.question}
 							className={`overflow-hidden rounded-xl border bg-card transition-all ${
 								openIndex === index ? 'border-foreground/30 shadow-md' : 'border-border'
 							}`}

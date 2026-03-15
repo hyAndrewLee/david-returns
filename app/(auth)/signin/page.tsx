@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { Suspense, useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -15,7 +15,7 @@ const trustSignals = [
   { icon: MapPin, text: "Serving Manhattan & Brooklyn" },
 ]
 
-const SignInPage = () => {
+const SignInPageContent = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [email, setEmail] = useState("")
@@ -196,5 +196,15 @@ const SignInPage = () => {
     </main>
   )
 }
+
+const SignInPage = () => (
+  <Suspense fallback={
+    <main className="flex min-h-screen items-center justify-center">
+      <div className="h-12 w-12 animate-spin rounded-full border-4 border-muted border-t-foreground" />
+    </main>
+  }>
+    <SignInPageContent />
+  </Suspense>
+)
 
 export default SignInPage

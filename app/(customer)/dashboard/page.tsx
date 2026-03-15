@@ -20,29 +20,29 @@ const DashboardPage = async () => {
     redirect("/signin")
   }
 
-  const orders = await adminDb
-    .select()
-    .from(ordersTable)
-    .where(eq(ordersTable.userId, user.id))
-    .orderBy(desc(ordersTable.createdAt))
-
-  const [profile] = await adminDb
-    .select()
-    .from(profilesTable)
-    .where(eq(profilesTable.id, user.id))
-    .limit(1)
-
-  const [subscription] = await adminDb
-    .select()
-    .from(subscriptionsTable)
-    .where(
-      and(
-        eq(subscriptionsTable.userId, user.id),
-        eq(subscriptionsTable.status, "active"),
-        eq(subscriptionsTable.plan, "membership"),
-      ),
-    )
-    .limit(1)
+  const [orders, [profile], [subscription]] = await Promise.all([
+    adminDb
+      .select()
+      .from(ordersTable)
+      .where(eq(ordersTable.userId, user.id))
+      .orderBy(desc(ordersTable.createdAt)),
+    adminDb
+      .select()
+      .from(profilesTable)
+      .where(eq(profilesTable.id, user.id))
+      .limit(1),
+    adminDb
+      .select()
+      .from(subscriptionsTable)
+      .where(
+        and(
+          eq(subscriptionsTable.userId, user.id),
+          eq(subscriptionsTable.status, "active"),
+          eq(subscriptionsTable.plan, "membership"),
+        ),
+      )
+      .limit(1),
+  ])
 
   const activeOrders = orders.filter(
     (order) => !["completed", "cancelled"].includes(order.trackingStatus || "pending"),

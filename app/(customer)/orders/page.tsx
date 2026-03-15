@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 
 import { createServerSupabaseClient } from "@/server/auth/supabase"
@@ -6,6 +7,11 @@ import { OrdersProvider } from "@/app/(customer)/orders/OrdersContext"
 import { adminDb } from "@/server/db"
 import { orders as ordersTable, profiles as profilesTable } from "@/server/db/schema"
 import { eq, desc } from "drizzle-orm"
+
+export const metadata: Metadata = {
+  title: "My Orders | David Returns",
+  description: "View and track all your return pickup orders.",
+}
 
 const OrdersPage = async () => {
   const supabase = await createServerSupabaseClient()

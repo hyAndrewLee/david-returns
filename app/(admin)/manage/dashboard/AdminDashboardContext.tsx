@@ -36,6 +36,8 @@ export type Profile = {
   subscriptions?: any[]
 }
 
+const EMPTY_CUSTOMERS: Profile[] = []
+
 export type AdminStats = {
   total: number
   pending: number
@@ -102,7 +104,7 @@ export const AdminDashboardProvider = ({
   children,
   orders,
   userEmail,
-  customers = [],
+  customers = EMPTY_CUSTOMERS,
 }: AdminDashboardProviderProps) => {
   const [searchQuery, setSearchQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")

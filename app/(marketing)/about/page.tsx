@@ -1,6 +1,14 @@
+import type { Metadata } from "next"
+
 import { Navigation } from "@/components/layout/Navigation"
 import { Footer } from "@/components/layout/Footer"
 import { Building2, Package, MapPin } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "About Us — Why David Returns Exists",
+  description:
+    "David Returns builds return infrastructure for apartment buildings in NYC. Residents get free pickups, buildings get happier tenants.",
+}
 
 const AboutPage = () => (
   <main className="min-h-screen">

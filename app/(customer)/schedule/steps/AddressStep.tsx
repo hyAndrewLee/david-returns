@@ -66,7 +66,7 @@ export const AddressStep = () => {
 
       {savedAddresses.length > 0 && !addressConfirmed && (
         <div className="space-y-3">
-          <label className="text-sm font-medium text-foreground">Saved Addresses</label>
+          <p className="text-sm font-medium text-foreground">Saved Addresses</p>
           <div className="grid gap-3">
             {savedAddresses.map((addr) => (
               <button
@@ -140,8 +140,9 @@ export const AddressStep = () => {
 
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
-              <label className="text-sm font-medium text-foreground">Full name</label>
+              <label htmlFor="address-name" className="text-sm font-medium text-foreground">Full name</label>
               <input
+                id="address-name"
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
@@ -150,8 +151,9 @@ export const AddressStep = () => {
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground">Mobile number</label>
+              <label htmlFor="address-phone" className="text-sm font-medium text-foreground">Mobile number</label>
               <input
+                id="address-phone"
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
@@ -162,8 +164,9 @@ export const AddressStep = () => {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-foreground">Street address</label>
+            <label htmlFor="address-street" className="text-sm font-medium text-foreground">Street address</label>
             <input
+              id="address-street"
               type="text"
               value={formData.address}
               onChange={(e) => setFormData((prev) => ({ ...prev, address: e.target.value }))}
@@ -174,10 +177,11 @@ export const AddressStep = () => {
 
           <div className="grid gap-5 sm:grid-cols-3">
             <div>
-              <label className="text-sm font-medium text-foreground">
+              <label htmlFor="address-apt" className="text-sm font-medium text-foreground">
                 Apt / Unit <span className="text-muted-foreground">(optional)</span>
               </label>
               <input
+                id="address-apt"
                 type="text"
                 value={formData.apt}
                 onChange={(e) => setFormData((prev) => ({ ...prev, apt: e.target.value }))}
@@ -186,8 +190,9 @@ export const AddressStep = () => {
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground">City</label>
+              <label htmlFor="address-city" className="text-sm font-medium text-foreground">City</label>
               <input
+                id="address-city"
                 type="text"
                 value={formData.city}
                 onChange={(e) => setFormData((prev) => ({ ...prev, city: e.target.value }))}
@@ -196,8 +201,9 @@ export const AddressStep = () => {
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-foreground">ZIP code</label>
+              <label htmlFor="address-zip" className="text-sm font-medium text-foreground">ZIP code</label>
               <input
+                id="address-zip"
                 type="text"
                 value={formData.zip}
                 onChange={(e) => setFormData((prev) => ({ ...prev, zip: e.target.value }))}
@@ -208,10 +214,11 @@ export const AddressStep = () => {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-foreground">
+            <label htmlFor="address-building" className="text-sm font-medium text-foreground">
               Building name <span className="text-muted-foreground">(optional)</span>
             </label>
             <input
+              id="address-building"
               type="text"
               value={formData.buildingName}
               onChange={(e) => setFormData((prev) => ({ ...prev, buildingName: e.target.value }))}
@@ -221,10 +228,11 @@ export const AddressStep = () => {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-foreground">
+            <label htmlFor="address-notes" className="text-sm font-medium text-foreground">
               Building access notes <span className="text-muted-foreground">(optional)</span>
             </label>
             <textarea
+              id="address-notes"
               value={formData.notes}
               onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
               placeholder="Gate code, doorman instructions, etc."
