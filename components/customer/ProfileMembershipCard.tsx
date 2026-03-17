@@ -43,7 +43,7 @@ export const ProfileMembershipCard = () => {
               </p>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-bold text-orange-600">$14.99</p>
+              <p className="text-2xl font-bold text-orange-600">$22.99</p>
               <p className="text-xs text-muted-foreground">per month</p>
             </div>
           </div>
@@ -132,7 +132,7 @@ export const ProfileMembershipCard = () => {
       <CardContent className="space-y-4">
         <div className="text-center py-2">
           <p className="text-sm text-muted-foreground mb-2">You don't have an active membership</p>
-          <p className="text-3xl font-bold text-orange-600 mb-1">$14.99</p>
+          <p className="text-3xl font-bold text-orange-600 mb-1">$22.99</p>
           <p className="text-xs text-muted-foreground mb-4">per month</p>
         </div>
 

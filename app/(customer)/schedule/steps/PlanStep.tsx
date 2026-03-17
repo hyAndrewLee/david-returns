@@ -51,8 +51,8 @@ export const PlanStep = () => {
 					)}
 					<h3 className='text-lg font-semibold text-foreground'>One-time pickup</h3>
 					<div className='mt-3'>
-						<span className='text-3xl font-bold text-foreground'>$7</span>
-						<span className='text-muted-foreground'> per pickup</span>
+					<span className='text-3xl font-bold text-foreground'>$7.99</span>
+					<span className='text-muted-foreground'> per pickup</span>
 					</div>
 					<p className='mt-1 text-sm text-muted-foreground'>+ $1 per additional package</p>
 					<ul className='mt-4 space-y-2 text-sm text-muted-foreground'>
@@ -89,7 +89,7 @@ export const PlanStep = () => {
 					)}
 					<h3 className='text-lg font-semibold text-foreground'>Unlimited</h3>
 					<div className='mt-3'>
-						<span className='text-3xl font-bold text-foreground'>$14.99</span>
+						<span className='text-3xl font-bold text-foreground'>$22.99</span>
 						<span className='text-muted-foreground'> / month</span>
 					</div>
 					<p className='mt-1 text-sm text-orange-600 font-medium'>Unlimited pickups & packages</p>

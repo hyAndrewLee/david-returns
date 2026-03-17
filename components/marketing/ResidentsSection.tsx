@@ -9,7 +9,7 @@ const partnerBenefits = [
 ];
 
 const payAsYouGoFeatures = [
-	'$7 per pickup',
+	'$7.99 per pickup',
 	'+$1 per additional package',
 	'Same carrier coverage',
 	'Full tracking included',
@@ -94,7 +94,7 @@ export const ResidentsSection = () => (
 			</div>
 
 			<p className='mt-10 text-center text-sm text-muted-foreground'>
-				Unlimited membership also available &mdash; $14.99/mo for unlimited pickups &amp; packages.
+				Unlimited membership also available &mdash; $22.99/mo for unlimited pickups &amp; packages.
 			</p>
 		</div>
 	</section>

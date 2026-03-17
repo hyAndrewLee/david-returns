@@ -13,9 +13,9 @@ const partnerBenefits = [
 ];
 
 const payFeatures = [
-	{ label: 'Per pickup', value: '$7' },
+	{ label: 'Per pickup', value: '$7.99' },
 	{ label: 'Additional package', value: '+$1' },
-	{ label: 'Unlimited membership', value: '$14.99/mo' },
+	{ label: 'Unlimited membership', value: '$22.99/mo' },
 ];
 
 const steps = [

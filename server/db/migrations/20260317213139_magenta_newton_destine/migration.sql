@@ -52,7 +52,8 @@ CREATE TABLE "profiles" (
 	"is_admin" boolean DEFAULT false,
 	"stripe_customer_id" text,
 	"stripe_subscription_id" text,
-	"created_at" timestamp with time zone DEFAULT now()
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
 ALTER TABLE "profiles" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint

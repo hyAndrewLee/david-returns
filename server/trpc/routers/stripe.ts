@@ -69,15 +69,15 @@ export const stripeRouter = createTRPCRouter({
         calculatedTotal = 0
       } else if (input.plan === "Membership") {
         const membership = getProduct("unlimited-membership")
-        calculatedTotal = membership?.priceInCents || 1499
+        calculatedTotal = membership?.priceInCents || 2299
       } else {
         const basePickup = getProduct("pickup-base")
         const additionalItem = getProduct("additional-item")
         const instantFee = getProduct("instant-pickup")
 
-        let total = basePickup?.priceInCents || 500
+        let total = basePickup?.priceInCents || 799
         if (input.itemCount > 1) {
-          total += (input.itemCount - 1) * (additionalItem?.priceInCents || 200)
+          total += (input.itemCount - 1) * (additionalItem?.priceInCents || 100)
         }
         if (input.isInstant) {
           total += instantFee?.priceInCents || 150
@@ -164,7 +164,7 @@ export const stripeRouter = createTRPCRouter({
             const price = await stripe.prices.create({
               product: membershipProduct.id,
               currency: "usd",
-              unit_amount: 1499,
+              unit_amount: 2299,
               recurring: { interval: "month" },
             })
             priceId = price.id
@@ -178,7 +178,7 @@ export const stripeRouter = createTRPCRouter({
           const price = await stripe.prices.create({
             product: product.id,
             currency: "usd",
-            unit_amount: 1499,
+            unit_amount: 2299,
             recurring: { interval: "month" },
           })
           priceId = price.id

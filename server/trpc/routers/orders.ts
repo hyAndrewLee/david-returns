@@ -77,7 +77,7 @@ export const ordersRouter = createTRPCRouter({
             pickupInstructions: input.pickupInstructions?.trim() || null,
           },
           items: input.itemsDetails || [],
-          totalAmount: input.plan === "Pay-As-You-Go" ? input.numPackages * 500 : 0,
+          totalAmount: input.plan === "Pay-As-You-Go" ? 799 + Math.max(0, input.numPackages - 1) * 100 : 0,
         })
         .returning()
 

@@ -634,11 +634,11 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
     }
 
     if (formData.plan === "Membership") {
-      return { pickup: 0, items: 0, instant: 0, total: 14.99, isMembership: true, isExistingMember: false }
+      return { pickup: 0, items: 0, instant: 0, total: 22.99, isMembership: true, isExistingMember: false }
     }
 
-    const pickup = 5
-    const additionalItems = Math.max(0, formData.items.length - 1) * 2
+    const pickup = 7.99
+    const additionalItems = Math.max(0, formData.items.length - 1) * 1
     const instant = formData.isInstant ? 1.5 : 0
     const subtotal = pickup + additionalItems + instant
 

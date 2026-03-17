@@ -11,13 +11,13 @@ export const PRODUCTS: Product[] = [
     id: "pickup-base",
     name: "One-Time Pickup",
     description: "Base pickup fee for one item",
-    priceInCents: 500,
+    priceInCents: 799,
   },
   {
     id: "additional-item",
     name: "Additional Item",
     description: "Fee per additional item after the first",
-    priceInCents: 200,
+    priceInCents: 100,
   },
   {
     id: "instant-pickup",
@@ -29,7 +29,7 @@ export const PRODUCTS: Product[] = [
     id: "unlimited-membership",
     name: "Unlimited Membership",
     description: "Unlimited pickups per month",
-    priceInCents: 1499,
+    priceInCents: 2299,
     isRecurring: true,
   },
 ]

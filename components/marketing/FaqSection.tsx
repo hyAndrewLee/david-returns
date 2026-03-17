@@ -15,7 +15,7 @@ const faqsByCategory: Record<FaqCategory, { question: string; answer: string }[]
 		{
 			question: 'How much does it cost?',
 			answer:
-				"If your building partners with David Returns, pickups are completely free. Otherwise, it's $7 per pickup (+$1 for additional packages), or $14.99/month for unlimited.",
+				"If your building partners with David Returns, pickups are completely free. Otherwise, it's $7.99 per pickup (+$1 for additional packages), or $22.99/month for unlimited.",
 		},
 		{
 			question: 'What counts as a "package" or return?',

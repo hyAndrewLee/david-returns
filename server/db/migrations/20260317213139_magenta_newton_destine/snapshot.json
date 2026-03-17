@@ -1,7 +1,7 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "143d2b4b-1a99-42ef-8ac7-470019f3b4f4",
+  "id": "36160287-e8d2-4455-9f27-5b600c1ff8d5",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -624,6 +624,19 @@
       "generated": null,
       "identity": null,
       "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "profiles"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
       "entityType": "columns",
       "schema": "public",
       "table": "profiles"
