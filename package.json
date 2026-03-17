@@ -8,6 +8,7 @@
     "lint": "eslint .",
     "start": "next start",
     "typecheck": "tsgo --noEmit",
+    "check": "turbo lint typecheck",
     "db:generate": "doppler run -- drizzle-kit generate",
     "db:migrate": "doppler run -- drizzle-kit migrate",
     "db:push": "doppler run -- drizzle-kit push",
@@ -19,6 +20,7 @@
     "supabase:status": "supabase status",
     "supabase:reset": "supabase db reset"
   },
+  "packageManager": "bun@1.2.23",
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-alert-dialog": "1.1.4",
@@ -68,6 +70,7 @@
     "puppeteer": "^24.39.0",
     "supabase": "^2.78.1",
     "tailwindcss": "^4.1.9",
+    "turbo": "^2.8.17",
     "tw-animate-css": "1.3.3",
     "typescript": "^5"
   }

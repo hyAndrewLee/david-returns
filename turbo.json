@@ -1,0 +1,46 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "globalDependencies": ["tsconfig.json"],
+  "envMode": "loose",
+  "ui": "stream",
+  "tasks": {
+    "build": {
+      "outputs": [".next/**", "!.next/cache/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "!README.md",
+        "!docs/**",
+        "!screenshots/**",
+        "!**/*.md"
+      ],
+      "env": [
+        "NEXT_PUBLIC_SUPABASE_URL",
+        "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+        "NODE_ENV"
+      ]
+    },
+    "lint": {
+      "inputs": ["**/*.{ts,tsx,js,jsx,mjs}", "eslint.config.*", "!.next/**"],
+      "outputs": []
+    },
+    "typecheck": {
+      "inputs": ["**/*.{ts,tsx}", "tsconfig.json", "!.next/**"],
+      "outputs": []
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:generate": { "cache": false },
+    "db:migrate": { "cache": false },
+    "db:push": { "cache": false },
+    "db:pull": { "cache": false },
+    "db:studio": { "cache": false, "persistent": true },
+    "db:check": { "cache": false }
+  }
+}
