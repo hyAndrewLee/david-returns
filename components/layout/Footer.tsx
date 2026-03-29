@@ -3,6 +3,8 @@
 import Link from "next/link"
 import { ArrowRight, MapPin, Mail, Linkedin } from "lucide-react"
 
+const PARTNER_EMAIL_HREF = "mailto:hello@davidreturns.com?subject=Partner%20My%20Building"
+
 export const Footer = () => (
   <footer>
     {/* Final CTA */}
@@ -17,14 +19,14 @@ export const Footer = () => (
           </p>
           <div className="mt-2 flex flex-col items-center gap-3 sm:flex-row">
             <a
-              href="mailto:hello@davidreturns.com"
+              href={PARTNER_EMAIL_HREF}
               className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-medium text-background-dark transition-all hover:scale-[1.02] hover:shadow-lg"
             >
               Partner Your Building
               <ArrowRight className="h-4 w-4" />
             </a>
             <Link
-              href="/signin"
+              href="/dashboard"
               className="inline-flex items-center gap-2 rounded-full border border-white/20 px-8 py-3.5 text-sm font-medium text-white transition-all hover:border-white/40 hover:bg-white/5"
             >
               Schedule a Pickup
@@ -70,7 +72,7 @@ export const Footer = () => (
             <h4 className="text-sm font-medium text-white">For Residents</h4>
             <ul className="mt-4 space-y-2.5 text-sm text-white/60">
               <li>
-                <Link href="/signin" className="transition-colors hover:text-white">
+                <Link href="/dashboard" className="transition-colors hover:text-white">
                   Schedule pickup
                 </Link>
               </li>

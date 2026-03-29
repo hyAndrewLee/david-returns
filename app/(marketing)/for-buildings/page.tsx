@@ -52,6 +52,8 @@ const idealBuilding = [
   { icon: Package, text: "NYC metro area" },
 ]
 
+const PARTNER_EMAIL_HREF = "mailto:hello@davidreturns.com?subject=Partner%20My%20Building"
+
 export const metadata: Metadata = {
   title: "For Buildings — Partner with David Returns",
   description:
@@ -77,7 +79,7 @@ const ForBuildingsPage = () => (
           </p>
           <div className="mt-10">
             <a
-              href="mailto:hello@davidreturns.com"
+              href={PARTNER_EMAIL_HREF}
               className="inline-flex items-center gap-2 rounded-full bg-foreground px-8 py-3.5 text-sm font-medium text-background transition-all hover:scale-[1.02] hover:shadow-lg"
             >
               Partner Your Building

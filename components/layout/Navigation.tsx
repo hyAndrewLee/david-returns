@@ -6,6 +6,8 @@ import { Menu, X } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
 
+const PARTNER_EMAIL_HREF = "mailto:hello@davidreturns.com?subject=Partner%20My%20Building"
+
 const navLinks = [
   { label: "How It Works", href: "/#how-it-works" },
   { label: "For Buildings", href: "/for-buildings" },
@@ -67,17 +69,17 @@ export const Navigation = () => {
 
         <div className="hidden items-center gap-3 lg:flex">
           <Link
-            href="/signin"
+            href="/dashboard"
             className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             Schedule Pickup
           </Link>
-          <Link
-            href="/for-buildings#partner"
+          <a
+            href={PARTNER_EMAIL_HREF}
             className="rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
           >
             Partner Your Building
-          </Link>
+          </a>
         </div>
 
         <button
@@ -102,17 +104,17 @@ export const Navigation = () => {
             ))}
             <div className="mt-3 flex flex-col gap-2 border-t border-border pt-3">
               <Link
-                href="/signin"
+                href="/dashboard"
                 className="rounded-full border border-border py-2.5 text-center text-sm font-medium text-foreground transition-all hover:bg-secondary"
               >
                 Schedule Pickup
               </Link>
-              <Link
-                href="/for-buildings#partner"
+              <a
+                href={PARTNER_EMAIL_HREF}
                 className="rounded-full bg-foreground py-2.5 text-center text-sm font-medium text-background transition-all hover:shadow-md"
               >
                 Partner Your Building
-              </Link>
+              </a>
             </div>
           </div>
         </div>

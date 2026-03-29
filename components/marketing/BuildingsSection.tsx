@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { ArrowRight, Package, Home, Zap, Heart } from "lucide-react"
 
+const PARTNER_EMAIL_HREF = "mailto:hello@davidreturns.com?subject=Partner%20My%20Building"
+
 const benefits = [
   {
     icon: Package,
@@ -52,13 +54,13 @@ export const BuildingsSection = () => (
       </div>
 
       <div className="mt-16 text-center">
-        <Link
-          href="/for-buildings#partner"
+        <a
+          href={PARTNER_EMAIL_HREF}
           className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-medium text-background-dark transition-all hover:scale-[1.02] hover:shadow-lg"
         >
           Partner Your Building
           <ArrowRight className="h-4 w-4" />
-        </Link>
+        </a>
       </div>
     </div>
   </section>

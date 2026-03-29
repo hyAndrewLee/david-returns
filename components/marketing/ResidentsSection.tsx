@@ -49,7 +49,7 @@ export const ResidentsSection = () => (
 					</ul>
 
 					<Link
-						href='/signin'
+						href='/dashboard'
 						className='mt-8 flex w-full items-center justify-center gap-2 rounded-full bg-foreground py-3 text-sm font-medium text-background transition-all hover:scale-[1.02] hover:shadow-md'
 					>
 						Schedule Free Pickup
