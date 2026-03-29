@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 const carriers = [
-	{ src: '/images/happy-returns.svg', alt: 'Happy Returns', height: 'h-8 sm:h-10' },
+	{ src: '/images/happy-returns.png', alt: 'Happy Returns', height: 'h-8 sm:h-10' },
 	{ src: '/images/fedex-logo.svg', alt: 'FedEx', height: 'h-8 sm:h-10' },
 	{ src: '/images/ups-logo.svg', alt: 'UPS', height: 'h-8 sm:h-10' },
 	{ src: '/images/usps-logo.svg', alt: 'USPS', height: 'h-8 sm:h-10' },
