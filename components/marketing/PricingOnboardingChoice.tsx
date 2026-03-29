@@ -22,7 +22,9 @@ const PricingOnboardingChoice = () => (
 					</div>
 
 					<div className='mt-3'>
-						<h3 className='font-display text-2xl font-normal tracking-tight text-foreground sm:text-3xl'>Free with your building</h3>
+						<h3 className='font-display text-2xl font-normal tracking-tight text-foreground sm:text-3xl'>
+							Free with your building
+						</h3>
 						<p className='mt-3 text-muted-foreground'>Your building covers the cost &mdash; every return is free.</p>
 					</div>
 
@@ -45,13 +47,17 @@ const PricingOnboardingChoice = () => (
 							Schedule Free Pickup
 						</Link>
 
-						<span className='invisible mt-4 inline-flex h-5 items-center text-sm font-medium'>Get free pickups in your building</span>
+						<span className='invisible mt-4 inline-flex h-5 items-center text-sm font-medium'>
+							Get free pickups in your building
+						</span>
 					</div>
 				</article>
 
 				<article className='group flex h-full flex-col rounded-2xl border border-border bg-card p-7 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-foreground/20 hover:shadow-md sm:p-9'>
 					<div>
-						<h3 className='font-display text-2xl font-normal tracking-tight text-foreground sm:text-3xl'>Pay per return</h3>
+						<h3 className='font-display text-2xl font-normal tracking-tight text-foreground sm:text-3xl'>
+							Pay per return
+						</h3>
 						<p className='mt-3 text-muted-foreground'>Use anytime. Switch to free when your building joins.</p>
 					</div>
 
@@ -62,7 +68,7 @@ const PricingOnboardingChoice = () => (
 								<span className='text-sm text-muted-foreground'>per pickup</span>
 							</div>
 							<div className='flex items-baseline justify-between gap-3'>
-								<span className='font-display text-3xl font-normal text-foreground'>+$1</span>
+								<span className='font-display text-3xl font-normal text-foreground'>$1.00</span>
 								<span className='text-sm text-muted-foreground'>per extra package</span>
 							</div>
 						</div>
