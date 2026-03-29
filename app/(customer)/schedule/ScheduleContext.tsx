@@ -208,6 +208,8 @@ type ScheduleContextValue = {
   handleNextStep: () => void
   handlePreviousStep: () => void
   canProceed: () => boolean
+  returnToStep: number | null
+  editFromCheckout: (step: number) => void
 
   formData: ScheduleFormData
   setFormData: React.Dispatch<React.SetStateAction<ScheduleFormData>>
@@ -278,6 +280,7 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
   const DEBUG_UPLOAD = process.env.NEXT_PUBLIC_DEBUG_UPLOAD === "true"
 
   const [currentStep, setCurrentStep] = useState(1)
+  const [returnToStep, setReturnToStep] = useState<number | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState("")
@@ -908,7 +911,20 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
     return false
   }
 
+  const editFromCheckout = (step: number) => {
+    setReturnToStep(6)
+    setCurrentStep(step)
+  }
+
   const handleNextStep = () => {
+    if (currentStep === 1 && !formData.selectedDate) {
+      setError("Please select a pickup date.")
+      return
+    }
+    if (currentStep === 1 && !formData.timeWindow) {
+      setError("Please select a time window.")
+      return
+    }
     if (currentStep === 2 && !addressConfirmed && !showAddressForm) {
       setError("Please select an address or fill in the form.")
       return
@@ -929,6 +945,18 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
       setError("Please fill in your ZIP code.")
       return
     }
+    if (currentStep === 3 && !formData.pickupMethod) {
+      setError("Please select a pickup method.")
+      return
+    }
+    if (currentStep === 4 && !formData.plan) {
+      setError("Please select a plan.")
+      return
+    }
+    if (currentStep === 5 && formData.items.length === 0) {
+      setError("Please add at least one item to return.")
+      return
+    }
 
     if (currentStep === 2 && showAddressForm && saveThisAddress && userId && !selectedAddressId) {
       saveNewAddress().then((saved) => {
@@ -945,10 +973,24 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
       return
     }
 
+    setError("")
+
+    if (returnToStep !== null) {
+      const target = returnToStep
+      setReturnToStep(null)
+      setCurrentStep(target)
+      return
+    }
+
     setCurrentStep((prev) => prev + 1)
   }
 
   const handlePreviousStep = () => {
+    if (returnToStep !== null) {
+      setReturnToStep(null)
+      setCurrentStep(returnToStep)
+      return
+    }
     setCurrentStep((prev) => prev - 1)
   }
 
@@ -1093,6 +1135,8 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
     handleNextStep,
     handlePreviousStep,
     canProceed,
+    returnToStep,
+    editFromCheckout,
     formData,
     setFormData,
     dates,

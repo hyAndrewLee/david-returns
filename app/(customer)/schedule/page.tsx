@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowLeft, ArrowRight, Check, Zap, X, Truck } from "lucide-react"
+import { ArrowLeft, ArrowRight, Check, Zap, X } from "lucide-react"
 import { ScheduleProvider, useSchedule, STEPS } from "@/app/(customer)/schedule/ScheduleContext"
 import { ScheduleStep } from "@/app/(customer)/schedule/steps/ScheduleStep"
 import { AddressStep } from "@/app/(customer)/schedule/steps/AddressStep"
@@ -21,6 +21,7 @@ const SchedulePageContent = () => {
     formData,
     isSuccess,
     error,
+    returnToStep,
     DEBUG_UPLOAD,
     debugFileInfo,
     setDebugFileInfo,
@@ -33,9 +34,9 @@ const SchedulePageContent = () => {
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-200">
             <Check className="h-10 w-10 text-white" strokeWidth={3} />
           </div>
-          <h1 className="text-3xl font-semibold text-foreground">You're all set!</h1>
+          <h1 className="font-display text-3xl font-normal tracking-tight text-foreground sm:text-4xl">You're all set!</h1>
           <p className="mt-3 text-lg text-muted-foreground">We'll confirm your pickup by text shortly.</p>
-          <div className="mt-8 rounded-2xl border border-border bg-card p-6 text-left">
+          <div className="mt-8 rounded-2xl border border-border bg-card p-6 text-left shadow-sm">
             <h3 className="font-medium text-foreground">Pickup details</h3>
             <div className="mt-4 space-y-2 text-sm text-muted-foreground">
               <p>
@@ -99,31 +100,31 @@ const SchedulePageContent = () => {
                 <button
                   onClick={() => step.id <= currentStep && setCurrentStep(step.id)}
                   disabled={step.id > currentStep}
-                  className={`flex flex-col items-center gap-1.5 transition-all ${
+                  className={`flex flex-col items-center gap-1.5 transition-all duration-200 ${
                     step.id === currentStep
                       ? "text-foreground"
                       : step.id < currentStep
-                        ? "text-orange-500 cursor-pointer hover:opacity-80"
+                        ? "text-accent-warm cursor-pointer hover:opacity-80"
                         : "text-muted-foreground/50 cursor-not-allowed"
                   } ${step.id <= currentStep ? "cursor-pointer" : ""}`}
                 >
                   <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-full transition-all ${
+                    className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 ${
                       step.id === currentStep
-                        ? "bg-foreground text-background"
+                        ? "bg-foreground text-background shadow-md"
                         : step.id < currentStep
-                          ? "bg-orange-500 text-white hover:bg-orange-600"
+                          ? "bg-accent-warm text-white hover:opacity-90"
                           : "bg-secondary text-muted-foreground"
                     }`}
                   >
-                    {step.id < currentStep ? <Truck className="h-5 w-5" /> : <step.icon className="h-5 w-5" />}
+                    {step.id < currentStep ? <Check className="h-5 w-5" /> : <step.icon className="h-5 w-5" />}
                   </div>
                   <span className="text-xs font-medium hidden sm:block">{step.title}</span>
                 </button>
                 {index < STEPS.length - 1 && (
                   <div
-                    className={`mx-2 h-0.5 w-8 sm:w-12 transition-colors ${
-                      step.id < currentStep ? "bg-orange-500" : "bg-secondary"
+                    className={`mx-2 h-0.5 w-8 sm:w-12 transition-colors duration-200 ${
+                      step.id < currentStep ? "bg-accent-warm" : "bg-secondary"
                     }`}
                   />
                 )}
@@ -154,10 +155,10 @@ const SchedulePageContent = () => {
             {currentStep > 1 ? (
               <button
                 onClick={handlePreviousStep}
-                className="flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary transition-all"
+                className="flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary transition-all duration-200"
               >
                 <ArrowLeft className="h-4 w-4" />
-                Back
+                {returnToStep ? "Cancel" : "Back"}
               </button>
             ) : (
               <div />
@@ -165,9 +166,9 @@ const SchedulePageContent = () => {
             <button
               onClick={handleNextStep}
               disabled={!canProceed()}
-              className="flex items-center gap-2 rounded-full bg-foreground px-8 py-3 text-sm font-medium text-background transition-all hover:opacity-90 disabled:opacity-50"
+              className="flex items-center gap-2 rounded-full bg-foreground px-8 py-3 text-sm font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:shadow-lg disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none"
             >
-              Continue
+              {returnToStep ? "Save & return" : "Continue"}
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>

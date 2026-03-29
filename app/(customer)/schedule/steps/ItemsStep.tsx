@@ -25,8 +25,9 @@ export const ItemsStep = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold text-foreground">What are you returning?</h1>
-        <p className="mt-2 text-muted-foreground">Add each item you'd like us to pick up.</p>
+        <span className="text-xs font-semibold uppercase tracking-widest text-accent-warm">Items</span>
+        <h1 className="mt-2 font-display text-3xl font-normal tracking-tight text-foreground sm:text-4xl">What are you returning?</h1>
+        <p className="mt-3 text-muted-foreground">Add each item you'd like us to pick up.</p>
       </div>
 
       {formData.items.length > 0 && (
@@ -193,7 +194,7 @@ const SelectTypeStep = ({ setNewItem, setModalStep }: SelectTypeStepProps) => (
           setNewItem((prev) => ({ ...prev, labelType: "has-label" }))
           setModalStep("has-label-details")
         }}
-        className="flex flex-col items-center gap-3 rounded-xl border-2 border-border p-6 text-center hover:border-foreground hover:shadow-md transition-all aspect-square"
+        className="flex h-[160px] flex-col items-center justify-center gap-3 rounded-xl border-2 border-border p-5 text-center hover:border-foreground hover:shadow-md transition-all"
       >
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-stone-100">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-stone-600">
@@ -201,9 +202,9 @@ const SelectTypeStep = ({ setNewItem, setModalStep }: SelectTypeStepProps) => (
             <path d="M7 7h10M7 12h10M7 17h6" />
           </svg>
         </div>
-        <div>
+        <div className="space-y-0.5">
           <h3 className="font-semibold text-foreground text-sm">Physical label</h3>
-          <p className="text-xs text-muted-foreground mt-0.5">Already attached</p>
+          <p className="text-xs text-muted-foreground">Already attached</p>
         </div>
       </button>
 
@@ -212,7 +213,7 @@ const SelectTypeStep = ({ setNewItem, setModalStep }: SelectTypeStepProps) => (
           setNewItem((prev) => ({ ...prev, labelType: "email-pdf" }))
           setModalStep("email-pdf-details")
         }}
-        className="flex flex-col items-center gap-3 rounded-xl border-2 border-border p-6 text-center hover:border-foreground hover:shadow-md transition-all aspect-square"
+        className="flex h-[160px] flex-col items-center justify-center gap-3 rounded-xl border-2 border-border p-5 text-center hover:border-foreground hover:shadow-md transition-all"
       >
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
@@ -222,9 +223,9 @@ const SelectTypeStep = ({ setNewItem, setModalStep }: SelectTypeStepProps) => (
             <line x1="16" y1="17" x2="8" y2="17" />
           </svg>
         </div>
-        <div>
+        <div className="space-y-0.5">
           <h3 className="font-semibold text-foreground text-sm">Digital label</h3>
-          <p className="text-xs text-muted-foreground mt-0.5">PDF, email, or screenshot</p>
+          <p className="text-xs text-muted-foreground">PDF, email, or screenshot</p>
         </div>
       </button>
 
@@ -233,7 +234,7 @@ const SelectTypeStep = ({ setNewItem, setModalStep }: SelectTypeStepProps) => (
           setNewItem((prev) => ({ ...prev, labelType: "amazon-qr" }))
           setModalStep("amazon-qr-details")
         }}
-        className="flex flex-col items-center gap-3 rounded-xl border-2 border-border p-6 text-center hover:border-foreground hover:shadow-md transition-all aspect-square"
+        className="flex h-[160px] flex-col items-center justify-center gap-3 rounded-xl border-2 border-border p-5 text-center hover:border-foreground hover:shadow-md transition-all"
       >
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-orange-500">
@@ -246,9 +247,9 @@ const SelectTypeStep = ({ setNewItem, setModalStep }: SelectTypeStepProps) => (
             <rect x="18" y="18" width="3" height="3" rx="0.5" />
           </svg>
         </div>
-        <div>
+        <div className="space-y-0.5">
           <h3 className="font-semibold text-foreground text-sm">QR code</h3>
-          <p className="text-xs text-muted-foreground mt-0.5">Amazon, Kohl's, etc.</p>
+          <p className="text-xs text-muted-foreground">Amazon, FedEx, etc.</p>
         </div>
       </button>
     </div>

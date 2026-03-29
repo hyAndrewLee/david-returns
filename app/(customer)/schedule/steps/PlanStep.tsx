@@ -31,17 +31,18 @@ export const PlanStep = () => {
 	return (
 		<div className='space-y-8'>
 			<div>
-				<h1 className='text-2xl font-semibold text-foreground'>Choose your plan</h1>
-				<p className='mt-2 text-muted-foreground'>Select the option that works best for you.</p>
+				<span className='text-xs font-semibold uppercase tracking-widest text-accent-warm'>Plan</span>
+				<h1 className='mt-2 font-display text-3xl font-normal tracking-tight text-foreground sm:text-4xl'>Choose your plan</h1>
+				<p className='mt-3 text-muted-foreground'>Select the option that works best for you.</p>
 			</div>
 
 			<div className='grid gap-4 sm:grid-cols-2'>
 				<button
 					onClick={() => setFormData((prev) => ({ ...prev, plan: 'Pay-As-You-Go' }))}
-					className={`relative flex flex-col rounded-2xl border-2 p-6 text-left transition-all ${
+					className={`relative flex flex-col rounded-2xl border-2 p-6 text-left transition-all duration-200 ${
 						formData.plan === 'Pay-As-You-Go'
 							? 'border-foreground bg-card shadow-lg'
-							: 'border-border bg-card hover:border-muted-foreground hover:shadow-md'
+							: 'border-border bg-card hover:border-muted-foreground hover:-translate-y-0.5 hover:shadow-lg'
 					}`}
 				>
 					{formData.plan === 'Pay-As-You-Go' && (
@@ -73,10 +74,10 @@ export const PlanStep = () => {
 
 				<button
 					onClick={() => setFormData((prev) => ({ ...prev, plan: 'Membership' }))}
-					className={`relative flex flex-col rounded-2xl border-2 p-6 text-left transition-all ${
+					className={`relative flex flex-col rounded-2xl border-2 p-6 text-left transition-all duration-200 ${
 						formData.plan === 'Membership'
-							? 'border-orange-500 bg-card shadow-lg ring-2 ring-orange-500/20'
-							: 'border-border bg-card hover:border-muted-foreground hover:shadow-md'
+							? 'border-accent-warm bg-card shadow-lg ring-2 ring-accent-warm/20'
+							: 'border-border bg-card hover:border-muted-foreground hover:-translate-y-0.5 hover:shadow-lg'
 					}`}
 				>
 					<span className='absolute -top-3 left-4 rounded-full bg-orange-500 px-3 py-0.5 text-xs font-medium text-white'>

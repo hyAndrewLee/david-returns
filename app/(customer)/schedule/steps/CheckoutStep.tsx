@@ -8,7 +8,7 @@ export const CheckoutStep = () => {
   const {
     formData,
     setFormData,
-    setCurrentStep,
+    editFromCheckout,
     isMember,
     calculateTotal,
     showPayment,
@@ -26,18 +26,19 @@ export const CheckoutStep = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold text-foreground">Confirm your pickup</h1>
-        <p className="mt-2 text-muted-foreground">Review your details before confirming.</p>
+        <span className="text-xs font-semibold uppercase tracking-widest text-accent-warm">Review & Confirm</span>
+        <h1 className="mt-2 font-display text-3xl font-normal tracking-tight text-foreground sm:text-4xl">Confirm your pickup</h1>
+        <p className="mt-3 text-muted-foreground">Review your details before confirming.</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-4">
-          <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:shadow-md">
             <div className="flex items-center justify-between">
               <h3 className="font-medium text-foreground">Pickup details</h3>
               <button
-                onClick={() => setCurrentStep(1)}
-                className="text-sm text-orange-500 hover:text-orange-600 flex items-center gap-1"
+                onClick={() => editFromCheckout(1)}
+                className="text-sm text-accent-warm hover:opacity-80 flex items-center gap-1 transition-opacity"
               >
                 <Edit2 className="h-3.5 w-3.5" /> Edit
               </button>
@@ -71,12 +72,12 @@ export const CheckoutStep = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:shadow-md">
             <div className="flex items-center justify-between">
               <h3 className="font-medium text-foreground">Address</h3>
               <button
-                onClick={() => setCurrentStep(2)}
-                className="text-sm text-orange-500 hover:text-orange-600 flex items-center gap-1"
+                onClick={() => editFromCheckout(2)}
+                className="text-sm text-accent-warm hover:opacity-80 flex items-center gap-1 transition-opacity"
               >
                 <Edit2 className="h-3.5 w-3.5" /> Edit
               </button>
@@ -97,12 +98,12 @@ export const CheckoutStep = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-5">
+          <div className="rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:shadow-md">
             <div className="flex items-center justify-between">
               <h3 className="font-medium text-foreground">Items ({formData.items.length})</h3>
               <button
-                onClick={() => setCurrentStep(5)}
-                className="text-sm text-orange-500 hover:text-orange-600 flex items-center gap-1"
+                onClick={() => editFromCheckout(5)}
+                className="text-sm text-accent-warm hover:opacity-80 flex items-center gap-1 transition-opacity"
               >
                 <Edit2 className="h-3.5 w-3.5" /> Edit
               </button>

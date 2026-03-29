@@ -102,10 +102,11 @@ export const UserDashboard = () => {
       <main className="mx-auto max-w-3xl px-4 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-foreground">
+          <span className="text-xs font-semibold uppercase tracking-widest text-accent-warm">Dashboard</span>
+          <h1 className="mt-2 font-display text-3xl font-normal tracking-tight text-foreground sm:text-4xl">
             {isFirstTime ? `Welcome, ${firstName}` : `Welcome back, ${firstName}`}
           </h1>
-          <p className="mt-1 text-muted-foreground">Manage your returns and schedule new pickups.</p>
+          <p className="mt-3 text-muted-foreground">Manage your returns and schedule new pickups.</p>
         </div>
 
         {isMember && (
@@ -131,38 +132,40 @@ export const UserDashboard = () => {
         )}
 
         {/* Submit Return CTA */}
-        <Card className="mb-8 border-2 border-dashed border-border">
-          <CardContent className="flex items-center justify-between p-6">
+        <div className="mb-8 relative overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+          <div className="absolute inset-0 -z-10">
+            <div className="absolute -right-20 -top-20 h-[200px] w-[200px] rounded-full bg-accent-warm-light/40 blur-3xl" />
+            <div className="absolute -left-10 -bottom-10 h-[150px] w-[150px] rounded-full bg-accent-green-light/30 blur-3xl" />
+          </div>
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-500/10">
-                <Package className="h-6 w-6 text-orange-500" />
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-foreground/5 transition-colors group-hover:bg-accent-warm-light">
+                <Package className="h-7 w-7 text-accent-warm" />
               </div>
               <div>
-                <h2 className="font-semibold text-foreground">Need to return something?</h2>
-                <p className="text-sm text-muted-foreground">
+                <h2 className="text-lg font-semibold text-foreground">Need to return something?</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
                   {isMember
                     ? "Your pickup is free with your unlimited membership."
                     : "We'll pick it up and handle everything for you."}
                 </p>
               </div>
             </div>
-            <Button
-              asChild
-              className="gap-2 bg-orange-500 text-white hover:bg-orange-600 hover:scale-[1.02] transition-all duration-200 shadow-md hover:shadow-lg"
+            <Link
+              href="/schedule"
+              className="inline-flex items-center gap-2 rounded-full bg-foreground px-8 py-3.5 text-sm font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:shadow-lg"
             >
-              <Link href="/schedule">
-                <Plus className="h-4 w-4" />
-                Submit Return
-                {isMember && <Badge className="ml-1 bg-white/20 text-white text-[10px] px-1.5 py-0">FREE</Badge>}
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
+              <Plus className="h-4 w-4" />
+              Submit Return
+              {isMember && <Badge className="ml-1 bg-white/20 text-white text-[10px] px-1.5 py-0">FREE</Badge>}
+            </Link>
+          </div>
+        </div>
 
         {/* Active Returns Section */}
         <div className="mb-8">
           <div className="mb-4 flex items-center gap-2">
-            <Truck className="h-5 w-5 text-orange-500" />
+            <Truck className="h-5 w-5 text-accent-warm" />
             <h2 className="text-lg font-semibold text-foreground">Active Returns</h2>
             {activeOrders.length > 0 && (
               <Badge variant="secondary" className="ml-2">
@@ -187,7 +190,7 @@ export const UserDashboard = () => {
             <div className="space-y-3">
               {activeOrders.map((order) => (
                 <Link key={order.id} href={`/orders/${order.id}`}>
-                  <Card className="transition-all hover:shadow-md hover:border-foreground/20">
+                  <Card className="transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:border-foreground/20">
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">

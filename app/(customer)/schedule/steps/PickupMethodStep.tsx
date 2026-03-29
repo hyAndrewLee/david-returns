@@ -9,17 +9,18 @@ export const PickupMethodStep = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold text-foreground">How should we pick up?</h1>
-        <p className="mt-2 text-muted-foreground">Choose how you'd like to hand off your packages.</p>
+        <span className="text-xs font-semibold uppercase tracking-widest text-accent-warm">Pickup Method</span>
+        <h1 className="mt-2 font-display text-3xl font-normal tracking-tight text-foreground sm:text-4xl">How should we pick&nbsp;up?</h1>
+        <p className="mt-3 text-muted-foreground">Choose how you'd like to hand off your packages.</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <button
           onClick={() => setFormData((prev) => ({ ...prev, pickupMethod: "hand-to-me" }))}
-          className={`flex flex-col items-center gap-4 rounded-2xl border-2 p-8 transition-all ${
+          className={`flex flex-col items-center gap-4 rounded-2xl border-2 p-8 transition-all duration-200 ${
             formData.pickupMethod === "hand-to-me"
               ? "border-foreground bg-foreground text-background shadow-lg"
-              : "border-border bg-card hover:border-muted-foreground hover:shadow-md"
+              : "border-border bg-card hover:border-muted-foreground hover:-translate-y-0.5 hover:shadow-lg"
           }`}
         >
           <div
@@ -43,10 +44,10 @@ export const PickupMethodStep = () => {
 
         <button
           onClick={() => setFormData((prev) => ({ ...prev, pickupMethod: "leave-at-door" }))}
-          className={`flex flex-col items-center gap-4 rounded-2xl border-2 p-8 transition-all ${
+          className={`flex flex-col items-center gap-4 rounded-2xl border-2 p-8 transition-all duration-200 ${
             formData.pickupMethod === "leave-at-door"
               ? "border-foreground bg-foreground text-background shadow-lg"
-              : "border-border bg-card hover:border-muted-foreground hover:shadow-md"
+              : "border-border bg-card hover:border-muted-foreground hover:-translate-y-0.5 hover:shadow-lg"
           }`}
         >
           <div

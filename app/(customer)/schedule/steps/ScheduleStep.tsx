@@ -10,8 +10,9 @@ export const ScheduleStep = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold text-foreground">When should we pick up?</h1>
-        <p className="mt-2 text-muted-foreground">Choose a date and time that works for you.</p>
+        <span className="text-xs font-semibold uppercase tracking-widest text-accent-warm">Schedule</span>
+        <h1 className="mt-2 font-display text-3xl font-normal tracking-tight text-foreground sm:text-4xl">When should we pick&nbsp;up?</h1>
+        <p className="mt-3 text-muted-foreground">Choose a date and time that works for you.</p>
       </div>
 
       <div>
