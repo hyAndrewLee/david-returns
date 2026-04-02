@@ -14,7 +14,7 @@ export const ProfileForm = () => {
   const { saving, saved, error, handleSave } = useProfile()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-secondary/30 to-background">
+    <div className="min-h-screen bg-linear-to-b from-surface-container-low to-surface">
       <ProfileHeader />
 
       <main className="mx-auto max-w-7xl px-4 py-8">
@@ -29,11 +29,11 @@ export const ProfileForm = () => {
         <h1 className="text-2xl font-semibold text-foreground mb-6">Profile Settings</h1>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">{error}</div>
+          <div className="mb-6 p-4 bg-destructive/8 border border-[rgba(26,26,46,0.1)] rounded-[0.375rem] text-destructive text-sm">{error}</div>
         )}
 
         {saved && (
-          <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-600 text-sm flex items-center gap-2">
+          <div className="mb-6 p-4 bg-accent-green-light border border-[rgba(26,26,46,0.1)] rounded-[0.375rem] text-accent-green text-sm flex items-center gap-2">
             <CheckCircle className="h-4 w-4" />
             Changes saved successfully!
           </div>
@@ -45,9 +45,10 @@ export const ProfileForm = () => {
             <ProfileAddress />
 
             <Button
+              variant="primary"
               onClick={handleSave}
               disabled={saving}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+              className="w-full"
             >
               {saving ? (
                 <>

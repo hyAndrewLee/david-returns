@@ -9,6 +9,9 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { ArrowRight, Eye, EyeOff, Building2, Package, MapPin } from "lucide-react"
 import { createBrowserSupabaseClient } from "@/lib/supabase"
 
+const INPUT_CLASS =
+  "w-full rounded-[0.375rem] border border-[rgba(26,26,46,0.15)] bg-surface-container-lowest px-4 py-3.5 text-foreground placeholder:text-muted-foreground focus:border-[rgba(26,26,46,0.4)] focus:outline-none focus:ring-2 focus:ring-[rgba(26,26,46,0.06)] transition-all"
+
 const trustSignals = [
   { icon: Building2, text: "Partnered with buildings across NYC" },
   { icon: Package, text: "Thousands of packages processed" },
@@ -67,7 +70,7 @@ const SignInPageContent = () => {
   return (
     <main className="flex min-h-screen">
       {/* Brand panel */}
-      <div className="hidden w-1/2 bg-background-dark p-12 lg:flex lg:flex-col lg:justify-between">
+      <div className="hidden w-1/2 bg-surface-dark p-12 lg:flex lg:flex-col lg:justify-between">
         <Link href="/">
           <Image
             src="/images/david-returns-logo.png"
@@ -80,30 +83,30 @@ const SignInPageContent = () => {
         </Link>
 
         <div>
-          <h2 className="font-display text-4xl font-normal tracking-tight text-white xl:text-5xl">
+          <h2 className="font-display text-4xl font-normal leading-[1.1] tracking-[-0.02em] text-[#f9f9f6] xl:text-5xl">
             Returns, simplified.
           </h2>
-          <p className="mt-4 max-w-sm text-lg text-white/60">
+          <p className="mt-4 max-w-sm text-lg text-[rgba(249,249,246,0.6)]">
             Schedule a pickup and we handle the rest. No boxes, no lines, no effort.
           </p>
 
           <div className="mt-10 space-y-4">
             {trustSignals.map((signal) => (
-              <div key={signal.text} className="flex items-center gap-3 text-white/50">
-                <signal.icon className="h-5 w-5 shrink-0" />
+              <div key={signal.text} className="flex items-center gap-3 text-[rgba(249,249,246,0.45)]">
+                <signal.icon className="h-5 w-5 shrink-0" strokeWidth={1.5} />
                 <span className="text-sm">{signal.text}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <p className="text-sm text-white/30">
+        <p className="text-sm text-[rgba(249,249,246,0.3)]">
           &copy; {new Date().getFullYear()} David Returns
         </p>
       </div>
 
       {/* Form panel */}
-      <div className="flex w-full flex-col items-center justify-center bg-background px-4 lg:w-1/2">
+      <div className="flex w-full flex-col items-center justify-center bg-surface px-4 lg:w-1/2">
         <div className="w-full max-w-md">
           <Link href="/" className="mb-10 flex items-center justify-center lg:hidden">
             <Image
@@ -116,17 +119,23 @@ const SignInPageContent = () => {
             />
           </Link>
 
-          <h1 className="text-center font-display text-3xl font-normal tracking-tight text-foreground">
+          <h1 className="font-display text-3xl font-normal leading-[1.1] tracking-[-0.02em] text-foreground">
             Welcome back
           </h1>
-          <p className="mt-3 text-center text-muted-foreground">Sign in to manage your returns</p>
+          <p className="mt-3 text-muted-foreground">Sign in to manage your returns</p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
             {successMessage && (
-              <div className="rounded-xl bg-accent-green-light px-4 py-3 text-sm text-accent-green">{successMessage}</div>
+              <div className="rounded-[0.375rem] bg-accent-green-light px-4 py-3 text-sm text-accent-green">
+                {successMessage}
+              </div>
             )}
 
-            {error && <div className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">{error}</div>}
+            {error && (
+              <div className="rounded-[0.375rem] bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                {error}
+              </div>
+            )}
 
             <div>
               <label htmlFor="email" className="sr-only">Email</label>
@@ -136,7 +145,7 @@ const SignInPageContent = () => {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-border bg-background px-4 py-3.5 text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition-all"
+                className={INPUT_CLASS}
               />
             </div>
 
@@ -148,7 +157,7 @@ const SignInPageContent = () => {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl border border-border bg-background px-4 py-3.5 pr-12 text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition-all"
+                className={`${INPUT_CLASS} pr-12`}
               />
               <button
                 type="button"
@@ -168,7 +177,7 @@ const SignInPageContent = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-foreground py-3.5 text-sm font-medium text-background transition-all hover:shadow-md disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-[0.375rem] bg-primary py-3.5 text-sm font-medium text-on-primary transition-all hover:shadow-[0_4px_20px_rgba(26,26,46,0.15)] disabled:opacity-50"
             >
               {isLoading ? "Signing in..." : (
                 <>
@@ -199,7 +208,7 @@ const SignInPageContent = () => {
 
 const SignInPage = () => (
   <Suspense fallback={
-    <main className="flex min-h-screen items-center justify-center">
+    <main className="flex min-h-screen items-center justify-center bg-surface">
       <div className="h-12 w-12 animate-spin rounded-full border-4 border-muted border-t-foreground" />
     </main>
   }>

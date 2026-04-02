@@ -36,7 +36,7 @@ const SchedulePageContent = () => {
           </div>
           <h1 className="font-display text-3xl font-normal tracking-tight text-foreground sm:text-4xl">You're all set!</h1>
           <p className="mt-3 text-lg text-muted-foreground">We'll confirm your pickup by text shortly.</p>
-          <div className="mt-8 rounded-2xl border border-border bg-card p-6 text-left shadow-sm">
+          <div className="mt-8 rounded-[0.375rem] bg-surface-container-lowest p-6 text-left shadow-[0_4px_24px_rgba(26,28,27,0.06)]">
             <h3 className="font-medium text-foreground">Pickup details</h3>
             <div className="mt-4 space-y-2 text-sm text-muted-foreground">
               <p>
@@ -61,9 +61,9 @@ const SchedulePageContent = () => {
               )}
             </div>
           </div>
-          <Link
+            <Link
             href="/"
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-8 py-3.5 text-sm font-medium text-background transition-all hover:opacity-90"
+            className="mt-8 inline-flex items-center gap-2 rounded-[0.375rem] bg-primary px-7 py-3.5 text-sm font-medium text-on-primary transition-all hover:shadow-[0_4px_20px_rgba(26,26,46,0.15)]"
           >
             Back to home
           </Link>
@@ -73,8 +73,8 @@ const SchedulePageContent = () => {
   }
 
   return (
-    <main className="min-h-screen bg-linear-to-b from-secondary/30 to-background">
-      <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
+    <main className="min-h-screen bg-linear-to-b from-surface-container-low to-surface">
+      <header className="bg-[rgba(249,249,246,0.88)] backdrop-blur-md sticky top-0 z-50 shadow-[0_1px_0_rgba(26,26,46,0.06)]">
         <div className="mx-auto max-w-3xl px-4 py-4">
           <div className="flex items-center justify-between">
             <Link
@@ -92,7 +92,7 @@ const SchedulePageContent = () => {
         </div>
       </header>
 
-      <div className="border-b border-border bg-background">
+      <div className="bg-surface-container-lowest shadow-[0_1px_0_rgba(26,26,46,0.05)]">
         <div className="mx-auto max-w-3xl px-4 py-4">
           <div className="flex items-center justify-between">
             {STEPS.map((step, index) => (
@@ -155,7 +155,7 @@ const SchedulePageContent = () => {
             {currentStep > 1 ? (
               <button
                 onClick={handlePreviousStep}
-                className="flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary transition-all duration-200"
+                className="flex items-center gap-2 rounded-[0.375rem] border border-[rgba(26,26,46,0.15)] bg-surface-container-lowest px-6 py-3 text-sm font-medium text-foreground hover:bg-surface-container-low transition-all duration-200"
               >
                 <ArrowLeft className="h-4 w-4" />
                 {returnToStep ? "Cancel" : "Back"}
@@ -166,7 +166,7 @@ const SchedulePageContent = () => {
             <button
               onClick={handleNextStep}
               disabled={!canProceed()}
-              className="flex items-center gap-2 rounded-full bg-foreground px-8 py-3 text-sm font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:shadow-lg disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none"
+              className="flex items-center gap-2 rounded-[0.375rem] bg-primary px-7 py-3 text-sm font-medium text-on-primary transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(26,26,46,0.15)] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none"
             >
               {returnToStep ? "Save & return" : "Continue"}
               <ArrowRight className="h-4 w-4" />

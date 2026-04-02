@@ -57,9 +57,9 @@ export const UserDashboard = () => {
   } = useDashboard()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-secondary/30 to-background">
+    <div className="min-h-screen bg-linear-to-b from-surface-container-low to-surface">
       {/* Header */}
-      <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
+      <header className="bg-[rgba(249,249,246,0.88)] backdrop-blur-md sticky top-0 z-50 shadow-[0_1px_0_rgba(26,26,46,0.06)]">
         <div className="mx-auto max-w-3xl px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/">
@@ -110,29 +110,27 @@ export const UserDashboard = () => {
         </div>
 
         {isMember && (
-          <Card className="mb-6 border-orange-200 bg-gradient-to-r from-orange-50 to-amber-50">
-            <CardContent className="flex items-center justify-between p-3">
-              <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-500">
-                  <Crown className="h-4 w-4 text-white" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-semibold text-foreground">Unlimited Member</h3>
-                    <Badge className="bg-orange-500 text-white text-xs">Active</Badge>
-                  </div>
+          <div className="mb-6 rounded-[0.375rem] bg-copper-light p-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-copper/20">
+                <Crown className="h-4 w-4 text-copper" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-foreground">Unlimited Member</h3>
+                  <Badge className="bg-copper text-white text-xs">Active</Badge>
                 </div>
               </div>
-              <div className="text-right">
-                <p className="text-sm font-medium text-orange-600">$0 per pickup</p>
-                <p className="text-xs text-muted-foreground">Unlimited returns</p>
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+            <div className="text-right">
+              <p className="text-sm font-medium text-copper">$0 per pickup</p>
+              <p className="text-xs text-muted-foreground">Unlimited returns</p>
+            </div>
+          </div>
         )}
 
         {/* Submit Return CTA */}
-        <div className="mb-8 relative overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+        <div className="mb-8 relative overflow-hidden rounded-[0.375rem] bg-surface-container-lowest p-8 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_40px_rgba(26,28,27,0.06)]">
           <div className="absolute inset-0 -z-10">
             <div className="absolute -right-20 -top-20 h-[200px] w-[200px] rounded-full bg-accent-warm-light/40 blur-3xl" />
             <div className="absolute -left-10 -bottom-10 h-[150px] w-[150px] rounded-full bg-accent-green-light/30 blur-3xl" />
@@ -153,7 +151,7 @@ export const UserDashboard = () => {
             </div>
             <Link
               href="/schedule"
-              className="inline-flex items-center gap-2 rounded-full bg-foreground px-8 py-3.5 text-sm font-medium text-background transition-all duration-200 hover:scale-[1.02] hover:shadow-lg"
+              className="inline-flex items-center gap-2 rounded-[0.375rem] bg-primary px-7 py-3 text-sm font-medium text-on-primary transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_4px_20px_rgba(26,26,46,0.15)]"
             >
               <Plus className="h-4 w-4" />
               Submit Return
@@ -190,7 +188,7 @@ export const UserDashboard = () => {
             <div className="space-y-3">
               {activeOrders.map((order) => (
                 <Link key={order.id} href={`/orders/${order.id}`}>
-                  <Card className="transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:border-foreground/20">
+                  <Card className="transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_40px_rgba(26,28,27,0.08)]">
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">

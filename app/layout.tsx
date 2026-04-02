@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Geist, Geist_Mono, DM_Serif_Display } from "next/font/google"
+import { Inter, Noto_Serif, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { validateEnv } from "@/lib/env"
@@ -8,9 +8,9 @@ import { TRPCProvider } from "@/lib/trpc"
 
 validateEnv()
 
-const geistSans = Geist({ subsets: ["latin"] })
-const geistMono = Geist_Mono({ subsets: ["latin"] })
-const dmSerifDisplay = DM_Serif_Display({ weight: "400", subsets: ["latin"], variable: "--font-display" })
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
+const notoSerif = Noto_Serif({ weight: ["400", "500"], subsets: ["latin"], variable: "--font-display" })
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" })
 
 export const metadata: Metadata = {
   title: "David Returns — Return Infrastructure for Apartment Buildings",
@@ -60,7 +60,7 @@ const RootLayout = ({
   children: React.ReactNode
 }>) => (
   <html lang="en">
-    <body className={`${geistSans.className} ${dmSerifDisplay.variable} antialiased`}>
+    <body className={`${inter.variable} ${notoSerif.variable} ${geistMono.variable} antialiased`}>
       <TRPCProvider>
         {children}
       </TRPCProvider>

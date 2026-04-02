@@ -1,59 +1,63 @@
-import { Home, Building2, Truck } from "lucide-react"
-import Link from "next/link"
+import Image from 'next/image'
+import { Check } from 'lucide-react'
+import Link from 'next/link'
 
-const pillars = [
-  {
-    icon: Home,
-    title: "For Residents",
-    description: "Scheduled pickups from your apartment. No trips to UPS. No packaging stress.",
-  },
-  {
-    icon: Building2,
-    title: "For Buildings",
-    description: "Reduced package room congestion and clutter. Happy tenants, zero infrastructure cost.",
-  },
-  {
-    icon: Truck,
-    title: "For the City",
-    description: "Fewer individual carrier trips. Consolidated logistics across the neighborhood.",
-  },
+const benefits = [
+	'Pickup from your lobby — no trips to UPS or USPS',
+	'We collect directly from residents on a schedule',
+	'Buildings see reduced package room congestion',
+	'Routed to the right carrier automatically',
 ]
 
 export const SolutionSection = () => (
-  <section className="bg-background py-20 sm:py-28">
-    <div className="mx-auto max-w-6xl px-4 sm:px-6">
-      <div className="mx-auto max-w-3xl text-center">
-        <span className="text-xs font-semibold uppercase tracking-widest text-accent-warm">
-          The Solution
-        </span>
-        <h2 className="mt-4 font-display text-3xl font-normal tracking-tight sm:text-4xl lg:text-5xl">
-          Return infrastructure, delivered to your&nbsp;building.
-        </h2>
-      </div>
+	<section className='bg-surface overflow-hidden'>
+		<div className='mx-auto max-w-6xl'>
+			<div className='grid lg:grid-cols-[1fr_44%]'>
+				{/* Left: editorial text column */}
+				<div className='flex flex-col justify-center px-4 py-20 sm:px-8 lg:py-28 lg:pr-16'>
+					<p className='text-xs font-semibold uppercase tracking-[0.14em] text-copper'>
+						The Solution
+					</p>
+					<h2 className='mt-4 font-display text-3xl font-normal leading-[1.1] tracking-[-0.02em] text-foreground sm:text-4xl lg:text-[2.75rem]'>
+						The Luxury of<br />Reclaimed Time.
+					</h2>
+					<p className='mt-5 text-lg leading-relaxed text-muted-foreground max-w-md'>
+						We bridge the gap between your building and the carrier door. Every David Returns courier is trained in residential etiquette and large-format bag management — professional, reliable, on your schedule.
+					</p>
 
-      <div className="mt-16 grid gap-8 sm:grid-cols-3">
-        {pillars.map((pillar) => (
-          <div
-            key={pillar.title}
-            className="rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
-          >
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-warm-light">
-              <pillar.icon className="h-6 w-6 text-accent-warm" />
-            </div>
-            <h3 className="mt-5 text-lg font-semibold text-foreground">{pillar.title}</h3>
-            <p className="mt-3 leading-relaxed text-muted-foreground">{pillar.description}</p>
-          </div>
-        ))}
-      </div>
+					<ul className='mt-8 space-y-3'>
+						{benefits.map((benefit) => (
+							<li key={benefit} className='flex items-start gap-3 text-sm text-foreground'>
+								<div className='mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-copper-light'>
+									<Check className='h-3 w-3 text-copper' strokeWidth={2.5} />
+								</div>
+								{benefit}
+							</li>
+						))}
+					</ul>
 
-      <div className="mt-12 text-center">
-        <Link
-          href="/#how-it-works"
-          className="inline-flex items-center gap-1 text-sm font-medium text-accent-warm transition-colors hover:text-foreground"
-        >
-          Learn how it works &rarr;
-        </Link>
-      </div>
-    </div>
-  </section>
+					<div className='mt-10'>
+						<Link
+							href='/#how-it-works'
+							className='text-sm font-medium text-copper transition-colors hover:text-foreground'
+						>
+							See how it works &rarr;
+						</Link>
+					</div>
+				</div>
+
+				{/* Right: photo column bleeding to the edge */}
+				<div className='relative min-h-[360px] lg:min-h-0'>
+					<Image
+						src='/images/stitch-parcels-door.jpg'
+						alt='Professionally packaged parcels by a modern apartment door'
+						fill
+						className='object-cover object-center'
+					/>
+					{/* Subtle left edge blend */}
+					<div className='absolute inset-y-0 left-0 w-16 bg-linear-to-r from-surface to-transparent' />
+				</div>
+			</div>
+		</div>
+	</section>
 )

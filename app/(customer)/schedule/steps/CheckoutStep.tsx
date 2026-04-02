@@ -33,7 +33,7 @@ export const CheckoutStep = () => {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-4">
-          <div className="rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:shadow-md">
+          <div className="rounded-[0.375rem] bg-surface-container-lowest p-5 transition-all duration-200 hover:shadow-md">
             <div className="flex items-center justify-between">
               <h3 className="font-medium text-foreground">Pickup details</h3>
               <button
@@ -72,7 +72,7 @@ export const CheckoutStep = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:shadow-md">
+          <div className="rounded-[0.375rem] bg-surface-container-lowest p-5 transition-all duration-200 hover:shadow-md">
             <div className="flex items-center justify-between">
               <h3 className="font-medium text-foreground">Address</h3>
               <button
@@ -98,7 +98,7 @@ export const CheckoutStep = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-5 transition-all duration-200 hover:shadow-md">
+          <div className="rounded-[0.375rem] bg-surface-container-lowest p-5 transition-all duration-200 hover:shadow-md">
             <div className="flex items-center justify-between">
               <h3 className="font-medium text-foreground">Items ({formData.items.length})</h3>
               <button
@@ -124,14 +124,14 @@ export const CheckoutStep = () => {
         </div>
 
         <div>
-          <div className="rounded-2xl border border-border bg-card p-6 sticky top-32">
+          <div className="rounded-[0.375rem] bg-surface-container-lowest p-6 sticky top-32">
             <h2 className="text-lg font-semibold text-foreground mb-4">Order summary</h2>
 
             {isMember && (
-              <div className="mb-6 rounded-xl bg-linear-to-br from-orange-50 to-amber-50 border-2 border-orange-200 p-4">
+              <div className="mb-6 rounded-[0.375rem] bg-copper-light p-4">
                 <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 shrink-0">
-                    <Crown className="h-5 w-5 text-white" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-copper/20 shrink-0">
+                    <Crown className="h-5 w-5 text-copper" />
                   </div>
                   <div>
                     <p className="font-semibold text-foreground text-sm">Thank you for being a loyal member!</p>
@@ -219,9 +219,9 @@ export const CheckoutStep = () => {
             </div>
 
             {formData.plan === "Pay-As-You-Go" && !total.isExistingMember && (
-              <div className="mt-6 rounded-xl bg-orange-50 border border-orange-100 p-4">
+              <div className="mt-6 rounded-[0.375rem] bg-copper-light p-4">
                 <div className="flex items-start gap-3">
-                  <Sparkles className="h-5 w-5 text-orange-500 mt-0.5" />
+                  <Sparkles className="h-5 w-5 text-copper mt-0.5" />
                   <div>
                     <p className="font-medium text-foreground text-sm">Save with Unlimited</p>
                     <p className="text-xs text-muted-foreground mt-0.5">
@@ -229,7 +229,7 @@ export const CheckoutStep = () => {
                     </p>
                     <button
                       onClick={() => setFormData((prev) => ({ ...prev, plan: "Membership" }))}
-                      className="text-xs font-medium text-orange-600 hover:text-orange-700 mt-2"
+                      className="text-xs font-medium text-copper hover:text-foreground mt-2 transition-colors"
                     >
                       Upgrade now →
                     </button>
@@ -249,7 +249,7 @@ export const CheckoutStep = () => {
                     uploadFilesAndProceedToPayment()
                   }}
                   disabled={isUploadingFiles}
-                  className="mt-6 w-full rounded-full bg-foreground py-4 text-sm font-medium text-background transition-all hover:opacity-90 disabled:opacity-50"
+                  className="mt-6 w-full rounded-[0.375rem] bg-primary py-4 text-sm font-medium text-on-primary transition-all hover:shadow-[0_4px_20px_rgba(26,26,46,0.15)] disabled:opacity-50"
                 >
                   {isUploadingFiles ? "Uploading files..." : "Proceed to payment"}
                 </button>
