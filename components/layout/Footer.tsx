@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, MapPin, Mail, Linkedin } from "lucide-react"
 
@@ -8,46 +7,33 @@ const PARTNER_EMAIL_HREF = "mailto:hello@davidreturns.com?subject=Partner%20My%2
 
 export const Footer = () => (
   <footer>
-    {/* Final CTA — dark navy block with editorial split */}
-    <div id="partner" className="bg-surface-dark overflow-hidden">
-      <div className="mx-auto max-w-6xl">
-        <div className="grid lg:grid-cols-[1fr_38%]">
-          {/* Right: gloved hands photo */}
-          <div className="relative min-h-[320px] order-first lg:order-last lg:min-h-0">
-            <Image
-              src="/images/stitch-gloved-hands.jpg"
-              alt="Professional gloved hands carefully handling a premium package"
-              fill
-              className="object-cover object-center"
-            />
-            <div className="absolute inset-y-0 right-0 w-24 bg-linear-to-l from-surface-dark to-transparent lg:block hidden" />
-          </div>
-          {/* Left: CTA text */}
-          <div className="px-4 py-20 sm:px-8 sm:py-24 lg:pr-16 order-last lg:order-first flex flex-col gap-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-copper">
-              Ready to outsource the errand of returns?
-            </p>
-            <h2 className="font-display text-3xl font-normal leading-[1.1] tracking-[-0.02em] text-[#f9f9f6] sm:text-4xl lg:text-[2.75rem] max-w-2xl">
-              Bring David Returns to your building.
-            </h2>
-            <p className="max-w-md text-lg text-[rgba(249,249,246,0.6)]">
-              Join the growing network of apartment buildings offering effortless returns for their residents.
-            </p>
-            <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={PARTNER_EMAIL_HREF}
-                className="inline-flex items-center gap-2.5 rounded-[0.375rem] bg-primary-fixed px-7 py-3.5 text-sm font-medium text-on-primary-fixed transition-all hover:shadow-[0_8px_32px_rgba(226,224,252,0.2)] hover:scale-[1.02]"
-              >
-                Trusted Account
-                <ArrowRight className="h-4 w-4" />
-              </a>
-              <Link
-                href="/dashboard"
-                className="inline-flex items-center gap-2 rounded-[0.375rem] border border-[rgba(249,249,246,0.15)] px-7 py-3.5 text-sm font-medium text-[#f9f9f6] transition-all hover:border-[rgba(249,249,246,0.3)] hover:bg-[rgba(249,249,246,0.05)]"
-              >
-                Building Partnership
-              </Link>
-            </div>
+    {/* Final CTA — dark navy block */}
+    <div id="partner" className="bg-surface-dark">
+      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-8 sm:py-24">
+        <div className="flex flex-col items-center gap-6 text-center max-w-2xl mx-auto">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-copper">
+            Ready to outsource the errand of returns?
+          </p>
+          <h2 className="font-display text-3xl font-normal leading-[1.1] tracking-[-0.02em] text-[#f9f9f6] sm:text-4xl lg:text-[2.75rem]">
+            Bring David Returns to your building.
+          </h2>
+          <p className="text-lg text-[rgba(249,249,246,0.6)]">
+            Join the growing network of apartment buildings offering effortless returns for their residents.
+          </p>
+          <div className="mt-2 flex flex-col gap-3 sm:flex-row">
+            <a
+              href={PARTNER_EMAIL_HREF}
+              className="inline-flex items-center gap-2.5 rounded-[0.375rem] bg-primary-fixed px-7 py-3.5 text-sm font-medium text-on-primary-fixed transition-all hover:shadow-[0_8px_32px_rgba(226,224,252,0.2)] hover:scale-[1.02]"
+            >
+              Trusted Account
+              <ArrowRight className="h-4 w-4" />
+            </a>
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center gap-2 rounded-[0.375rem] border border-[rgba(249,249,246,0.15)] px-7 py-3.5 text-sm font-medium text-[#f9f9f6] transition-all hover:border-[rgba(249,249,246,0.3)] hover:bg-[rgba(249,249,246,0.05)]"
+            >
+              Building Partnership
+            </Link>
           </div>
         </div>
       </div>
