@@ -19,7 +19,7 @@ const stats = [
 export const StatsSection = () => (
   <section className='bg-surface-container-low py-20 sm:py-28'>
     <div className='mx-auto max-w-6xl px-4 sm:px-6'>
-      <div className='mx-auto max-w-3xl'>
+      <div className='mx-auto max-w-3xl text-center'>
         <p className='text-xs font-semibold uppercase tracking-[0.14em] text-copper'>
           The Problem
         </p>
@@ -28,9 +28,13 @@ export const StatsSection = () => (
         </h2>
       </div>
 
-      <div className='mt-16 grid gap-12 sm:grid-cols-3'>
+      {/* Full content width so three stats distribute evenly; each column centers its stack */}
+      <div className='mt-16 grid w-full grid-cols-1 gap-14 sm:grid-cols-3 sm:gap-8 lg:gap-12'>
         {stats.map((stat) => (
-          <div key={stat.value}>
+          <div
+            key={stat.value}
+            className='flex min-w-0 flex-col items-center text-center sm:px-2'
+          >
             <p
               className={`font-display text-[5rem] font-normal leading-none tracking-[-0.03em] sm:text-[6rem] lg:text-[7rem] ${
                 stat.emphasis ? 'text-copper' : 'text-foreground'
@@ -38,14 +42,14 @@ export const StatsSection = () => (
             >
               {stat.value}
             </p>
-            <p className='mt-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground'>
+            <p className='mt-4 max-w-56 text-xs font-semibold uppercase tracking-widest text-muted-foreground sm:max-w-none'>
               {stat.label}
             </p>
           </div>
         ))}
       </div>
 
-      <p className='mt-16 max-w-2xl text-lg leading-relaxed text-muted-foreground'>
+      <p className='mx-auto mt-16 max-w-3xl text-center text-lg leading-relaxed text-muted-foreground'>
         Apartment buildings bear the burden &mdash; cluttered package rooms, frustrated tenants, and no infrastructure for outbound returns.
       </p>
     </div>
