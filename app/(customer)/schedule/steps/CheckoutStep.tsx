@@ -173,7 +173,7 @@ export const CheckoutStep = () => {
                 <>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Unlimited membership</span>
-                    <span className="text-foreground font-medium">$14.99/mo</span>
+                    <span className="text-foreground font-medium">$22.99/mo</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">This pickup</span>
@@ -225,7 +225,7 @@ export const CheckoutStep = () => {
                   <div>
                     <p className="font-medium text-foreground text-sm">Save with Unlimited</p>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      Get unlimited pickups for just $14.99/mo
+                      Get unlimited pickups for just $22.99/mo
                     </p>
                     <button
                       onClick={() => setFormData((prev) => ({ ...prev, plan: "Membership" }))}
