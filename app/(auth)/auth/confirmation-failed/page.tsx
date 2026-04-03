@@ -1,5 +1,11 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { Suspense } from "react"
+
+export const metadata: Metadata = {
+  title: "Confirmation Failed | David Returns",
+  description: "Email confirmation failed. Please try signing up again or contact support.",
+}
 
 const ConfirmationFailedContent = () => {
   return (

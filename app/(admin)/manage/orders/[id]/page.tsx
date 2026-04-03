@@ -1,5 +1,11 @@
+import type { Metadata } from "next"
 import { redirect, notFound } from "next/navigation"
 import { cookies } from "next/headers"
+
+export const metadata: Metadata = {
+  title: "Order Details | David Returns Admin",
+  description: "View and manage order details.",
+}
 import { AdminOrderDetailProvider } from "@/app/(admin)/manage/orders/[id]/AdminOrderDetailContext"
 import { OrderDetail } from "@/components/admin/OrderDetail"
 import { adminDb } from "@/server/db"

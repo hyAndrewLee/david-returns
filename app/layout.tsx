@@ -13,10 +13,14 @@ const notoSerif = Noto_Serif({ weight: ["400", "500"], subsets: ["latin"], varia
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" })
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://davidreturns.com"),
   title: "David Returns — Return Infrastructure for Apartment Buildings",
   description:
     "David Returns partners with apartment buildings across NYC to provide seamless return pickups for residents. No trips. No lines. No effort.",
   keywords: ["returns", "apartment buildings", "NYC", "pickup", "logistics", "property management", "tenant amenity"],
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
     shortcut: "/favicon.svg",
@@ -28,14 +32,6 @@ export const metadata: Metadata = {
       "David Returns partners with apartment buildings across NYC to provide seamless return pickups for residents.",
     url: "https://davidreturns.com",
     siteName: "David Returns",
-    images: [
-      {
-        url: "https://davidreturns.com/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "David Returns — Return infrastructure for apartment living",
-      },
-    ],
     locale: "en_US",
     type: "website",
   },
@@ -44,7 +40,6 @@ export const metadata: Metadata = {
     title: "David Returns — Return Infrastructure for Apartment Buildings",
     description:
       "David Returns partners with apartment buildings across NYC to provide seamless return pickups for residents.",
-    images: ["https://davidreturns.com/og-image.jpg"],
   },
 }
 
@@ -54,6 +49,26 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "David Returns",
+  url: "https://davidreturns.com",
+  logo: "https://davidreturns.com/images/david-returns-logo.png",
+  description:
+    "David Returns partners with apartment buildings across NYC to provide seamless return pickups for residents.",
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "hello@davidreturns.com",
+    telephone: "+1-706-308-8865",
+    contactType: "customer service",
+  },
+  areaServed: {
+    "@type": "City",
+    name: "New York",
+  },
+}
+
 const RootLayout = ({
   children,
 }: Readonly<{
@@ -61,6 +76,11 @@ const RootLayout = ({
 }>) => (
   <html lang="en">
     <body className={`${inter.variable} ${notoSerif.variable} ${geistMono.variable} antialiased`}>
+      <script
+        type="application/ld+json"
+      >
+        {JSON.stringify(organizationJsonLd)}
+      </script>
       <TRPCProvider>
         {children}
       </TRPCProvider>

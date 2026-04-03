@@ -1,6 +1,12 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
 import { Mail } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "Check Your Email | David Returns",
+  description: "A confirmation email has been sent. Please verify your email to activate your account.",
+}
 
 const SignUpSuccessPage = () => (
   <main className="flex min-h-screen flex-col items-center justify-center bg-background px-4">

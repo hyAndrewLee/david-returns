@@ -1,6 +1,12 @@
+import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 
 import { createServerSupabaseClient } from "@/server/auth/supabase"
+
+export const metadata: Metadata = {
+  title: "Dashboard | David Returns",
+  description: "View and manage your return pickups, track order status, and schedule new pickups.",
+}
 import { createCaller } from "@/server/trpc/router"
 import { createTRPCContext } from "@/server/trpc/init"
 import { UserDashboard } from "@/components/customer/UserDashboard"

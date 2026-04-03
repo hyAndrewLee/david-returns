@@ -1,5 +1,11 @@
+import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
+
+export const metadata: Metadata = {
+  title: "Admin Dashboard | David Returns",
+  description: "Manage orders, customers, and operations for David Returns.",
+}
 import { AdminDashboard } from "@/components/admin/AdminDashboard"
 import { AdminDashboardProvider } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
 import { adminDb } from "@/server/db"
