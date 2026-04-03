@@ -5,7 +5,7 @@ import type React from "react"
 import { Suspense, useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { ArrowRight, Eye, EyeOff, Building2, Package, MapPin } from "lucide-react"
 import { createBrowserSupabaseClient } from "@/lib/supabase"
 
@@ -19,7 +19,6 @@ const trustSignals = [
 ]
 
 const SignInPageContent = () => {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -58,7 +57,8 @@ const SignInPageContent = () => {
         return
       }
 
-      router.push("/dashboard")
+      const redirectTo = searchParams.get("redirectTo") || "/dashboard"
+      window.location.href = redirectTo
     } catch (err) {
       console.error("Sign in error:", err)
       setError("An unexpected error occurred")
