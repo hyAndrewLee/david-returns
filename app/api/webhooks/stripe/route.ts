@@ -4,10 +4,12 @@ import { sendOrderConfirmation, sendAdminOrderNotification } from "@/server/serv
 import { adminDb } from "@/server/db"
 import { orders, profiles, subscriptions } from "@/server/db/schema"
 import { eq } from "drizzle-orm"
+import { createLogger } from "@/lib/logger"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
+const log = createLogger("stripe-webhook")
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
 export const POST = async (request: Request) => {
@@ -15,6 +17,7 @@ export const POST = async (request: Request) => {
   const signature = request.headers.get("stripe-signature")
 
   if (!signature) {
+    log.warn("webhook received without stripe-signature header")
     return NextResponse.json({ error: "No signature" }, { status: 400 })
   }
 
@@ -28,15 +31,19 @@ export const POST = async (request: Request) => {
 
   try {
     event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET!)
-  } catch {
+  } catch (err) {
+    log.error({ error: err }, "webhook signature verification failed")
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 })
   }
+
+  log.info({ eventType: event.type, eventId: event.id }, "webhook event received")
 
   try {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session
         const metadata = session.metadata
+        log.info({ sessionId: session.id, userId: metadata?.user_id, orderId: metadata?.order_id }, "checkout.session.completed")
 
         if (metadata?.user_id && metadata?.order_id) {
           const [existingOrder] = await adminDb
@@ -115,10 +122,10 @@ export const POST = async (request: Request) => {
                 isInstant: metadata.is_instant === "true",
               })
             } catch (adminEmailError) {
-              console.error("Failed to send admin notification:", adminEmailError)
+              log.error({ error: adminEmailError, orderId: order.id }, "failed to send admin notification email")
             }
           } catch (emailError) {
-            console.error("Failed to send confirmation email:", emailError)
+            log.error({ error: emailError, orderId: order.id }, "failed to send confirmation email")
           }
 
           if (session.mode === "subscription" && session.subscription) {
@@ -191,9 +198,10 @@ export const POST = async (request: Request) => {
       }
     }
 
+    log.info({ eventType: event.type, eventId: event.id }, "webhook processed successfully")
     return NextResponse.json({ received: true })
   } catch (error) {
-    console.error("Fatal error processing webhook:", error)
+    log.error({ error, eventType: event.type, eventId: event.id }, "fatal error processing webhook")
     return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 })
   }
 }

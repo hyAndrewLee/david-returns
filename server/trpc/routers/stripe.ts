@@ -6,6 +6,9 @@ import { adminDb } from "@/server/db"
 import { orders, subscriptions, profiles } from "@/server/db/schema"
 import { eq, and } from "drizzle-orm"
 import { getProduct } from "@/lib/constants"
+import { createLogger } from "@/lib/logger"
+
+const log = createLogger("stripe-router")
 
 export const stripeRouter = createTRPCRouter({
   createCheckout: authedProcedure
@@ -49,6 +52,8 @@ export const stripeRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.user.id
       const userEmail = ctx.user.email
+
+      log.info({ userId, plan: input.plan, itemCount: input.itemCount, isInstant: input.isInstant }, "createCheckout started")
 
       const [sub] = await adminDb
         .select()
@@ -238,9 +243,11 @@ export const stripeRouter = createTRPCRouter({
       })
 
       if (!session.client_secret) {
+        log.error({ sessionId: session.id, userId }, "checkout session missing client_secret")
         return { success: false, error: "Failed to initialize payment session." }
       }
 
+      log.info({ sessionId: session.id, orderId: order.id, mode, userId }, "checkout session created")
       return { success: true, clientSecret: session.client_secret }
     }),
 
@@ -291,32 +298,50 @@ export const stripeRouter = createTRPCRouter({
 
   getCheckoutSession: authedProcedure
     .input(z.object({ sessionId: z.string() }))
-    .query(async ({ input }) => {
-      const session = await stripe.checkout.sessions.retrieve(input.sessionId)
+    .query(async ({ ctx, input }) => {
+      log.info({ sessionId: input.sessionId, userId: ctx.user.id }, "getCheckoutSession called")
 
-      return {
-        id: session.id,
-        mode: session.mode,
-        paymentStatus: session.payment_status,
-        customer: session.customer,
-        metadata: session.metadata,
+      try {
+        const session = await stripe.checkout.sessions.retrieve(input.sessionId)
+
+        log.info(
+          { sessionId: session.id, mode: session.mode, paymentStatus: session.payment_status, userId: ctx.user.id },
+          "checkout session retrieved",
+        )
+
+        return {
+          id: session.id,
+          mode: session.mode,
+          paymentStatus: session.payment_status,
+          customer: session.customer,
+          metadata: session.metadata,
+        }
+      } catch (error) {
+        log.error({ sessionId: input.sessionId, userId: ctx.user.id, error }, "failed to retrieve checkout session")
+        throw error
       }
     }),
 
   activateMembership: authedProcedure
     .input(z.object({ sessionId: z.string() }))
-    .mutation(async ({ input }) => {
+    .mutation(async ({ ctx, input }) => {
+      log.info({ sessionId: input.sessionId, userId: ctx.user.id }, "activateMembership called")
+
       const session = await stripe.checkout.sessions.retrieve(input.sessionId, {
         expand: ["subscription"],
       })
 
       if (session.mode !== "subscription" || !session.subscription) {
+        log.warn({ sessionId: input.sessionId, mode: session.mode }, "activateMembership called on non-subscription session")
         return { error: "Not a subscription payment" }
       }
 
       const subscription = session.subscription as any
       const userId = session.metadata?.user_id
-      if (!userId) return { error: "User ID not found" }
+      if (!userId) {
+        log.error({ sessionId: input.sessionId }, "activateMembership: user_id missing from session metadata")
+        return { error: "User ID not found" }
+      }
 
       const [existingSub] = await adminDb
         .select({ id: subscriptions.id })
@@ -360,6 +385,7 @@ export const stripeRouter = createTRPCRouter({
           .where(eq(orders.id, session.metadata.order_id))
       }
 
+      log.info({ userId, subscriptionId: subscription.id, orderId: session.metadata?.order_id }, "membership activated")
       return { message: "Membership activated successfully!", subscriptionId: subscription.id }
     }),
 })

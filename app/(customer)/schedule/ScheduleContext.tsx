@@ -64,6 +64,34 @@ export type ScheduleFormData = {
   items: ReturnItem[]
 }
 
+/** Maps Supabase auth user_metadata (raw_user_meta_data) from signup into schedule form fields. */
+const formDataFromSignupUserMetadata = (
+  meta: Record<string, unknown> | undefined,
+): Partial<ScheduleFormData> | null => {
+  if (!meta) return null
+  const street =
+    typeof meta.street_address === "string" ? meta.street_address.trim() : ""
+  const zip = typeof meta.zip === "string" ? meta.zip.trim() : ""
+  if (!street && !zip) return null
+
+  const name = typeof meta.full_name === "string" ? meta.full_name : ""
+  const phone = typeof meta.phone === "string" ? meta.phone : ""
+  const apt = typeof meta.apt === "string" ? meta.apt : ""
+  const city =
+    typeof meta.city === "string" && meta.city.trim() ? meta.city : "New York"
+
+  return {
+    name,
+    phone,
+    address: street,
+    apt,
+    buildingName: "",
+    city,
+    zip,
+    notes: "",
+  }
+}
+
 export type NewItemState = {
   type: string
   labelType: LabelType | ""
@@ -230,6 +258,7 @@ type ScheduleContextValue = {
   handleSelectAddress: (address: SavedAddress) => void
   handleCancelAddressForm: () => void
   handleShowNewAddressForm: () => void
+  prefilledFromSignup: boolean
 
   isMember: boolean
   membershipChecked: boolean
@@ -310,6 +339,7 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
   const [saveThisAddress, setSaveThisAddress] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
   const [addressConfirmed, setAddressConfirmed] = useState(false)
+  const [prefilledFromSignup, setPrefilledFromSignup] = useState(false)
 
   const [formData, setFormData] = useState<ScheduleFormData>({
     selectedDate: "",
@@ -395,6 +425,22 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
       }
     } else if (addressesQuery.data && addressesQuery.data.length === 0) {
       setShowAddressForm(true)
+
+      const applySignupAddress = async () => {
+        const supabase = createBrowserSupabaseClient()
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+        const partial = formDataFromSignupUserMetadata(
+          user?.user_metadata as Record<string, unknown> | undefined,
+        )
+        if (partial) {
+          setFormData((prev) => ({ ...prev, ...partial }))
+          setPrefilledFromSignup(true)
+        }
+      }
+
+      void applySignupAddress()
     }
   }, [addressesQuery.data])
 
@@ -451,6 +497,7 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
     setSelectedAddressId(null)
     setShowAddressForm(true)
     setAddressConfirmed(false)
+    setPrefilledFromSignup(false)
     setFormData((prev) => ({
       ...prev,
       name: "",
@@ -1154,6 +1201,7 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
     handleSelectAddress,
     handleCancelAddressForm,
     handleShowNewAddressForm,
+    prefilledFromSignup,
     isMember,
     membershipChecked,
     newItem,

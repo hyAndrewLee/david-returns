@@ -8,35 +8,40 @@ import { trpc } from "@/lib/trpc"
 const PaymentReturnPageContent = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const sessionId = searchParams.get("session_id") ?? ""
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading")
   const [message, setMessage] = useState("")
   const [isMembership, setIsMembership] = useState(false)
 
+  const sessionQuery = trpc.stripe.getCheckoutSession.useQuery(
+    { sessionId },
+    { enabled: !!sessionId, retry: 1 },
+  )
+
   const activateMutation = trpc.stripe.activateMembership.useMutation()
 
   useEffect(() => {
+    if (!sessionId) {
+      setStatus("error")
+      setMessage("Invalid payment session")
+      return
+    }
+
+    if (sessionQuery.isLoading) return
+
+    if (sessionQuery.error || !sessionQuery.data) {
+      console.error("Error verifying payment:", sessionQuery.error)
+      setStatus("error")
+      setMessage("Failed to verify payment")
+      return
+    }
+
     const processPayment = async () => {
       try {
-        const sessionId = searchParams.get("session_id")
-        if (!sessionId) {
-          setStatus("error")
-          setMessage("Invalid payment session")
-          return
-        }
-
-        const sessionData = await fetch(`/api/trpc/stripe.getCheckoutSession?input=${encodeURIComponent(JSON.stringify({ sessionId }))}`)
-          .then((r) => r.json())
-          .then((r) => r.result?.data)
-
-        if (!sessionData) {
-          setStatus("error")
-          setMessage("Failed to verify payment")
-          return
-        }
+        const sessionData = sessionQuery.data
 
         if (sessionData.mode === "subscription") {
           setIsMembership(true)
-
           const result = await activateMutation.mutateAsync({ sessionId })
 
           if (result.message) {
@@ -64,7 +69,7 @@ const PaymentReturnPageContent = () => {
 
     processPayment()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams])
+  }, [sessionId, sessionQuery.data, sessionQuery.error, sessionQuery.isLoading])
 
   if (status === "loading") {
     return (

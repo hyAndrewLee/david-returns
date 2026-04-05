@@ -15,6 +15,7 @@ export const AddressStep = () => {
     handleSelectAddress,
     handleCancelAddressForm,
     handleShowNewAddressForm,
+    prefilledFromSignup,
     userId,
     saveThisAddress,
     setSaveThisAddress,
@@ -28,7 +29,9 @@ export const AddressStep = () => {
         <p className="mt-3 text-muted-foreground">
           {savedAddresses.length > 0 && addressConfirmed
             ? "Confirm your pickup address or choose a different one."
-            : "Enter your pickup address and contact info."}
+            : prefilledFromSignup
+              ? "We filled in the address from when you signed up. Update it here if anything changed."
+              : "Enter your pickup address and contact info."}
         </p>
       </div>
 
@@ -126,6 +129,11 @@ export const AddressStep = () => {
 
       {(showAddressForm || savedAddresses.length === 0) && (
         <div className="space-y-5">
+          {prefilledFromSignup && savedAddresses.length === 0 && (
+            <div className="rounded-xl border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
+              Using your signup address from your account. You can edit any field below.
+            </div>
+          )}
           {savedAddresses.length > 0 && (
             <div className="flex items-center justify-between">
               <h3 className="font-medium">New Address</h3>
