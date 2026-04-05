@@ -3,7 +3,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft, ArrowRight, Check, Zap, X } from 'lucide-react';
-import { ScheduleProvider, useSchedule, STEPS } from '@/app/(customer)/schedule/ScheduleContext';
+import {
+	ScheduleProvider,
+	useSchedule,
+	getScheduleSteps,
+} from '@/app/(customer)/schedule/ScheduleContext';
 import { ScheduleStep } from '@/app/(customer)/schedule/steps/ScheduleStep';
 import { AddressStep } from '@/app/(customer)/schedule/steps/AddressStep';
 import { PickupMethodStep } from '@/app/(customer)/schedule/steps/PickupMethodStep';
@@ -25,7 +29,11 @@ const SchedulePageContent = () => {
 		DEBUG_UPLOAD,
 		debugFileInfo,
 		setDebugFileInfo,
+		isMember,
+		membershipChecked,
 	} = useSchedule();
+
+	const scheduleSteps = getScheduleSteps(membershipChecked, isMember);
 
 	if (isSuccess) {
 		return (
@@ -103,7 +111,7 @@ const SchedulePageContent = () => {
 			<div className='bg-surface-container-lowest shadow-[0_1px_0_rgba(26,26,46,0.05)]'>
 				<div className='mx-auto max-w-3xl px-4 py-4'>
 					<div className='flex items-center justify-between'>
-						{STEPS.map((step, index) => (
+						{scheduleSteps.map((step, index) => (
 							<div key={step.id} className='flex items-center'>
 								<button
 									onClick={() => step.id <= currentStep && setCurrentStep(step.id)}
@@ -129,7 +137,7 @@ const SchedulePageContent = () => {
 									</div>
 									<span className='text-xs font-medium hidden sm:block'>{step.title}</span>
 								</button>
-								{index < STEPS.length - 1 && (
+								{index < scheduleSteps.length - 1 && (
 									<div
 										className={`mx-2 h-0.5 w-8 sm:w-12 transition-colors duration-200 ${
 											step.id < currentStep ? 'bg-accent-warm' : 'bg-secondary'

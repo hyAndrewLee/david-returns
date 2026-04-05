@@ -147,6 +147,10 @@ export const STEPS = [
   { id: 6, title: "Checkout", icon: Truck },
 ]
 
+/** Unlimited members skip the plan step entirely — same step ids, but Plan (4) is omitted from the UI. */
+export const getScheduleSteps = (membershipChecked: boolean, isMember: boolean) =>
+  membershipChecked && isMember ? STEPS.filter((s) => s.id !== 4) : STEPS
+
 export const TIME_WINDOWS: { value: TimeWindow; label: string }[] = [
   { value: "8–11am", label: "8–11am" },
   { value: "11am–2pm", label: "11am–2pm" },
@@ -374,6 +378,11 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
       setMembershipChecked(true)
     }
   }, [membershipQuery.data, membershipQuery.error])
+
+  useEffect(() => {
+    if (!membershipChecked || !isMember) return
+    setCurrentStep((s) => (s === 4 ? 5 : s))
+  }, [membershipChecked, isMember])
 
   useEffect(() => {
     const user = localStorage.getItem("davidreturns_user")
@@ -908,6 +917,7 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
       case 3:
         return !!formData.pickupMethod
       case 4:
+        if (isMember) return true
         return !!formData.plan
       case 5:
         return formData.items.length > 0
@@ -987,7 +997,7 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
       setError("Please select a pickup method.")
       return
     }
-    if (currentStep === 4 && !formData.plan) {
+    if (currentStep === 4 && !isMember && !formData.plan) {
       setError("Please select a plan.")
       return
     }
@@ -1009,7 +1019,7 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
           setReturnToStep(null)
           setCurrentStep(target)
         } else {
-          setCurrentStep((prev) => prev + 1)
+          setCurrentStep((prev) => (prev === 3 && isMember ? 5 : prev + 1))
         }
       })
       return
@@ -1024,7 +1034,7 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
       return
     }
 
-    setCurrentStep((prev) => prev + 1)
+    setCurrentStep((prev) => (prev === 3 && isMember ? 5 : prev + 1))
   }
 
   const handlePreviousStep = () => {
@@ -1039,7 +1049,7 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
       return
     }
 
-    setCurrentStep((prev) => prev - 1)
+    setCurrentStep((prev) => (prev === 5 && isMember ? 3 : prev - 1))
   }
 
   const handleSubmit = async () => {

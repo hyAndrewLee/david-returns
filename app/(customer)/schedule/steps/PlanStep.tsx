@@ -4,29 +4,7 @@ import { Check, Sparkles } from 'lucide-react'
 import { useSchedule } from '@/app/(customer)/schedule/ScheduleContext'
 
 export const PlanStep = () => {
-	const { formData, setFormData, isMember, setCurrentStep } = useSchedule()
-
-	if (isMember) {
-		return (
-			<div className='space-y-8'>
-				<div className='rounded-[0.375rem] bg-copper-light p-8 text-center'>
-					<div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-copper/20'>
-						<Check className='h-8 w-8 text-copper' />
-					</div>
-					<h2 className='text-2xl font-semibold text-foreground mb-2'>You&apos;re all set!</h2>
-					<p className='text-muted-foreground mb-6'>
-						Your unlimited membership covers this pickup at no additional cost.
-					</p>
-					<button
-						onClick={() => setCurrentStep(5)}
-						className='rounded-[0.375rem] bg-primary px-8 py-3 text-sm font-medium text-on-primary transition-all hover:shadow-[0_4px_20px_rgba(26,26,46,0.15)]'
-					>
-						Continue to items
-					</button>
-				</div>
-			</div>
-		)
-	}
+	const { formData, setFormData } = useSchedule()
 
 	return (
 		<div className='space-y-8'>
@@ -41,10 +19,10 @@ export const PlanStep = () => {
 			<div className='grid gap-4 sm:grid-cols-2'>
 				<button
 					onClick={() => setFormData((prev) => ({ ...prev, plan: 'Pay-As-You-Go' }))}
-					className={`relative flex flex-col rounded-[0.375rem] p-6 text-left transition-all duration-200 ${
+					className={`relative flex flex-col rounded-[0.375rem] border-2 p-6 text-left transition-all duration-200 ${
 						formData.plan === 'Pay-As-You-Go'
-							? 'bg-surface-container-lowest shadow-[0_4px_32px_rgba(26,28,27,0.1)]'
-							: 'bg-surface-container-lowest hover:shadow-[0_4px_20px_rgba(26,28,27,0.06)] hover:-translate-y-0.5'
+							? 'border-primary bg-surface-container-lowest shadow-[0_4px_32px_rgba(26,28,27,0.1)]'
+							: 'border-transparent bg-surface-container-lowest hover:shadow-[0_4px_20px_rgba(26,28,27,0.06)] hover:-translate-y-0.5'
 					}`}
 				>
 					{formData.plan === 'Pay-As-You-Go' && (
@@ -76,10 +54,10 @@ export const PlanStep = () => {
 
 				<button
 					onClick={() => setFormData((prev) => ({ ...prev, plan: 'Membership' }))}
-					className={`relative flex flex-col rounded-[0.375rem] p-6 text-left transition-all duration-200 ${
+					className={`relative flex flex-col rounded-[0.375rem] border-2 p-6 text-left transition-all duration-200 ${
 						formData.plan === 'Membership'
-							? 'bg-surface-container-lowest shadow-[0_4px_32px_rgba(136,81,39,0.15)]'
-							: 'bg-surface-container-lowest hover:shadow-[0_4px_20px_rgba(26,28,27,0.06)] hover:-translate-y-0.5'
+							? 'border-copper bg-surface-container-lowest shadow-[0_4px_32px_rgba(136,81,39,0.15)]'
+							: 'border-transparent bg-surface-container-lowest hover:shadow-[0_4px_20px_rgba(26,28,27,0.06)] hover:-translate-y-0.5'
 					}`}
 				>
 					<span className='absolute -top-3 left-4 rounded-[0.375rem] bg-copper px-3 py-0.5 text-xs font-medium text-white'>
