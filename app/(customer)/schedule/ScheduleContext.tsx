@@ -250,8 +250,6 @@ type ScheduleContextValue = {
   setSelectedAddressId: React.Dispatch<React.SetStateAction<string | null>>
   showAddressForm: boolean
   setShowAddressForm: React.Dispatch<React.SetStateAction<boolean>>
-  addressConfirmed: boolean
-  setAddressConfirmed: React.Dispatch<React.SetStateAction<boolean>>
   saveThisAddress: boolean
   setSaveThisAddress: React.Dispatch<React.SetStateAction<boolean>>
   userId: string | null
@@ -338,7 +336,6 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
   const [showAddressForm, setShowAddressForm] = useState(false)
   const [saveThisAddress, setSaveThisAddress] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
-  const [addressConfirmed, setAddressConfirmed] = useState(false)
   const [prefilledFromSignup, setPrefilledFromSignup] = useState(false)
 
   const [formData, setFormData] = useState<ScheduleFormData>({
@@ -421,7 +418,6 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
       if (defaultAddr) {
         setSelectedAddressId(defaultAddr.id)
         populateFormFromAddress(defaultAddr)
-        setAddressConfirmed(true)
       }
     } else if (addressesQuery.data && addressesQuery.data.length === 0) {
       setShowAddressForm(true)
@@ -478,12 +474,10 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
     setSelectedAddressId(address.id)
     populateFormFromAddress(address)
     setShowAddressForm(false)
-    setAddressConfirmed(true)
   }
 
   const handleCancelAddressForm = () => {
     setShowAddressForm(false)
-    setAddressConfirmed(true)
     if (savedAddresses.length > 0) {
       const defaultAddr = savedAddresses.find((a) => a.is_default) || savedAddresses[0]
       if (defaultAddr) {
@@ -496,7 +490,6 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
   const handleShowNewAddressForm = () => {
     setSelectedAddressId(null)
     setShowAddressForm(true)
-    setAddressConfirmed(false)
     setPrefilledFromSignup(false)
     setFormData((prev) => ({
       ...prev,
@@ -950,8 +943,6 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
     if (data) {
       setSavedAddresses((prev) => [...prev, data])
       setSelectedAddressId(data.id)
-      setShowAddressForm(false)
-      setAddressConfirmed(false)
       return true
     }
     console.error("Failed to save new address:", insertError)
@@ -972,8 +963,8 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
       setError("Please select a time window.")
       return
     }
-    if (currentStep === 2 && !addressConfirmed && !showAddressForm) {
-      setError("Please select an address or fill in the form.")
+    if (currentStep === 2 && !showAddressForm && !selectedAddressId) {
+      setError("Please select an address.")
       return
     }
     if (currentStep === 2 && showAddressForm && !formData.name) {
@@ -1009,14 +1000,18 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
       saveNewAddress().then((saved) => {
         if (!saved) {
           setError("Failed to save address. Please try again.")
+          return
+        }
+        setShowAddressForm(false)
+        setError("")
+        if (returnToStep !== null) {
+          const target = returnToStep
+          setReturnToStep(null)
+          setCurrentStep(target)
+        } else {
+          setCurrentStep((prev) => prev + 1)
         }
       })
-      return
-    }
-
-    if (currentStep === 2 && showAddressForm && !selectedAddressId) {
-      setShowAddressForm(false)
-      setAddressConfirmed(true)
       return
     }
 
@@ -1038,6 +1033,12 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
       setCurrentStep(returnToStep)
       return
     }
+
+    if (currentStep === 2 && showAddressForm && savedAddresses.length > 0) {
+      handleCancelAddressForm()
+      return
+    }
+
     setCurrentStep((prev) => prev - 1)
   }
 
@@ -1193,8 +1194,6 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
     setSelectedAddressId,
     showAddressForm,
     setShowAddressForm,
-    addressConfirmed,
-    setAddressConfirmed,
     saveThisAddress,
     setSaveThisAddress,
     userId,

@@ -16,7 +16,7 @@ export const CheckoutStep = () => {
     uploadFilesAndProceedToPayment,
     isUploadingFiles,
     uploadedItems,
-    addressConfirmed,
+    selectedAddressId,
     showAddressForm,
     setError,
   } = useSchedule()
@@ -242,7 +242,7 @@ export const CheckoutStep = () => {
               <>
                 <button
                   onClick={() => {
-                    if (!addressConfirmed && !showAddressForm) {
+                    if (!selectedAddressId && !showAddressForm) {
                       setError("Please select an address or fill in the form.")
                       return
                     }

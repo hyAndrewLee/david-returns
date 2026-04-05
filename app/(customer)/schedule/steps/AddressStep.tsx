@@ -1,6 +1,6 @@
 "use client"
 
-import { MapPin, Home, Building, Check, Plus } from "lucide-react"
+import { Home, Building, Check, Plus } from "lucide-react"
 import { useSchedule } from "@/app/(customer)/schedule/ScheduleContext"
 
 export const AddressStep = () => {
@@ -8,12 +8,9 @@ export const AddressStep = () => {
     savedAddresses,
     selectedAddressId,
     showAddressForm,
-    addressConfirmed,
-    setAddressConfirmed,
     formData,
     setFormData,
     handleSelectAddress,
-    handleCancelAddressForm,
     handleShowNewAddressForm,
     prefilledFromSignup,
     userId,
@@ -27,103 +24,67 @@ export const AddressStep = () => {
         <span className="text-xs font-semibold uppercase tracking-widest text-accent-warm">Address</span>
         <h1 className="mt-2 font-display text-3xl font-normal tracking-tight text-foreground sm:text-4xl">Where should we pick&nbsp;up?</h1>
         <p className="mt-3 text-muted-foreground">
-          {savedAddresses.length > 0 && addressConfirmed
-            ? "Confirm your pickup address or choose a different one."
+          {savedAddresses.length > 0 && !showAddressForm
+            ? "Select your pickup address or add a new one."
             : prefilledFromSignup
               ? "We filled in the address from when you signed up. Update it here if anything changed."
               : "Enter your pickup address and contact info."}
         </p>
       </div>
 
-      {savedAddresses.length > 0 && addressConfirmed && !showAddressForm && selectedAddressId && (
-        <div className="space-y-4">
-          <div className="rounded-xl border-2 border-orange-500 bg-orange-50 p-5">
-            <div className="flex items-start justify-between">
-              <div className="flex items-start gap-3">
-                <div className="rounded-full bg-orange-500 p-2 text-white">
-                  <MapPin className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="font-medium text-foreground">{formData.name}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {formData.address}
-                    {formData.apt ? `, ${formData.apt}` : ""}, {formData.city} {formData.zip}
-                  </p>
-                  <p className="text-sm text-muted-foreground">{formData.phone}</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setAddressConfirmed(false)}
-                className="text-sm font-medium text-orange-600 hover:text-orange-700"
-              >
-                Change
-              </button>
-            </div>
-          </div>
-
-          <p className="text-center text-sm text-muted-foreground">
-            This is your saved address. Click continue to proceed.
-          </p>
-        </div>
-      )}
-
-      {savedAddresses.length > 0 && !addressConfirmed && (
-        <div className="space-y-3">
-          <p className="text-sm font-medium text-foreground">Saved Addresses</p>
-          <div className="grid gap-3">
-            {savedAddresses.map((addr) => (
-              <button
-                key={addr.id}
-                type="button"
-                onClick={() => handleSelectAddress(addr)}
-                className={`flex items-start gap-3 rounded-xl border p-4 text-left transition-all ${
-                  selectedAddressId === addr.id
-                    ? "border-orange-500 bg-orange-50 ring-1 ring-orange-500"
-                    : "border-border bg-card hover:border-foreground/30"
+      {savedAddresses.length > 0 && !showAddressForm && (
+        <div className="grid gap-3">
+          {savedAddresses.map((addr) => (
+            <button
+              key={addr.id}
+              type="button"
+              onClick={() => handleSelectAddress(addr)}
+              className={`flex items-start gap-3 rounded-xl border p-4 text-left transition-all ${
+                selectedAddressId === addr.id
+                  ? "border-orange-500 bg-orange-50 ring-1 ring-orange-500"
+                  : "border-border bg-card hover:border-foreground/30"
+              }`}
+            >
+              <div
+                className={`mt-0.5 rounded-full p-2 ${
+                  selectedAddressId === addr.id ? "bg-orange-500 text-white" : "bg-muted"
                 }`}
               >
-                <div
-                  className={`mt-0.5 rounded-full p-2 ${
-                    selectedAddressId === addr.id ? "bg-orange-500 text-white" : "bg-muted"
-                  }`}
-                >
-                  {addr.label.toLowerCase().includes("work") ? (
-                    <Building className="h-4 w-4" />
-                  ) : (
-                    <Home className="h-4 w-4" />
+                {addr.label.toLowerCase().includes("work") ? (
+                  <Building className="h-4 w-4" />
+                ) : (
+                  <Home className="h-4 w-4" />
+                )}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">{addr.label}</span>
+                  {addr.is_default && (
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                      Default
+                    </span>
                   )}
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">{addr.label}</span>
-                    {addr.is_default && (
-                      <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
-                        Default
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {addr.street_address}
-                    {addr.apt ? `, ${addr.apt}` : ""}, {addr.city} {addr.zip}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {addr.full_name} • {addr.phone}
-                  </p>
-                </div>
-                {selectedAddressId === addr.id && <Check className="h-5 w-5 text-orange-500" />}
-              </button>
-            ))}
-
-            <button
-              type="button"
-              onClick={handleShowNewAddressForm}
-              className="flex items-center justify-center gap-2 rounded-xl border border-dashed border-border p-4 text-muted-foreground hover:border-foreground hover:text-foreground transition-all"
-            >
-              <Plus className="h-4 w-4" />
-              <span>Use a different address</span>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {addr.street_address}
+                  {addr.apt ? `, ${addr.apt}` : ""}, {addr.city} {addr.zip}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {addr.full_name} • {addr.phone}
+                </p>
+              </div>
+              {selectedAddressId === addr.id && <Check className="h-5 w-5 text-orange-500" />}
             </button>
-          </div>
+          ))}
+
+          <button
+            type="button"
+            onClick={handleShowNewAddressForm}
+            className="flex items-center justify-center gap-2 rounded-xl border border-dashed border-border p-4 text-muted-foreground hover:border-foreground hover:text-foreground transition-all"
+          >
+            <Plus className="h-4 w-4" />
+            <span>Use a different address</span>
+          </button>
         </div>
       )}
 
@@ -135,16 +96,7 @@ export const AddressStep = () => {
             </div>
           )}
           {savedAddresses.length > 0 && (
-            <div className="flex items-center justify-between">
-              <h3 className="font-medium">New Address</h3>
-              <button
-                type="button"
-                onClick={handleCancelAddressForm}
-                className="text-sm text-muted-foreground hover:text-foreground"
-              >
-                Cancel
-              </button>
-            </div>
+            <h3 className="font-medium">New Address</h3>
           )}
 
           <div className="grid gap-5 sm:grid-cols-2">
