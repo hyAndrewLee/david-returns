@@ -12,7 +12,7 @@ export const StepIndicator = () => {
       <div className="mx-auto max-w-3xl px-4 py-4">
         <div className="flex items-center justify-between">
           {scheduleSteps.map((step, index) => (
-            <div key={step.id} className="flex items-center">
+            <div key={step.id} className="flex items-start">
               <button
                 onClick={() => step.id <= currentStep && setCurrentStep(step.id)}
                 disabled={step.id > currentStep}
@@ -39,7 +39,7 @@ export const StepIndicator = () => {
               </button>
               {index < scheduleSteps.length - 1 && (
                 <div
-                  className={`mx-2 h-0.5 w-8 sm:w-12 transition-colors duration-200 ${
+                  className={`mx-2 mt-[19px] h-0.5 w-8 sm:w-12 transition-colors duration-200 ${
                     step.id < currentStep ? "bg-accent-warm" : "bg-secondary"
                   }`}
                 />
