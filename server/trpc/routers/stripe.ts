@@ -1,7 +1,10 @@
 import { z } from "zod"
+import Stripe from "stripe"
 import { createTRPCRouter } from "../init"
 import { authedProcedure } from "../middlewares"
 import { stripe } from "@/server/services/stripe"
+import { encodeOrderMetadata } from "@/server/services/stripeMetadata"
+import { fulfillCheckout } from "@/server/services/fulfillment"
 import { adminDb } from "@/server/db"
 import { orders, subscriptions, profiles } from "@/server/db/schema"
 import { eq, and } from "drizzle-orm"
@@ -104,7 +107,7 @@ export const stripeRouter = createTRPCRouter({
       if (profile?.stripeCustomerId) {
         try {
           const customer = await stripe.customers.retrieve(profile.stripeCustomerId)
-          if (!(customer as any).deleted) {
+          if (!(customer as unknown as Record<string, unknown>).deleted) {
             validatedCustomerId = profile.stripeCustomerId
           } else {
             await adminDb.update(profiles).set({ stripeCustomerId: null }).where(eq(profiles.id, userId))
@@ -149,7 +152,7 @@ export const stripeRouter = createTRPCRouter({
         return { success: true, free: true, orderId: order.id }
       }
 
-      let lineItems: any[] = []
+      let lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
       let mode: "subscription" | "payment" = "payment"
 
       if (input.plan === "Membership") {
@@ -206,37 +209,25 @@ export const stripeRouter = createTRPCRouter({
         ]
       }
 
-      const [order] = await adminDb
-        .insert(orders)
-        .values([
-          {
-            userId,
-            pickupDate: input.pickupDate || new Date().toISOString().split("T")[0],
-            pickupTime: input.pickupTime || "",
-            pickupMethod: input.pickupMethod,
-            address: input.address ?? {},
-            items: input.items ?? [],
-            isInstant: input.isInstant,
-            totalAmount: calculatedTotal,
-            status: mode === "subscription" ? "pending_subscription" : "pending_payment",
-            trackingStatus: "pending",
-          },
-        ])
-        .returning()
+      const metadata = encodeOrderMetadata({
+        userId,
+        plan: input.plan,
+        isInstant: input.isInstant,
+        itemCount: input.itemCount,
+        totalAmount: calculatedTotal,
+        pickupDate: input.pickupDate || new Date().toISOString().split("T")[0],
+        pickupTime: input.pickupTime || "",
+        pickupMethod: input.pickupMethod || "",
+        address: input.address ?? {},
+        items: input.items ?? [],
+      })
 
       const session = await stripe.checkout.sessions.create({
         ui_mode: "embedded",
         return_url: `${baseUrl}/schedule/return?session_id={CHECKOUT_SESSION_ID}`,
         line_items: lineItems,
         mode,
-        metadata: {
-          user_id: userId,
-          order_id: order.id,
-          plan: input.plan,
-          is_instant: input.isInstant ? "true" : "false",
-          item_count: input.itemCount.toString(),
-          total_amount: calculatedTotal.toString(),
-        },
+        metadata,
         ...(validatedCustomerId && !useCustomerEmail
           ? { customer: validatedCustomerId }
           : { customer_email: userEmail }),
@@ -247,7 +238,7 @@ export const stripeRouter = createTRPCRouter({
         return { success: false, error: "Failed to initialize payment session." }
       }
 
-      log.info({ sessionId: session.id, orderId: order.id, mode, userId }, "checkout session created")
+      log.info({ sessionId: session.id, mode, userId }, "checkout session created")
       return { success: true, clientSecret: session.client_secret }
     }),
 
@@ -296,96 +287,26 @@ export const stripeRouter = createTRPCRouter({
     return { success: true }
   }),
 
-  getCheckoutSession: authedProcedure
-    .input(z.object({ sessionId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      log.info({ sessionId: input.sessionId, userId: ctx.user.id }, "getCheckoutSession called")
-
-      try {
-        const session = await stripe.checkout.sessions.retrieve(input.sessionId)
-
-        log.info(
-          { sessionId: session.id, mode: session.mode, paymentStatus: session.payment_status, userId: ctx.user.id },
-          "checkout session retrieved",
-        )
-
-        return {
-          id: session.id,
-          mode: session.mode,
-          paymentStatus: session.payment_status,
-          customer: session.customer,
-          metadata: session.metadata,
-        }
-      } catch (error) {
-        log.error({ sessionId: input.sessionId, userId: ctx.user.id, error }, "failed to retrieve checkout session")
-        throw error
-      }
-    }),
-
-  activateMembership: authedProcedure
+  finalizeCheckout: authedProcedure
     .input(z.object({ sessionId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      log.info({ sessionId: input.sessionId, userId: ctx.user.id }, "activateMembership called")
+      log.info({ sessionId: input.sessionId, userId: ctx.user.id }, "finalizeCheckout called")
 
-      const session = await stripe.checkout.sessions.retrieve(input.sessionId, {
-        expand: ["subscription"],
-      })
+      const result = await fulfillCheckout(input.sessionId)
 
-      if (session.mode !== "subscription" || !session.subscription) {
-        log.warn({ sessionId: input.sessionId, mode: session.mode }, "activateMembership called on non-subscription session")
-        return { error: "Not a subscription payment" }
+      if (!result.success) {
+        log.error({ sessionId: input.sessionId, error: result.error }, "finalizeCheckout failed")
+        return { error: result.error || "Failed to finalize checkout" }
       }
 
-      const subscription = session.subscription as any
-      const userId = session.metadata?.user_id
-      if (!userId) {
-        log.error({ sessionId: input.sessionId }, "activateMembership: user_id missing from session metadata")
-        return { error: "User ID not found" }
+      if (result.alreadyFulfilled) {
+        log.info({ sessionId: input.sessionId, orderId: result.orderId }, "finalizeCheckout: already fulfilled")
       }
 
-      const [existingSub] = await adminDb
-        .select({ id: subscriptions.id })
-        .from(subscriptions)
-        .where(eq(subscriptions.userId, userId))
-        .limit(1)
+      const message = result.isMembership
+        ? "Membership activated successfully!"
+        : "Payment successful! Your pickup has been scheduled."
 
-      const subscriptionData = {
-        userId,
-        stripeCustomerId: session.customer as string,
-        stripeSubscriptionId: subscription.id,
-        status: subscription.status,
-        plan: "membership",
-        currentPeriodStart: new Date(subscription.current_period_start * 1000),
-        currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-      }
-
-      if (existingSub) {
-        await adminDb.update(subscriptions).set(subscriptionData).where(eq(subscriptions.userId, userId))
-      } else {
-        await adminDb.insert(subscriptions).values(subscriptionData)
-      }
-
-      await adminDb
-        .update(profiles)
-        .set({
-          stripeSubscriptionId: subscription.id,
-          stripeCustomerId: session.customer as string,
-        })
-        .where(eq(profiles.id, userId))
-
-      if (session.metadata?.order_id) {
-        await adminDb
-          .update(orders)
-          .set({
-            status: "scheduled",
-            trackingStatus: "pending",
-            stripePaymentIntentId: subscription.id,
-            totalAmount: session.amount_total ?? 0,
-          })
-          .where(eq(orders.id, session.metadata.order_id))
-      }
-
-      log.info({ userId, subscriptionId: subscription.id, orderId: session.metadata?.order_id }, "membership activated")
-      return { message: "Membership activated successfully!", subscriptionId: subscription.id }
+      return { message, orderId: result.orderId }
     }),
 })

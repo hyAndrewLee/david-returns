@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
 import Stripe from "stripe"
-import { sendOrderConfirmation, sendAdminOrderNotification } from "@/server/services/email"
+import { fulfillCheckout } from "@/server/services/fulfillment"
 import { adminDb } from "@/server/db"
-import { orders, profiles, subscriptions } from "@/server/db/schema"
+import { subscriptions } from "@/server/db/schema"
 import { eq } from "drizzle-orm"
 import { createLogger } from "@/lib/logger"
 
@@ -42,130 +42,26 @@ export const POST = async (request: Request) => {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session
-        const metadata = session.metadata
-        log.info({ sessionId: session.id, userId: metadata?.user_id, orderId: metadata?.order_id }, "checkout.session.completed")
+        log.info({ sessionId: session.id, userId: session.metadata?.user_id }, "checkout.session.completed")
 
-        if (metadata?.user_id && metadata?.order_id) {
-          const [existingOrder] = await adminDb
-            .select()
-            .from(orders)
-            .where(eq(orders.id, metadata.order_id))
-            .limit(1)
+        const result = await fulfillCheckout(session.id)
 
-          if (existingOrder?.stripeSessionId === session.id) {
-            return NextResponse.json({ received: true, skipped: true })
-          }
-
-          const totalAmount = metadata.total_amount
-            ? parseInt(metadata.total_amount)
-            : session.amount_total || 0
-
-          const [order] = await adminDb
-            .update(orders)
-            .set({
-              status: "scheduled",
-              trackingStatus: "pending",
-              stripeSessionId: session.id,
-              stripePaymentIntentId: (session.payment_intent as string) || (session.subscription as string),
-              totalAmount,
-            })
-            .where(eq(orders.id, metadata.order_id))
-            .returning()
-
-          try {
-            const [profile] = await adminDb
-              .select()
-              .from(profiles)
-              .where(eq(profiles.id, metadata.user_id))
-              .limit(1)
-
-            const customerEmail = session.customer_email || profile?.email
-            const customerName = profile?.fullName || (order.address as any)?.fullName || "Customer"
-
-            if (customerEmail) {
-              await sendOrderConfirmation({
-                customerEmail,
-                customerName,
-                orderId: order.id,
-                pickupDate: String(order.pickupDate),
-                pickupTime: order.pickupTime,
-                pickupMethod: order.pickupMethod || "hand",
-                address: {
-                  street: (order.address as any)?.street || "",
-                  apt: (order.address as any)?.apt,
-                  city: (order.address as any)?.city || "",
-                  zip: (order.address as any)?.zip || "",
-                },
-                itemCount: Array.isArray(order.items) ? order.items.length : 0,
-                total: totalAmount,
-                isInstant: order.isInstant === true,
-              })
-            }
-
-            try {
-              await sendAdminOrderNotification({
-                orderId: order.id,
-                customerName,
-                customerEmail: customerEmail || "No email provided",
-                customerPhone: (order.address as any)?.phone,
-                pickupDate: String(order.pickupDate),
-                pickupTime: order.pickupTime,
-                pickupMethod: order.pickupMethod || "hand",
-                address: {
-                  street: (order.address as any)?.street || "",
-                  apt: (order.address as any)?.apt,
-                  city: (order.address as any)?.city || "",
-                  zip: (order.address as any)?.zip || "",
-                },
-                itemCount: Array.isArray(order.items) ? order.items.length : 0,
-                total: totalAmount,
-                isInstant: metadata.is_instant === "true",
-              })
-            } catch (adminEmailError) {
-              log.error({ error: adminEmailError, orderId: order.id }, "failed to send admin notification email")
-            }
-          } catch (emailError) {
-            log.error({ error: emailError, orderId: order.id }, "failed to send confirmation email")
-          }
-
-          if (session.mode === "subscription" && session.subscription) {
-            const subscription = await stripe.subscriptions.retrieve(session.subscription as string)
-
-            const [existingSub] = await adminDb
-              .select({ id: subscriptions.id })
-              .from(subscriptions)
-              .where(eq(subscriptions.userId, metadata.user_id))
-              .limit(1)
-
-            const subscriptionData = {
-              userId: metadata.user_id,
-              stripeCustomerId: session.customer as string,
-              stripeSubscriptionId: subscription.id,
-              status: subscription.status,
-              plan: "membership",
-              currentPeriodStart: new Date(((subscription as any).current_period_start ?? Math.floor(Date.now() / 1000)) * 1000),
-              currentPeriodEnd: new Date(((subscription as any).current_period_end ?? Math.floor(Date.now() / 1000)) * 1000),
-              updatedAt: new Date(),
-            }
-
-            if (existingSub) {
-              await adminDb
-                .update(subscriptions)
-                .set(subscriptionData)
-                .where(eq(subscriptions.id, existingSub.id))
-            } else {
-              await adminDb.insert(subscriptions).values(subscriptionData)
-            }
-
-            await adminDb
-              .update(profiles)
-              .set({
-                stripeSubscriptionId: session.subscription as string,
-                stripeCustomerId: session.customer as string,
-              })
-              .where(eq(profiles.id, metadata.user_id))
-          }
+        if (!result.success) {
+          log.error({ sessionId: session.id, error: result.error }, "webhook fulfillment failed")
+        } else if (result.alreadyFulfilled) {
+          log.info({ sessionId: session.id, orderId: result.orderId }, "webhook: order already fulfilled by return page")
+        } else {
+          log.info({ sessionId: session.id, orderId: result.orderId }, "webhook: order fulfilled")
         }
+
+        break
+      }
+
+      case "checkout.session.async_payment_succeeded": {
+        const session = event.data.object as Stripe.Checkout.Session
+        log.info({ sessionId: session.id }, "checkout.session.async_payment_succeeded")
+
+        await fulfillCheckout(session.id)
         break
       }
 
@@ -176,8 +72,12 @@ export const POST = async (request: Request) => {
           .update(subscriptions)
           .set({
             status: subscription.status,
-            currentPeriodStart: new Date(((subscription as any).current_period_start ?? Math.floor(Date.now() / 1000)) * 1000),
-            currentPeriodEnd: new Date(((subscription as any).current_period_end ?? Math.floor(Date.now() / 1000)) * 1000),
+            currentPeriodStart: new Date(
+              ((subscription as unknown as Record<string, number>).current_period_start ?? Math.floor(Date.now() / 1000)) * 1000,
+            ),
+            currentPeriodEnd: new Date(
+              ((subscription as unknown as Record<string, number>).current_period_end ?? Math.floor(Date.now() / 1000)) * 1000,
+            ),
             updatedAt: new Date(),
           })
           .where(eq(subscriptions.stripeSubscriptionId, subscription.id))

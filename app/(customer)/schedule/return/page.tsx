@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useEffect, useState } from "react"
+import { Suspense, useEffect, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { CheckCircle2, Loader2 } from "lucide-react"
 import { trpc } from "@/lib/trpc"
@@ -12,13 +12,9 @@ const PaymentReturnPageContent = () => {
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading")
   const [message, setMessage] = useState("")
   const [isMembership, setIsMembership] = useState(false)
+  const fulfilledRef = useRef(false)
 
-  const sessionQuery = trpc.stripe.getCheckoutSession.useQuery(
-    { sessionId },
-    { enabled: !!sessionId, retry: 1 },
-  )
-
-  const activateMutation = trpc.stripe.activateMembership.useMutation()
+  const finalizeMutation = trpc.stripe.finalizeCheckout.useMutation()
 
   useEffect(() => {
     if (!sessionId) {
@@ -27,35 +23,22 @@ const PaymentReturnPageContent = () => {
       return
     }
 
-    if (sessionQuery.isLoading) return
-
-    if (sessionQuery.error || !sessionQuery.data) {
-      console.error("Error verifying payment:", sessionQuery.error)
-      setStatus("error")
-      setMessage("Failed to verify payment")
-      return
-    }
+    if (fulfilledRef.current) return
+    fulfilledRef.current = true
 
     const processPayment = async () => {
       try {
-        const sessionData = sessionQuery.data
+        const result = await finalizeMutation.mutateAsync({ sessionId })
 
-        if (sessionData.mode === "subscription") {
-          setIsMembership(true)
-          const result = await activateMutation.mutateAsync({ sessionId })
-
-          if (result.message) {
-            setStatus("success")
-            setMessage(result.message)
-          } else {
-            setStatus("error")
-            setMessage(result.error || "Failed to activate membership")
-          }
-        } else {
-          setIsMembership(false)
-          setStatus("success")
-          setMessage("Payment successful! Your pickup has been scheduled.")
+        if (result.error) {
+          setStatus("error")
+          setMessage(result.error)
+          return
         }
+
+        setIsMembership(result.message?.includes("Membership") ?? false)
+        setStatus("success")
+        setMessage(result.message ?? "Payment successful!")
 
         setTimeout(() => {
           router.push("/dashboard")
@@ -69,7 +52,7 @@ const PaymentReturnPageContent = () => {
 
     processPayment()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionId, sessionQuery.data, sessionQuery.error, sessionQuery.isLoading])
+  }, [sessionId])
 
   if (status === "loading") {
     return (

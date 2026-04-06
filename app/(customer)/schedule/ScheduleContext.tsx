@@ -287,8 +287,6 @@ type ScheduleContextValue = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   uploadedItems: any[]
 
-  isSubmitting: boolean
-  isSuccess: boolean
   error: string
   setError: React.Dispatch<React.SetStateAction<string>>
 
@@ -312,8 +310,6 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
 
   const [currentStep, setCurrentStep] = useState(1)
   const [returnToStep, setReturnToStep] = useState<number | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState("")
   const [showItemModal, setShowItemModal] = useState(false)
   const [debugFileInfo, setDebugFileInfo] = useState<string>("")
@@ -333,7 +329,6 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
     retry: false,
   })
   const uploadLabelMutation = trpc.upload.uploadLabel.useMutation()
-  const createOrderMutation = trpc.orders.create.useMutation()
 
   const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([])
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null)
@@ -1052,141 +1047,6 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
     setCurrentStep((prev) => (prev === 5 && isMember ? 3 : prev - 1))
   }
 
-  const handleSubmit = async () => {
-    console.log("[v0] ===== FORM SUBMISSION STARTED =====")
-    if (isSubmitting) return
-
-    setError("")
-    setIsSubmitting(true)
-
-    try {
-      if (showAddressForm && saveThisAddress && userId && !selectedAddressId) {
-        const addressSaved = await saveNewAddress()
-        if (!addressSaved) {
-          throw new Error("Failed to save new address.")
-        }
-      }
-
-      const orderData = {
-        pickupDate: formData.selectedDate,
-        pickupTime: formData.timeWindow,
-        address: {
-          fullName: formData.name,
-          phone: formData.phone,
-          street: formData.address,
-          apt: formData.apt || undefined,
-          city: formData.city,
-          zip: formData.zip,
-          notes: formData.notes || undefined,
-          buildingName: formData.buildingName || undefined,
-        },
-        pickupMethod: formData.pickupMethod,
-        pickupInstructions: formData.pickupInstructions,
-        items: formData.items.map((item) => ({
-          labelType: item.labelType,
-          description: item.description,
-          retailer: item.retailer || undefined,
-          packageSize: item.packageSize,
-          needsBox: item.needsBox,
-          returnTo: item.returnTo || undefined,
-          notes: item.notes,
-        })),
-        plan: formData.plan,
-        isInstant: formData.isInstant,
-      }
-
-      localStorage.setItem("pendingOrder", JSON.stringify(orderData))
-
-      const uploadedItemsData = await Promise.all(
-        formData.items.map(async (item) => {
-          let labelFileUrl = null
-          let photoFileUrl = null
-
-          if (item.file) {
-            const base64 = await fileToBase64(item.file)
-            const result = await uploadLabelMutation.mutateAsync({
-              base64,
-              name: item.file.name,
-              type: item.file.type,
-              size: item.file.size,
-            })
-            if (result.error) throw new Error(result.error)
-            labelFileUrl = result.url
-          }
-          if (item.photoFile) {
-            const base64 = await fileToBase64(item.photoFile)
-            const result = await uploadLabelMutation.mutateAsync({
-              base64,
-              name: item.photoFile.name,
-              type: item.photoFile.type,
-              size: item.photoFile.size,
-            })
-            if (result.error) throw new Error(result.error)
-            photoFileUrl = result.url
-          }
-
-          return {
-            description: item.description,
-            retailer: item.retailer,
-            labelType: item.labelType,
-            packageSize: item.packageSize,
-            photoUrl: photoFileUrl ?? undefined,
-            printOption: item.printOption,
-            isBoxed: item.isBoxed,
-            orderNumber: item.orderNumber,
-            returnPortalLink: item.returnPortalLink,
-            needHelpGettingLabel: item.needHelpGettingLabel,
-            labelFileUrl: labelFileUrl ?? undefined,
-            needsBox: item.needsBox,
-            returnTo: item.returnTo,
-            notes: item.notes,
-          }
-        }),
-      )
-
-      setUploadedItems(uploadedItemsData)
-
-      await createOrderMutation.mutateAsync({
-        name: formData.name,
-        email: localStorage.getItem("davidreturns_user")
-          ? JSON.parse(localStorage.getItem("davidreturns_user")!).email
-          : "",
-        phone: formData.phone,
-        address: formData.apt ? `${formData.address}, ${formData.apt}` : formData.address,
-        buildingName: formData.buildingName,
-        city: formData.city,
-        zip: formData.zip,
-        retailer:
-          formData.items
-            .map((i) => i.retailer)
-            .filter(Boolean)
-            .join(", ") || "Various",
-        itemsDescription: formData.items.map((i) => i.description).join("; "),
-        returnType:
-          formData.items[0]?.labelType === "has-label"
-            ? "Pre-labeled package ready"
-            : formData.items[0]?.labelType === "no-label"
-              ? "Need us to bring label"
-              : "Email/PDF label",
-        preferredDate: formData.selectedDate,
-        timeWindow: formData.timeWindow,
-        notes: formData.notes,
-        pickupInstructions: formData.pickupInstructions,
-        plan: formData.plan,
-        numPackages: formData.items.length,
-        serviceType: formData.isInstant ? "Instant" : "Standard",
-        pickupMethod: formData.pickupMethod,
-        itemsDetails: uploadedItemsData,
-      })
-
-      setIsSuccess(true)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong")
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
   const value: ScheduleContextValue = {
     currentStep,
     setCurrentStep,
@@ -1232,8 +1092,6 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
     uploadFilesAndProceedToPayment,
     isUploadingFiles,
     uploadedItems,
-    isSubmitting,
-    isSuccess,
     error,
     setError,
     DEBUG_UPLOAD,

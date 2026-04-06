@@ -1,19 +1,19 @@
-import Link from 'next/link'
-import { Check, ArrowRight } from 'lucide-react'
+import Link from 'next/link';
+import { Check, ArrowRight } from 'lucide-react';
 
 const partnerBenefits = [
 	'Free unlimited pickups',
 	'Scheduled returns at your convenience',
 	'No trips to UPS or USPS',
 	'No packaging materials needed',
-]
+];
 
 const payAsYouGoFeatures = [
 	'$7.99 per pickup',
 	'+$1 per additional package',
 	'Same carrier coverage',
 	'Full tracking included',
-]
+];
 
 export const ResidentsSection = () => (
 	<section className='bg-surface-container-low py-20 sm:py-28'>
@@ -92,10 +92,6 @@ export const ResidentsSection = () => (
 					</div>
 				</div>
 			</div>
-
-			<p className='mt-10 text-sm text-muted-foreground'>
-				Unlimited membership also available &mdash; $22.99/mo for unlimited pickups &amp; packages.
-			</p>
 		</div>
 	</section>
-)
+);

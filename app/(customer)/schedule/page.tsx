@@ -1,7 +1,6 @@
 "use client"
 
 import { ScheduleProvider, useSchedule } from "@/app/(customer)/schedule/ScheduleContext"
-import { ScheduleSuccess } from "@/app/(customer)/schedule/ScheduleSuccess"
 import { ScheduleHeader } from "@/app/(customer)/schedule/ScheduleHeader"
 import { StepIndicator } from "@/app/(customer)/schedule/StepIndicator"
 import { StepNavigation } from "@/app/(customer)/schedule/StepNavigation"
@@ -23,9 +22,7 @@ const STEP_COMPONENTS: Record<number, React.ReactNode> = {
 }
 
 const SchedulePageContent = () => {
-  const { currentStep, isSuccess, error } = useSchedule()
-
-  if (isSuccess) return <ScheduleSuccess />
+  const { currentStep, error } = useSchedule()
 
   return (
     <main className="min-h-screen bg-linear-to-b from-surface-container-low to-surface">
