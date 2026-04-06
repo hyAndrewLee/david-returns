@@ -68,10 +68,17 @@ export const POST = async (request: Request) => {
       case "customer.subscription.updated": {
         const subscription = event.data.object as Stripe.Subscription
 
+        // When cancel_at_period_end is true, Stripe keeps status as "active" but
+        // we use "canceling" to distinguish it from a normally-renewing subscription.
+        const dbStatus =
+          subscription.status === "active" && subscription.cancel_at_period_end
+            ? "canceling"
+            : subscription.status
+
         await adminDb
           .update(subscriptions)
           .set({
-            status: subscription.status,
+            status: dbStatus,
             currentPeriodStart: new Date(
               ((subscription as unknown as Record<string, number>).current_period_start ?? Math.floor(Date.now() / 1000)) * 1000,
             ),

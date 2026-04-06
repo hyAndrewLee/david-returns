@@ -10,7 +10,7 @@ import {
   addresses as addressesTable,
   subscriptions as subscriptionsTable,
 } from "@/server/db/schema"
-import { eq, and } from "drizzle-orm"
+import { eq, and, inArray } from "drizzle-orm"
 
 export const metadata: Metadata = {
   title: "Profile Settings | David Returns",
@@ -45,7 +45,7 @@ const ProfilePage = async () => {
       .where(
         and(
           eq(subscriptionsTable.userId, user.id),
-          eq(subscriptionsTable.status, "active"),
+          inArray(subscriptionsTable.status, ["active", "canceling"]),
           eq(subscriptionsTable.plan, "membership"),
         ),
       )

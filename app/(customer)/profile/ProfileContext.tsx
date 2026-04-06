@@ -175,7 +175,7 @@ export const ProfileProvider = ({
     }
   }, [cancelMutation, router])
 
-  const isMember = !!subscription && subscription.status === "active"
+  const isMember = !!subscription && (subscription.status === "active" || subscription.status === "canceling")
   const isCanceling = subscription?.status === "canceling"
 
   return (
