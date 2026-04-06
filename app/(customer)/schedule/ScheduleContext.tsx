@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect } from "react"
+import { toast } from "sonner"
 import {
   Calendar,
   MapPin,
@@ -890,7 +891,7 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
       setShowPayment(true)
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "Failed to upload files. Please try again."
-      setError(errorMsg)
+      toast.error(errorMsg)
       if (DEBUG_UPLOAD) {
         setDebugFileInfo((prev) => `${prev}\n\n❗ FINAL ERROR: ${errorMsg}`)
         console.error("Error during file upload process:", err)

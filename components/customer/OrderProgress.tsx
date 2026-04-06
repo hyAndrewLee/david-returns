@@ -11,14 +11,14 @@ export const OrderProgress = () => {
   return (
     <Card className="mb-6">
       <CardContent className="py-6">
-        <div className="flex items-center justify-between">
+        <div className="flex items-start justify-between">
           {statusSteps.map((step, index) => (
-            <div key={step} className="flex flex-1 items-center">
+            <div key={step} className="flex flex-1 items-start">
               <div className="flex flex-col items-center">
                 <div
                   className={`flex h-8 w-8 items-center justify-center rounded-full border-2 sm:h-10 sm:w-10 ${
                     index <= currentStepIndex
-                      ? "border-primary bg-primary text-primary-foreground"
+                      ? "border-primary bg-primary text-on-primary"
                       : "border-muted-foreground/30 text-muted-foreground"
                   }`}
                 >
@@ -32,7 +32,7 @@ export const OrderProgress = () => {
               </div>
               {index < statusSteps.length - 1 && (
                 <div
-                  className={`mx-1 h-1 flex-1 rounded sm:mx-2 ${
+                  className={`mx-1 mt-[14px] h-1 flex-1 rounded sm:mx-2 sm:mt-[18px] ${
                     index < currentStepIndex ? "bg-primary" : "bg-muted"
                   }`}
                 />

@@ -58,7 +58,16 @@ export const uploadToStorage = async (
 
   if (error) {
     console.error("[storage] Upload failed:", error)
-    return { url: null, error: `Upload failed: ${error.message}` }
+    const isInternalError =
+      error.message.includes("row-level security") ||
+      error.message.includes("Bucket not found") ||
+      error.message.includes("permission denied")
+    return {
+      url: null,
+      error: isInternalError
+        ? "Upload failed due to a server configuration issue. Please try again later."
+        : `Upload failed: ${error.message}`,
+    }
   }
 
   return { url: getPublicUrl(storagePath), error: null }
