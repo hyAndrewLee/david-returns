@@ -153,7 +153,7 @@ export const AdminOrdersTab = () => {
                         {statusLabels[order.status]}
                       </Badge>
                     </TableCell>
-                    <TableCell className="font-mono text-sm">${order.totalAmount.toFixed(2)}</TableCell>
+                    <TableCell className="font-mono text-sm">${((order.totalAmount || 0) / 100).toFixed(2)}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Button variant="ghost" size="sm" asChild>
