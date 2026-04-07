@@ -110,6 +110,11 @@ export const Footer = () => (
                   Coverage
                 </Link>
               </li>
+              <li>
+                <Link href="/blog" className="transition-colors hover:text-[#f9f9f6]">
+                  Blog
+                </Link>
+              </li>
               <li className="flex items-center gap-2">
                 <MapPin className="h-3.5 w-3.5 opacity-50" />
                 New York City
@@ -120,6 +125,7 @@ export const Footer = () => (
               </li>
             </ul>
           </div>
+
         </div>
 
         <div className="mt-12 border-t border-[rgba(249,249,246,0.07)] pt-8 flex flex-col items-center justify-between gap-4 sm:flex-row">

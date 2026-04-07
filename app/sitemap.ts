@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next"
 
+import { blogPosts } from "@/app/(marketing)/blog/blogPosts"
+
 const BASE_URL = "https://davidreturns.com"
 
 const sitemap = (): MetadataRoute.Sitemap => [
@@ -51,6 +53,18 @@ const sitemap = (): MetadataRoute.Sitemap => [
     changeFrequency: "yearly",
     priority: 0.3,
   },
+  {
+    url: `${BASE_URL}/blog`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.8,
+  },
+  ...blogPosts.map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  })),
 ]
 
 export default sitemap
