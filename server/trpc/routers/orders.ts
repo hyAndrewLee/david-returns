@@ -134,34 +134,20 @@ export const ordersRouter = createTRPCRouter({
       return { ...order, profiles: userProfile }
     }),
 
-  updateStatus: adminProcedure
+  updateNotes: adminProcedure
     .input(
       z.object({
         orderId: z.string(),
-        trackingStatus: z.string(),
         adminNotes: z.string().optional(),
-        trackingNumber: z.string().optional(),
       }),
     )
     .mutation(async ({ input }) => {
-      const updateData: Record<string, unknown> = {
-        trackingStatus: input.trackingStatus,
-        adminNotes: input.adminNotes,
-        trackingNumber: input.trackingNumber,
-        updatedAt: new Date(),
-      }
-
-      if (input.trackingStatus === "picked_up") {
-        updateData.pickedUpAt = new Date()
-      } else if (input.trackingStatus === "delivered") {
-        updateData.deliveredAt = new Date()
-      } else if (input.trackingStatus === "return_confirmed") {
-        updateData.returnConfirmedAt = new Date()
-      }
-
       await adminDb
         .update(orders)
-        .set(updateData)
+        .set({
+          adminNotes: input.adminNotes,
+          updatedAt: new Date(),
+        })
         .where(eq(orders.id, input.orderId))
 
       return { success: true }

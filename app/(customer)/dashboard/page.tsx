@@ -51,10 +51,10 @@ const DashboardPage = async () => {
   ])
 
   const activeOrders = orders.filter(
-    (order) => !["completed", "cancelled"].includes(order.trackingStatus || "pending"),
+    (order) => !["completed", "cancelled"].includes(order.status),
   )
   const pastOrders = orders.filter((order) =>
-    ["completed", "cancelled"].includes(order.trackingStatus || ""),
+    ["completed", "cancelled"].includes(order.status),
   )
 
   return (

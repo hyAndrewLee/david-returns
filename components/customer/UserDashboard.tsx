@@ -193,8 +193,8 @@ export const UserDashboard = () => {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="mb-2 flex items-center gap-2">
-                            <Badge variant="outline" className={statusColors[order.trackingStatus || "pending"]}>
-                              {statusLabels[order.trackingStatus || "pending"]}
+                            <Badge variant="outline" className={statusColors[order.status]}>
+                              {statusLabels[order.status]}
                             </Badge>
                             {order.isInstant && (
                               <Badge className="bg-orange-500/10 text-orange-600 border-orange-500/20">Instant</Badge>
@@ -265,8 +265,8 @@ export const UserDashboard = () => {
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <div className="mb-2 flex items-center gap-2">
-                                <Badge variant="outline" className={statusColors[order.trackingStatus || "pending"]}>
-                                  {statusLabels[order.trackingStatus || "pending"]}
+                                <Badge variant="outline" className={statusColors[order.status]}>
+                                  {statusLabels[order.status]}
                                 </Badge>
                               </div>
                               <div className="mt-2 flex flex-wrap items-center gap-4 text-sm">

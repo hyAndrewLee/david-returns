@@ -16,7 +16,6 @@ export type Order = {
   items: OrderItem[]
   isInstant: boolean | null
   status: string
-  trackingStatus: string | null
   totalAmount: number
   userId: string
   profiles?: {
@@ -71,7 +70,6 @@ type AdminDashboardContextValue = {
   isRefreshing: boolean
   deletingCustomerId: string | null
   deletingOrderId: string | null
-  updatingOrderId: string | null
   isBulkDeleting: boolean
 
   handleRefresh: () => void
@@ -79,7 +77,6 @@ type AdminDashboardContextValue = {
   handleDeleteOrder: (orderId: string) => Promise<void>
   handleDeleteCustomer: (customerId: string) => Promise<void>
   handleBulkDelete: () => Promise<void>
-  handleQuickStatusUpdate: (orderId: string, newStatus: string) => Promise<void>
   toggleOrderSelection: (orderId: string) => void
   toggleAllOrders: () => void
   clearSelection: () => void
@@ -113,7 +110,6 @@ export const AdminDashboardProvider = ({
   const [activeTab, setActiveTab] = useState("orders")
   const [deletingCustomerId, setDeletingCustomerId] = useState<string | null>(null)
   const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null)
-  const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null)
   const [selectedOrderIds, setSelectedOrderIds] = useState<Set<string>>(new Set())
   const [isBulkDeleting, setIsBulkDeleting] = useState(false)
   const router = useRouter()
@@ -121,7 +117,6 @@ export const AdminDashboardProvider = ({
   const deleteOrderMutation = trpc.orders.delete.useMutation()
   const bulkDeleteMutation = trpc.orders.bulkDelete.useMutation()
   const deleteCustomerMutation = trpc.admin.deleteCustomer.useMutation()
-  const updateStatusMutation = trpc.orders.updateStatus.useMutation()
 
   useEffect(() => {
     const supabase = createBrowserSupabaseClient()
@@ -158,21 +153,6 @@ export const AdminDashboardProvider = ({
     router.refresh()
     setTimeout(() => setIsRefreshing(false), 1000)
   }, [router])
-
-  const handleQuickStatusUpdate = useCallback(
-    async (orderId: string, newStatus: string) => {
-      setUpdatingOrderId(orderId)
-      try {
-        await updateStatusMutation.mutateAsync({ orderId, trackingStatus: newStatus })
-        router.refresh()
-      } catch (error) {
-        alert(`Failed to update status: ${error}`)
-      } finally {
-        setUpdatingOrderId(null)
-      }
-    },
-    [updateStatusMutation, router],
-  )
 
   const handleDeleteOrder = useCallback(
     async (orderId: string) => {
@@ -242,7 +222,7 @@ export const AdminDashboardProvider = ({
       .filter((order) => {
         if (!order.pickupDate) return false
         const pickupDate = String(order.pickupDate).split("T")[0]
-        return pickupDate === todayET && order.trackingStatus !== "completed" && order.trackingStatus !== "cancelled"
+        return pickupDate === todayET && order.status !== "completed" && order.status !== "cancelled"
       })
       .sort((a, b) => {
         const timeOrder = ["8-11am", "11am-2pm", "2-5pm", "5-8pm"]
@@ -259,7 +239,7 @@ export const AdminDashboardProvider = ({
         order.address?.city?.toLowerCase().includes(query) ||
         order.id.toLowerCase().includes(query)
 
-      const matchesStatus = statusFilter === "all" || order.trackingStatus === statusFilter
+      const matchesStatus = statusFilter === "all" || order.status === statusFilter
 
       return matchesSearch && matchesStatus
     })
@@ -286,9 +266,9 @@ export const AdminDashboardProvider = ({
   const stats = useMemo<AdminStats>(
     () => ({
       total: orders.length,
-      pending: orders.filter((o) => o.trackingStatus === "pending").length,
-      inProgress: orders.filter((o) => o.trackingStatus === "in_progress").length,
-      completed: orders.filter((o) => o.trackingStatus === "completed").length,
+      pending: orders.filter((o) => o.status === "pending" || o.status === "scheduled").length,
+      inProgress: orders.filter((o) => o.status === "in_transit" || o.status === "picked_up").length,
+      completed: orders.filter((o) => o.status === "completed" || o.status === "delivered").length,
       customers: customers.length,
       todaysPickups: todaysPickups.length,
     }),
@@ -316,14 +296,12 @@ export const AdminDashboardProvider = ({
       isRefreshing,
       deletingCustomerId,
       deletingOrderId,
-      updatingOrderId,
       isBulkDeleting,
       handleRefresh,
       handleSignOut,
       handleDeleteOrder,
       handleDeleteCustomer,
       handleBulkDelete,
-      handleQuickStatusUpdate,
       toggleOrderSelection,
       toggleAllOrders,
       clearSelection,
@@ -331,8 +309,8 @@ export const AdminDashboardProvider = ({
     [
       orders, customers, filteredOrders, filteredCustomers, todaysPickups, stats, userEmail,
       searchQuery, statusFilter, customerSearchTerm, activeTab, selectedOrderIds, isRefreshing,
-      deletingCustomerId, deletingOrderId, updatingOrderId, isBulkDeleting, handleRefresh,
-      handleSignOut, handleDeleteOrder, handleDeleteCustomer, handleBulkDelete, handleQuickStatusUpdate,
+      deletingCustomerId,       deletingOrderId, isBulkDeleting, handleRefresh,
+      handleSignOut, handleDeleteOrder, handleDeleteCustomer, handleBulkDelete,
       toggleOrderSelection, toggleAllOrders, clearSelection,
     ],
   )

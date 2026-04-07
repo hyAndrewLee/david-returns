@@ -11,7 +11,7 @@ import { useOrders } from "@/app/(customer)/orders/OrdersContext"
 import { parseDateET } from "@/lib/timezone"
 
 export const CustomerOrders = () => {
-  const { orders, profile, userEmail, statusColors, statusLabels, statusDescriptions, handleSignOut } = useOrders()
+  const { orders, profile, userEmail, statusColors, statusLabels, handleSignOut } = useOrders()
 
   return (
     <div className="min-h-screen bg-background">
@@ -59,8 +59,8 @@ export const CustomerOrders = () => {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="mb-2 flex items-center gap-2">
-                          <Badge variant="outline" className={statusColors[order.trackingStatus || "pending"]}>
-                            {statusLabels[order.trackingStatus || "pending"]}
+                          <Badge variant="outline" className={statusColors[order.status]}>
+                            {statusLabels[order.status]}
                           </Badge>
                           {order.isInstant && (
                             <Badge variant="secondary" className="text-xs">
@@ -69,7 +69,7 @@ export const CustomerOrders = () => {
                           )}
                         </div>
                         <p className="text-sm text-muted-foreground">
-                          {statusDescriptions[order.trackingStatus || "pending"]}
+                          Order {statusLabels[order.status]?.toLowerCase() || order.status}
                         </p>
                         <div className="mt-3 flex flex-wrap items-center gap-4 text-sm">
                           <div className="flex items-center gap-1 text-muted-foreground">

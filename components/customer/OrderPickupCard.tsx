@@ -13,19 +13,6 @@ export const OrderPickupCard = () => {
 
   return (
     <>
-      {order.trackingNumber && (
-        <Card className="mb-6">
-          <CardContent className="py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground">Tracking Number</p>
-                <p className="font-mono font-medium">{order.trackingNumber}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">

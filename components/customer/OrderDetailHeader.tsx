@@ -25,8 +25,8 @@ export const OrderDetailHeader = () => {
             {order.createdAt ? format(new Date(order.createdAt), "MMMM d, yyyy") : "N/A"}
           </p>
         </div>
-        <Badge variant="outline" className={statusColors[order.trackingStatus || "pending"]}>
-          {statusLabels[order.trackingStatus || "pending"]}
+        <Badge variant="outline" className={statusColors[order.status]}>
+          {statusLabels[order.status]}
         </Badge>
       </div>
     </header>

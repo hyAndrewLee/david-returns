@@ -74,7 +74,6 @@ export const fulfillCheckout = async (sessionId: string): Promise<FulfillResult>
       isInstant: orderData.isInstant,
       totalAmount,
       status: "scheduled",
-      trackingStatus: "pending",
       stripeSessionId: sessionId,
       stripePaymentIntentId:
         (session.payment_intent as string) || (session.subscription as string) || null,

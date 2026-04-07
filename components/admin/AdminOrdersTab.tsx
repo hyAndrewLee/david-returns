@@ -19,7 +19,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/AlertDialog"
-import { Search, Eye, Truck, Trash2, Check } from "lucide-react"
+import { Search, Eye, Trash2 } from "lucide-react"
 import { useAdminDashboard, statusColors, statusLabels } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
 import { formatDateShort } from "@/lib/timezone"
 
@@ -32,11 +32,9 @@ export const AdminOrdersTab = () => {
     setStatusFilter,
     selectedOrderIds,
     deletingOrderId,
-    updatingOrderId,
     isBulkDeleting,
     handleDeleteOrder,
     handleBulkDelete,
-    handleQuickStatusUpdate,
     toggleOrderSelection,
     toggleAllOrders,
   } = useAdminDashboard()
@@ -48,7 +46,7 @@ export const AdminOrdersTab = () => {
           <div className="relative flex-1 sm:w-80">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
             <Input
-              placeholder="Search by order ID, tracking, or email..."
+              placeholder="Search by order ID, name, or email..."
               className="pl-10"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -61,10 +59,8 @@ export const AdminOrdersTab = () => {
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
               <SelectItem value="scheduled">Scheduled</SelectItem>
-              <SelectItem value="in_transit">In Transit</SelectItem>
-              <SelectItem value="picked_up">Picked Up</SelectItem>
-              <SelectItem value="delivered">Delivered</SelectItem>
-              <SelectItem value="return_confirmed">Return Confirmed</SelectItem>
+              <SelectItem value="completed">Completed</SelectItem>
+              <SelectItem value="cancelled">Cancelled</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -153,35 +149,13 @@ export const AdminOrdersTab = () => {
                       )}
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline" className={statusColors[order.trackingStatus || "pending"]}>
-                        {statusLabels[order.trackingStatus || "pending"]}
+                      <Badge variant="outline" className={statusColors[order.status]}>
+                        {statusLabels[order.status]}
                       </Badge>
                     </TableCell>
                     <TableCell className="font-mono text-sm">${order.totalAmount.toFixed(2)}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
-                        {order.trackingStatus === "pending" && (
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => handleQuickStatusUpdate(order.id, "in_progress")}
-                            disabled={updatingOrderId === order.id}
-                            className="text-blue-600 hover:bg-blue-50"
-                          >
-                            <Truck className="h-3.5 w-3.5" />
-                          </Button>
-                        )}
-                        {order.trackingStatus === "in_progress" && (
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => handleQuickStatusUpdate(order.id, "picked_up")}
-                            disabled={updatingOrderId === order.id}
-                            className="text-green-600 hover:bg-green-50"
-                          >
-                            <Check className="h-3.5 w-3.5" />
-                          </Button>
-                        )}
                         <Button variant="ghost" size="sm" asChild>
                           <Link href={`/manage/orders/${order.id}`}>
                             <Eye className="mr-2 h-4 w-4" />

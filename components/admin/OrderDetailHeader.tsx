@@ -8,7 +8,7 @@ import { format } from "date-fns"
 import { useAdminOrderDetail } from "@/app/(admin)/manage/orders/[id]/AdminOrderDetailContext"
 
 export const OrderDetailHeader = () => {
-  const { order, trackingStatus, statusColors, statusLabels } = useAdminOrderDetail()
+  const { order, statusColors, statusLabels } = useAdminOrderDetail()
 
   return (
     <header className="border-b bg-card">
@@ -25,8 +25,8 @@ export const OrderDetailHeader = () => {
             {order.createdAt ? format(new Date(order.createdAt), "MMM d, yyyy 'at' h:mm a") : "N/A"}
           </p>
         </div>
-        <Badge variant="outline" className={statusColors[trackingStatus]}>
-          {statusLabels[trackingStatus]}
+        <Badge variant="outline" className={statusColors[order.status]}>
+          {statusLabels[order.status]}
         </Badge>
       </div>
     </header>

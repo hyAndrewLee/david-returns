@@ -4,14 +4,12 @@ import { createContext, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { createBrowserSupabaseClient } from "@/lib/supabase"
 import type { Order as DbOrder } from "@/server/db/schema"
-import { STATUS_COLORS, STATUS_LABELS, STATUS_STEPS } from "@/lib/constants"
+import { STATUS_COLORS, STATUS_LABELS } from "@/lib/constants"
 
 type OrderDetailContextValue = {
   order: DbOrder
   statusColors: Record<string, string>
   statusLabels: Record<string, string>
-  statusSteps: readonly string[]
-  currentStepIndex: number
 }
 
 const OrderDetailContext = createContext<OrderDetailContextValue | null>(null)
@@ -30,9 +28,6 @@ type OrderDetailProviderProps = {
 export const OrderDetailProvider = ({ children, initialOrder }: OrderDetailProviderProps) => {
   const router = useRouter()
   const [order, setOrder] = useState(initialOrder)
-  const currentStepIndex = STATUS_STEPS.indexOf(
-    (order.trackingStatus || "pending") as (typeof STATUS_STEPS)[number],
-  )
 
   useEffect(() => {
     const supabase = createBrowserSupabaseClient()
@@ -64,8 +59,6 @@ export const OrderDetailProvider = ({ children, initialOrder }: OrderDetailProvi
         order,
         statusColors: STATUS_COLORS,
         statusLabels: STATUS_LABELS,
-        statusSteps: STATUS_STEPS,
-        currentStepIndex,
       }}
     >
       {children}

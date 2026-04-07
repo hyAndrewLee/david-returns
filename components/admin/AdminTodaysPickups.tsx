@@ -5,15 +5,13 @@ import { Button } from "@/components/ui/Button"
 import { Card, CardContent } from "@/components/ui/Card"
 import { Badge } from "@/components/ui/Badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
-import { Clock, Eye, Truck, MapPin, Check, Calendar } from "lucide-react"
+import { Clock, Eye, MapPin, Calendar } from "lucide-react"
 import { useAdminDashboard, statusColors, statusLabels } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
 import type { Order } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
 
 const TIME_WINDOWS = ["8-11am", "11am-2pm", "2-5pm", "5-8pm"] as const
 
 const PickupRow = ({ order }: { order: Order }) => {
-  const { updatingOrderId, handleQuickStatusUpdate } = useAdminDashboard()
-
   return (
     <TableRow>
       <TableCell>
@@ -54,36 +52,12 @@ const PickupRow = ({ order }: { order: Order }) => {
         </div>
       </TableCell>
       <TableCell>
-        <Badge variant="outline" className={statusColors[order.trackingStatus || "pending"]}>
-          {statusLabels[order.trackingStatus || "pending"]}
+        <Badge variant="outline" className={statusColors[order.status]}>
+          {statusLabels[order.status]}
         </Badge>
       </TableCell>
       <TableCell>
         <div className="flex items-center justify-end gap-2">
-          {order.trackingStatus === "pending" && (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => handleQuickStatusUpdate(order.id, "in_progress")}
-              disabled={updatingOrderId === order.id}
-              className="text-blue-600 border-blue-200 hover:bg-blue-50"
-            >
-              <Truck className="mr-1.5 h-3.5 w-3.5" />
-              Start Pickup
-            </Button>
-          )}
-          {order.trackingStatus === "in_progress" && (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => handleQuickStatusUpdate(order.id, "picked_up")}
-              disabled={updatingOrderId === order.id}
-              className="text-green-600 border-green-200 hover:bg-green-50"
-            >
-              <Check className="mr-1.5 h-3.5 w-3.5" />
-              Mark Picked Up
-            </Button>
-          )}
           <Button variant="ghost" size="sm" asChild>
             <Link href={`/manage/orders/${order.id}`}>
               <Eye className="mr-1.5 h-3.5 w-3.5" />
@@ -118,7 +92,7 @@ const TimeWindowSection = ({ timeWindow, pickups }: { timeWindow: string; pickup
                 <TableHead>Location</TableHead>
                 <TableHead>Items</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="text-right">Quick Actions</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -156,7 +130,7 @@ const UnassignedPickupsSection = ({ pickups }: { pickups: Order[] }) => {
                 <TableHead>Location</TableHead>
                 <TableHead>Items</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead className="text-right">Quick Actions</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -207,12 +181,19 @@ const UnassignedPickupsSection = ({ pickups }: { pickups: Order[] }) => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline" className={statusColors[order.trackingStatus || "pending"]}>
-                      {statusLabels[order.trackingStatus || "pending"]}
+                    <Badge variant="outline" className={statusColors[order.status]}>
+                      {statusLabels[order.status]}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <PickupActions order={order} />
+                    <div className="flex items-center justify-end gap-2">
+                      <Button variant="ghost" size="sm" asChild>
+                        <Link href={`/manage/orders/${order.id}`}>
+                          <Eye className="mr-1.5 h-3.5 w-3.5" />
+                          View
+                        </Link>
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -220,45 +201,6 @@ const UnassignedPickupsSection = ({ pickups }: { pickups: Order[] }) => {
           </Table>
         </CardContent>
       </Card>
-    </div>
-  )
-}
-
-const PickupActions = ({ order }: { order: Order }) => {
-  const { updatingOrderId, handleQuickStatusUpdate } = useAdminDashboard()
-
-  return (
-    <div className="flex items-center justify-end gap-2">
-      {order.trackingStatus === "pending" && (
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => handleQuickStatusUpdate(order.id, "in_progress")}
-          disabled={updatingOrderId === order.id}
-          className="text-blue-600 border-blue-200 hover:bg-blue-50"
-        >
-          <Truck className="mr-1.5 h-3.5 w-3.5" />
-          Start Pickup
-        </Button>
-      )}
-      {order.trackingStatus === "in_progress" && (
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => handleQuickStatusUpdate(order.id, "picked_up")}
-          disabled={updatingOrderId === order.id}
-          className="text-green-600 border-green-200 hover:bg-green-50"
-        >
-          <Check className="mr-1.5 h-3.5 w-3.5" />
-          Mark Picked Up
-        </Button>
-      )}
-      <Button variant="ghost" size="sm" asChild>
-        <Link href={`/manage/orders/${order.id}`}>
-          <Eye className="mr-1.5 h-3.5 w-3.5" />
-          View
-        </Link>
-      </Button>
     </div>
   )
 }

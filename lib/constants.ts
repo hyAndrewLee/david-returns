@@ -62,11 +62,3 @@ export const STATUS_LABELS: Record<string, string> = {
   delivered: "Delivered",
 }
 
-export const STATUS_DESCRIPTIONS: Record<string, string> = {
-  pending: "Your package is scheduled for pickup",
-  in_progress: "We've picked up your package and are processing your return",
-  completed: "Your return has been completed",
-  cancelled: "This order was cancelled",
-}
-
-export const STATUS_STEPS = ["pending", "in_progress", "completed"] as const

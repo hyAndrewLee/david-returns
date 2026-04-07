@@ -144,7 +144,6 @@ export const stripeRouter = createTRPCRouter({
               isInstant: input.isInstant,
               totalAmount: 0,
               status: "scheduled",
-              trackingStatus: "pending",
             },
           ])
           .returning()
