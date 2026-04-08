@@ -156,6 +156,7 @@ export const stripeRouter = createTRPCRouter({
 
       if (input.plan === "Membership") {
         mode = "subscription"
+        const expectedAmount = getProduct("unlimited-membership")?.priceInCents || 2299
         const products = await stripe.products.list({ active: true, limit: 100 })
         const membershipProduct = products.data.find(
           (p) => p.name === "Unlimited Membership" || p.metadata?.type === "membership",
@@ -164,17 +165,28 @@ export const stripeRouter = createTRPCRouter({
         let priceId: string
 
         if (membershipProduct) {
-          const prices = await stripe.prices.list({ product: membershipProduct.id, active: true, limit: 1 })
-          if (prices.data.length > 0) {
-            priceId = prices.data[0].id
+          const prices = await stripe.prices.list({ product: membershipProduct.id, active: true, limit: 10 })
+          const correctPrice = prices.data.find(
+            (p) => p.unit_amount === expectedAmount && p.recurring?.interval === "month",
+          )
+
+          if (correctPrice) {
+            priceId = correctPrice.id
           } else {
+            for (const oldPrice of prices.data) {
+              if (oldPrice.unit_amount !== expectedAmount) {
+                await stripe.prices.update(oldPrice.id, { active: false })
+                log.info({ oldPriceId: oldPrice.id, oldAmount: oldPrice.unit_amount, newAmount: expectedAmount }, "deactivated stale membership price")
+              }
+            }
             const price = await stripe.prices.create({
               product: membershipProduct.id,
               currency: "usd",
-              unit_amount: 2299,
+              unit_amount: expectedAmount,
               recurring: { interval: "month" },
             })
             priceId = price.id
+            log.info({ priceId, amount: expectedAmount }, "created new membership price")
           }
         } else {
           const product = await stripe.products.create({
@@ -185,7 +197,7 @@ export const stripeRouter = createTRPCRouter({
           const price = await stripe.prices.create({
             product: product.id,
             currency: "usd",
-            unit_amount: 2299,
+            unit_amount: expectedAmount,
             recurring: { interval: "month" },
           })
           priceId = price.id
