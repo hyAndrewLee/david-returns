@@ -4,14 +4,14 @@ import { createContext, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { createBrowserSupabaseClient } from "@/lib/supabase"
 import type { Order as DbOrder, Profile as DbProfile } from "@/server/db/schema"
-import { STATUS_COLORS, STATUS_LABELS } from "@/lib/constants"
+import { STATUS_COLORS, STATUS_LABELS, type OrderStatus } from "@/lib/constants"
 
 type OrdersContextValue = {
   orders: DbOrder[]
   profile: DbProfile | null
   userEmail: string
-  statusColors: Record<string, string>
-  statusLabels: Record<string, string>
+  statusColors: Record<OrderStatus, string>
+  statusLabels: Record<OrderStatus, string>
   handleSignOut: () => Promise<void>
 }
 

@@ -11,6 +11,7 @@ import { AdminDashboardProvider } from "@/app/(admin)/manage/dashboard/AdminDash
 import { adminDb } from "@/server/db"
 import { orders as ordersTable, profiles as profilesTable } from "@/server/db/schema"
 import { desc, inArray } from "drizzle-orm"
+import { ORDER_STATUSES } from "@/lib/constants"
 
 const ManageDashboardPage = async () => {
   const cookieStore = await cookies()
@@ -34,18 +35,7 @@ const ManageDashboardPage = async () => {
     const allOrders = await adminDb
       .select()
       .from(ordersTable)
-      .where(
-        inArray(ordersTable.status, [
-          "pending",
-          "pending_payment",
-          "scheduled",
-          "picked_up",
-          "in_transit",
-          "delivered",
-          "completed",
-          "cancelled",
-        ]),
-      )
+      .where(inArray(ordersTable.status, [...ORDER_STATUSES]))
       .orderBy(desc(ordersTable.createdAt))
 
     orders = allOrders.map((order) => {

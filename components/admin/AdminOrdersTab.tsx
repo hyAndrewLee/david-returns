@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/AlertDialog"
 import { Search, Eye, Trash2 } from "lucide-react"
 import { useAdminDashboard, statusColors, statusLabels } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
+import { ORDER_STATUSES, STATUS_LABELS } from "@/lib/constants"
 import { formatDateShort } from "@/lib/timezone"
 
 export const AdminOrdersTab = () => {
@@ -58,9 +59,11 @@ export const AdminOrdersTab = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="scheduled">Scheduled</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-              <SelectItem value="cancelled">Cancelled</SelectItem>
+              {ORDER_STATUSES.map((status) => (
+                <SelectItem key={status} value={status}>
+                  {STATUS_LABELS[status]}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

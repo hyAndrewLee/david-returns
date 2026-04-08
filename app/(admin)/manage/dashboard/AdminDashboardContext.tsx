@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useEffect, useMemo, useCallback } 
 import { useRouter } from "next/navigation"
 import { createBrowserSupabaseClient } from "@/lib/supabase"
 import { trpc } from "@/lib/trpc"
-import { STATUS_COLORS, STATUS_LABELS } from "@/lib/constants"
+import { STATUS_COLORS, STATUS_LABELS, type OrderStatus } from "@/lib/constants"
 import type { OrderAddress, OrderItem } from "@/server/db/schema/orders"
 
 export type Order = {
@@ -15,7 +15,7 @@ export type Order = {
   address: OrderAddress | null
   items: OrderItem[]
   isInstant: boolean | null
-  status: string
+  status: OrderStatus
   totalAmount: number
   userId: string
   profiles?: {
@@ -266,9 +266,11 @@ export const AdminDashboardProvider = ({
   const stats = useMemo<AdminStats>(
     () => ({
       total: orders.length,
-      pending: orders.filter((o) => o.status === "pending" || o.status === "scheduled").length,
-      inProgress: orders.filter((o) => o.status === "in_transit" || o.status === "picked_up").length,
-      completed: orders.filter((o) => o.status === "completed" || o.status === "delivered").length,
+      pending: orders.filter((o) => o.status === "scheduled").length,
+      inProgress: orders.filter((o) =>
+        o.status === "picked_up" || o.status === "sent_to_carrier" || o.status === "in_transit",
+      ).length,
+      completed: orders.filter((o) => o.status === "completed").length,
       customers: customers.length,
       todaysPickups: todaysPickups.length,
     }),

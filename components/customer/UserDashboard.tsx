@@ -24,20 +24,7 @@ import { Badge } from "@/components/ui/Badge"
 import { ContactSupportDialog } from "@/components/customer/ContactSupportDialog"
 import { formatDateShort } from "@/lib/timezone"
 import { useDashboard } from "@/app/(customer)/dashboard/DashboardContext"
-
-const statusColors: Record<string, string> = {
-  pending: "bg-yellow-500/10 text-yellow-600 border-yellow-500/20",
-  in_progress: "bg-blue-500/10 text-blue-600 border-blue-500/20",
-  completed: "bg-green-500/10 text-green-600 border-green-500/20",
-  cancelled: "bg-red-500/10 text-red-600 border-red-500/20",
-}
-
-const statusLabels: Record<string, string> = {
-  pending: "Pending Pickup",
-  in_progress: "Picked Up",
-  completed: "Completed",
-  cancelled: "Cancelled",
-}
+import { STATUS_COLORS, STATUS_LABELS } from "@/lib/constants"
 
 export const UserDashboard = () => {
   const {
@@ -193,8 +180,8 @@ export const UserDashboard = () => {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="mb-2 flex items-center gap-2">
-                            <Badge variant="outline" className={statusColors[order.status]}>
-                              {statusLabels[order.status]}
+                            <Badge variant="outline" className={STATUS_COLORS[order.status]}>
+                              {STATUS_LABELS[order.status]}
                             </Badge>
                             {order.isInstant && (
                               <Badge className="bg-orange-500/10 text-orange-600 border-orange-500/20">Instant</Badge>
@@ -265,8 +252,8 @@ export const UserDashboard = () => {
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <div className="mb-2 flex items-center gap-2">
-                                <Badge variant="outline" className={statusColors[order.status]}>
-                                  {statusLabels[order.status]}
+                                <Badge variant="outline" className={STATUS_COLORS[order.status]}>
+                                  {STATUS_LABELS[order.status]}
                                 </Badge>
                               </div>
                               <div className="mt-2 flex flex-wrap items-center gap-4 text-sm">

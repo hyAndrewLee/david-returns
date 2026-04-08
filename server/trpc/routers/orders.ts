@@ -3,7 +3,8 @@ import { createTRPCRouter } from "../init"
 import { authedProcedure, adminProcedure } from "../middlewares"
 import { adminDb } from "@/server/db"
 import { orders, profiles } from "@/server/db/schema"
-import { eq, desc, inArray, sql } from "drizzle-orm"
+import { eq, desc, inArray } from "drizzle-orm"
+import { ORDER_STATUSES } from "@/lib/constants"
 
 export const ordersRouter = createTRPCRouter({
   list: authedProcedure.query(async ({ ctx }) => {
@@ -60,7 +61,7 @@ export const ordersRouter = createTRPCRouter({
         .insert(orders)
         .values({
           userId: ctx.user.id,
-          status: "pending",
+          status: "scheduled",
           pickupDate: input.preferredDate,
           pickupTime: input.timeWindow,
           pickupMethod: input.pickupMethod || "hand-to-me",
@@ -88,18 +89,7 @@ export const ordersRouter = createTRPCRouter({
     const allOrders = await adminDb
       .select()
       .from(orders)
-      .where(
-        inArray(orders.status, [
-          "pending",
-          "pending_payment",
-          "scheduled",
-          "picked_up",
-          "in_transit",
-          "delivered",
-          "completed",
-          "cancelled",
-        ]),
-      )
+      .where(inArray(orders.status, [...ORDER_STATUSES]))
       .orderBy(desc(orders.createdAt))
 
     const allProfiles = await adminDb.select().from(profiles).orderBy(desc(profiles.createdAt))
@@ -132,6 +122,25 @@ export const ordersRouter = createTRPCRouter({
       }
 
       return { ...order, profiles: userProfile }
+    }),
+
+  updateStatus: adminProcedure
+    .input(
+      z.object({
+        orderId: z.string(),
+        status: z.enum(ORDER_STATUSES),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await adminDb
+        .update(orders)
+        .set({
+          status: input.status,
+          updatedAt: new Date(),
+        })
+        .where(eq(orders.id, input.orderId))
+
+      return { success: true }
     }),
 
   updateNotes: adminProcedure

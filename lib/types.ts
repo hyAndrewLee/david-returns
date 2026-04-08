@@ -1,4 +1,5 @@
-export type PickupStatus = "New" | "In Progress" | "Completed"
+import type { OrderStatus } from "@/lib/constants"
+
 export type PlanType = "Pay-As-You-Go" | "Membership"
 export type ServiceType = "Standard" | "Instant"
 export type ReturnType = "Pre-labeled package ready" | "Need us to bring label" | "Handle everything"
@@ -23,7 +24,7 @@ export interface PickupRequest {
   plan: PlanType
   numPackages?: number
   serviceType: ServiceType
-  status: PickupStatus
+  status: OrderStatus
   createdAt: string
   pickupMethod?: PickupMethod
   apt?: string

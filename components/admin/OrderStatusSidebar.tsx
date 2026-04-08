@@ -2,22 +2,57 @@
 
 import { Button } from "@/components/ui/Button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
 import { Textarea } from "@/components/ui/Textarea"
 import { Label } from "@/components/ui/Label"
+import { Badge } from "@/components/ui/Badge"
 import { Save } from "lucide-react"
 import { useAdminOrderDetail } from "@/app/(admin)/manage/orders/[id]/AdminOrderDetailContext"
+import { ORDER_STATUSES, STATUS_LABELS, STATUS_COLORS, type OrderStatus } from "@/lib/constants"
 
 export const OrderStatusSidebar = () => {
   const {
     order,
     adminNotes,
     isSaving,
+    isUpdatingStatus,
     setAdminNotes,
     handleSave,
+    handleUpdateStatus,
   } = useAdminOrderDetail()
 
   return (
     <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Order Status</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Current:</span>
+            <Badge variant="outline" className={STATUS_COLORS[order.status]}>
+              {STATUS_LABELS[order.status]}
+            </Badge>
+          </div>
+          <Select
+            value={order.status}
+            onValueChange={(value) => handleUpdateStatus(value as OrderStatus)}
+            disabled={isUpdatingStatus}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {ORDER_STATUSES.map((status) => (
+                <SelectItem key={status} value={status}>
+                  {STATUS_LABELS[status]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Admin Notes</CardTitle>

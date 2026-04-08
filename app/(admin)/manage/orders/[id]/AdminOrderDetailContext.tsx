@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from "rea
 import { useRouter } from "next/navigation"
 import { createBrowserSupabaseClient } from "@/lib/supabase"
 import { trpc } from "@/lib/trpc"
-import { STATUS_COLORS, STATUS_LABELS } from "@/lib/constants"
+import { STATUS_COLORS, STATUS_LABELS, type OrderStatus } from "@/lib/constants"
 
 export type Order = {
   id: string
@@ -15,7 +15,7 @@ export type Order = {
   address: any
   items: any
   isInstant: boolean | null
-  status: string
+  status: OrderStatus
   totalAmount: number
   profiles?: {
     fullName: string | null
@@ -29,8 +29,10 @@ type AdminOrderDetailContextValue = {
   order: Order
   adminNotes: string
   isSaving: boolean
+  isUpdatingStatus: boolean
   setAdminNotes: (notes: string) => void
   handleSave: () => Promise<void>
+  handleUpdateStatus: (status: OrderStatus) => Promise<void>
   statusColors: Record<string, string>
   statusLabels: Record<string, string>
 }
@@ -53,9 +55,11 @@ export const AdminOrderDetailProvider = ({
   const [order, setOrder] = useState(initialOrder)
   const [adminNotes, setAdminNotes] = useState(initialOrder.adminNotes || "")
   const [isSaving, setIsSaving] = useState(false)
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
   const router = useRouter()
 
   const updateNotesMutation = trpc.orders.updateNotes.useMutation()
+  const updateStatusMutation = trpc.orders.updateStatus.useMutation()
 
   useEffect(() => {
     const supabase = createBrowserSupabaseClient()
@@ -96,14 +100,31 @@ export const AdminOrderDetailProvider = ({
     }
   }, [order.id, adminNotes, updateNotesMutation, router])
 
+  const handleUpdateStatus = useCallback(async (status: OrderStatus) => {
+    setIsUpdatingStatus(true)
+    try {
+      await updateStatusMutation.mutateAsync({
+        orderId: order.id,
+        status,
+      })
+      router.refresh()
+    } catch (error) {
+      console.error("Error updating status:", error)
+    } finally {
+      setIsUpdatingStatus(false)
+    }
+  }, [order.id, updateStatusMutation, router])
+
   return (
     <AdminOrderDetailContext.Provider
       value={{
         order,
         adminNotes,
         isSaving,
+        isUpdatingStatus,
         setAdminNotes,
         handleSave,
+        handleUpdateStatus,
         statusColors: STATUS_COLORS,
         statusLabels: STATUS_LABELS,
       }}
