@@ -23,6 +23,7 @@ export const stripeRouter = createTRPCRouter({
         pickupDate: z.string().optional(),
         pickupTime: z.string().optional(),
         pickupMethod: z.string().optional(),
+        discountCode: z.string().optional(),
         address: z
           .object({
             fullName: z.string(),
@@ -58,6 +59,18 @@ export const stripeRouter = createTRPCRouter({
 
       log.info({ userId, plan: input.plan, itemCount: input.itemCount, isInstant: input.isInstant }, "createCheckout started")
 
+      const VALID_DISCOUNT_CODES: Record<string, number> = {
+        DOGFOODR: 100,
+      }
+
+      const discountPct = input.discountCode
+        ? VALID_DISCOUNT_CODES[input.discountCode.trim().toUpperCase()] ?? 0
+        : 0
+
+      if (input.discountCode && discountPct === 0) {
+        return { success: false, error: "Invalid discount code" }
+      }
+
       const [sub] = await adminDb
         .select()
         .from(subscriptions)
@@ -91,6 +104,33 @@ export const stripeRouter = createTRPCRouter({
           total += instantFee?.priceInCents || 150
         }
         calculatedTotal = total
+      }
+
+      if (discountPct > 0) {
+        calculatedTotal = Math.round(calculatedTotal * (1 - discountPct / 100))
+      }
+
+      if (calculatedTotal === 0 && !hasActiveMembership) {
+        log.info({ userId, discountCode: input.discountCode }, "discount code applied — creating free order")
+
+        const [order] = await adminDb
+          .insert(orders)
+          .values([
+            {
+              userId,
+              pickupDate: input.pickupDate || new Date().toISOString().split("T")[0],
+              pickupTime: input.pickupTime || "",
+              pickupMethod: input.pickupMethod,
+              address: input.address ?? {},
+              items: input.items ?? [],
+              isInstant: input.isInstant,
+              totalAmount: 0,
+              status: "scheduled",
+            },
+          ])
+          .returning()
+
+        return { success: true, free: true, orderId: order.id }
       }
 
       const baseUrl = process.env.NEXT_PUBLIC_URL || "http://localhost:3000"

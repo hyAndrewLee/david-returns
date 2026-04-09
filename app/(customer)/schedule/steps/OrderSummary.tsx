@@ -1,6 +1,7 @@
 "use client"
 
-import { Zap, Sparkles, Crown } from "lucide-react"
+import { useState } from "react"
+import { Zap, Sparkles, Crown, Tag, X } from "lucide-react"
 import { useSchedule } from "@/app/(customer)/schedule/ScheduleContext"
 import StripeCheckout from "@/components/customer/StripeCheckout"
 
@@ -9,6 +10,11 @@ export const OrderSummary = () => {
     formData,
     setFormData,
     isMember,
+    discountCode,
+    setDiscountCode,
+    discountApplied,
+    applyDiscountCode,
+    removeDiscountCode,
     calculateTotal,
     showPayment,
     uploadFilesAndProceedToPayment,
@@ -19,6 +25,7 @@ export const OrderSummary = () => {
     setError,
   } = useSchedule()
 
+  const [showDiscountInput, setShowDiscountInput] = useState(false)
   const total = calculateTotal()
 
   return (
@@ -77,10 +84,20 @@ export const OrderSummary = () => {
               <span className="text-muted-foreground">This pickup</span>
               <span className="text-emerald-600 font-medium">FREE</span>
             </div>
+            {total.discount > 0 && (
+              <div className="flex justify-between">
+                <span className="text-emerald-600 flex items-center gap-1">
+                  <Tag className="h-3.5 w-3.5" /> Discount
+                </span>
+                <span className="text-emerald-600 font-medium">-${total.discount.toFixed(2)}</span>
+              </div>
+            )}
             <div className="border-t border-border pt-3 mt-3">
               <div className="flex justify-between text-base">
                 <span className="font-semibold text-foreground">Total</span>
-                <span className="font-semibold text-foreground">${total.total.toFixed(2)}</span>
+                <span className={`font-semibold ${total.total === 0 ? "text-emerald-600" : "text-foreground"}`}>
+                  {total.total === 0 ? "FREE" : `$${total.total.toFixed(2)}`}
+                </span>
               </div>
             </div>
           </>
@@ -104,10 +121,20 @@ export const OrderSummary = () => {
                 <span className="text-orange-600 font-medium">${total.instant.toFixed(2)}</span>
               </div>
             )}
+            {total.discount > 0 && (
+              <div className="flex justify-between">
+                <span className="text-emerald-600 flex items-center gap-1">
+                  <Tag className="h-3.5 w-3.5" /> Discount
+                </span>
+                <span className="text-emerald-600 font-medium">-${total.discount.toFixed(2)}</span>
+              </div>
+            )}
             <div className="border-t border-border pt-3 mt-3">
               <div className="flex justify-between text-base">
                 <span className="font-semibold text-foreground">Total</span>
-                <span className="font-semibold text-foreground">${total.total.toFixed(2)}</span>
+                <span className={`font-semibold ${total.total === 0 ? "text-emerald-600" : "text-foreground"}`}>
+                  {total.total === 0 ? "FREE" : `$${total.total.toFixed(2)}`}
+                </span>
               </div>
             </div>
           </>
@@ -132,6 +159,49 @@ export const OrderSummary = () => {
         </div>
       )}
 
+      {!isMember && !showPayment && (
+        <div className="mt-4">
+          {discountApplied ? (
+            <div className="flex items-center justify-between rounded-[0.375rem] bg-emerald-50 border border-emerald-200 px-3 py-2">
+              <div className="flex items-center gap-2">
+                <Tag className="h-4 w-4 text-emerald-600" />
+                <span className="text-sm font-medium text-emerald-700">{discountCode.toUpperCase()}</span>
+              </div>
+              <button
+                onClick={removeDiscountCode}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          ) : showDiscountInput ? (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={discountCode}
+                onChange={(e) => setDiscountCode(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && applyDiscountCode()}
+                placeholder="Enter code"
+                className="flex-1 rounded-[0.375rem] border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              />
+              <button
+                onClick={applyDiscountCode}
+                className="rounded-[0.375rem] bg-primary px-4 py-2 text-sm font-medium text-on-primary hover:opacity-90 transition-opacity"
+              >
+                Apply
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowDiscountInput(true)}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Have a discount code?
+            </button>
+          )}
+        </div>
+      )}
+
       {!showPayment ? (
         <>
           <button
@@ -145,7 +215,11 @@ export const OrderSummary = () => {
             disabled={isUploadingFiles}
             className="mt-6 w-full rounded-[0.375rem] bg-primary py-4 text-sm font-medium text-on-primary transition-all hover:shadow-[0_4px_20px_rgba(26,26,46,0.15)] disabled:opacity-50"
           >
-            {isUploadingFiles ? "Uploading files..." : "Proceed to payment"}
+            {isUploadingFiles
+              ? "Uploading files..."
+              : total.total === 0 && discountApplied
+                ? "Confirm pickup"
+                : "Proceed to payment"}
           </button>
           <p className="mt-4 text-center text-xs text-muted-foreground">
             By confirming, you agree to our Terms of Service
@@ -160,6 +234,7 @@ export const OrderSummary = () => {
             pickupDate={formData.selectedDate}
             pickupTime={formData.timeWindow}
             pickupMethod={formData.pickupMethod}
+            discountCode={discountApplied ? discountCode.trim().toUpperCase() : undefined}
             address={{
               fullName: formData.name,
               phone: formData.phone,

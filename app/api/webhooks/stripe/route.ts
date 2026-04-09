@@ -97,7 +97,7 @@ export const POST = async (request: Request) => {
         await adminDb
           .update(subscriptions)
           .set({
-            status: "cancelled",
+            status: "canceled",
             updatedAt: new Date(),
           })
           .where(eq(subscriptions.stripeSubscriptionId, subscription.id))

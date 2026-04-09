@@ -21,6 +21,7 @@ type StripeCheckoutProps = {
   pickupDate: string
   pickupTime: string
   pickupMethod: string
+  discountCode?: string
   address: {
     fullName: string
     phone: string
@@ -52,6 +53,7 @@ const StripeCheckout = ({
   pickupDate,
   pickupTime,
   pickupMethod,
+  discountCode,
   address,
   items,
   clientSecret: propClientSecret,
@@ -98,6 +100,7 @@ const StripeCheckout = ({
           pickupDate,
           pickupTime,
           pickupMethod,
+          discountCode,
           address,
           items,
         })
@@ -155,6 +158,7 @@ const StripeCheckout = ({
   }
 
   if (isFree) {
+    const isMembershipFree = !discountCode
     return (
       <div className="rounded-xl border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 p-8 text-center shadow-lg">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-600 shadow-lg">
@@ -162,12 +166,16 @@ const StripeCheckout = ({
         </div>
         <h3 className="text-2xl font-bold text-green-900 mb-2">Pickup Scheduled Successfully!</h3>
         <p className="text-green-700 mb-4">
-          Thank you for being a loyal member! This pickup is completely free with your unlimited membership.
+          {isMembershipFree
+            ? "Thank you for being a loyal member! This pickup is completely free with your unlimited membership."
+            : "Your discount code has been applied. This pickup is on us!"}
         </p>
         <div className="rounded-lg bg-white/60 border border-green-200 p-4 mb-6 text-left">
           <p className="text-sm text-green-800">
-            <strong>No payment required.</strong> Your membership automatically covers all pickups. Simply schedule as
-            many returns as you need!
+            <strong>No payment required.</strong>{" "}
+            {isMembershipFree
+              ? "Your membership automatically covers all pickups. Simply schedule as many returns as you need!"
+              : "Your pickup has been scheduled and confirmed."}
           </p>
         </div>
         <button

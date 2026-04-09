@@ -132,6 +132,7 @@ export type OrderTotal = {
   pickup: number
   items: number
   instant: number
+  discount: number
   total: number
   isMembership: boolean
   isExistingMember: boolean
@@ -280,6 +281,12 @@ type ScheduleContextValue = {
   handleItemModalOpenChange: (open: boolean) => void
   validateFileSize: (file: File) => string | null
 
+  discountCode: string
+  setDiscountCode: React.Dispatch<React.SetStateAction<string>>
+  discountApplied: boolean
+  applyDiscountCode: () => void
+  removeDiscountCode: () => void
+
   calculateTotal: () => OrderTotal
   showPayment: boolean
   setShowPayment: React.Dispatch<React.SetStateAction<boolean>>
@@ -319,6 +326,8 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
   const [dates] = useState(generateDates)
   const [showPayment, setShowPayment] = useState(false)
   const [showInstantInfo, setShowInstantInfo] = useState(false)
+  const [discountCode, setDiscountCode] = useState("")
+  const [discountApplied, setDiscountApplied] = useState(false)
 
   const [isMember, setIsMember] = useState(false)
   const [membershipChecked, setMembershipChecked] = useState(false)
@@ -676,21 +685,45 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
     }
   }
 
+  const VALID_DISCOUNT_CODES: Record<string, number> = {
+    DOGFOODR: 100,
+  }
+
+  const applyDiscountCode = () => {
+    const code = discountCode.trim().toUpperCase()
+    if (VALID_DISCOUNT_CODES[code] !== undefined) {
+      setDiscountApplied(true)
+    } else {
+      toast.error("Invalid discount code")
+      setDiscountApplied(false)
+    }
+  }
+
+  const removeDiscountCode = () => {
+    setDiscountCode("")
+    setDiscountApplied(false)
+  }
+
   const calculateTotal = (): OrderTotal => {
     if (isMember) {
-      return { pickup: 0, items: 0, instant: 0, total: 0, isMembership: true, isExistingMember: true }
+      return { pickup: 0, items: 0, instant: 0, discount: 0, total: 0, isMembership: true, isExistingMember: true }
     }
 
     if (formData.plan === "Membership") {
-      return { pickup: 0, items: 0, instant: 0, total: 22.99, isMembership: true, isExistingMember: false }
+      const subtotal = 22.99
+      const discountPct = discountApplied ? (VALID_DISCOUNT_CODES[discountCode.trim().toUpperCase()] ?? 0) : 0
+      const discountAmount = subtotal * (discountPct / 100)
+      return { pickup: 0, items: 0, instant: 0, discount: discountAmount, total: subtotal - discountAmount, isMembership: true, isExistingMember: false }
     }
 
     const pickup = 7.99
     const additionalItems = Math.max(0, formData.items.length - 1) * 1
     const instant = formData.isInstant ? 1.5 : 0
     const subtotal = pickup + additionalItems + instant
+    const discountPct = discountApplied ? (VALID_DISCOUNT_CODES[discountCode.trim().toUpperCase()] ?? 0) : 0
+    const discountAmount = subtotal * (discountPct / 100)
 
-    return { pickup, items: additionalItems, instant, total: subtotal, isMembership: false, isExistingMember: false }
+    return { pickup, items: additionalItems, instant, discount: discountAmount, total: subtotal - discountAmount, isMembership: false, isExistingMember: false }
   }
 
   const uploadFilesAndProceedToPayment = async () => {
@@ -1087,6 +1120,11 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
     closeModal,
     handleItemModalOpenChange,
     validateFileSize,
+    discountCode,
+    setDiscountCode,
+    discountApplied,
+    applyDiscountCode,
+    removeDiscountCode,
     calculateTotal,
     showPayment,
     setShowPayment,

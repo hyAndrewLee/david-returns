@@ -1,7 +1,20 @@
 import { pgTable, uuid, text, timestamp } from "drizzle-orm/pg-core"
-import { pgPolicy } from "drizzle-orm/pg-core"
+import { pgEnum, pgPolicy } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 import { authenticatedRole, authUsers, authUid, serviceRole } from "drizzle-orm/supabase"
+
+export const subscriptionStatusEnum = pgEnum("subscription_status", [
+  "inactive",
+  "active",
+  "canceling",
+  "canceled",
+  "past_due",
+  "trialing",
+  "incomplete",
+  "incomplete_expired",
+  "unpaid",
+  "paused",
+])
 
 export const subscriptions = pgTable(
   "subscriptions",
@@ -12,7 +25,7 @@ export const subscriptions = pgTable(
       .references(() => authUsers.id, { onDelete: "cascade" }),
     stripeCustomerId: text("stripe_customer_id"),
     stripeSubscriptionId: text("stripe_subscription_id"),
-    status: text().notNull().default("inactive"),
+    status: subscriptionStatusEnum().notNull().default("inactive"),
     plan: text(),
     currentPeriodStart: timestamp("current_period_start", { withTimezone: true }),
     currentPeriodEnd: timestamp("current_period_end", { withTimezone: true }),
