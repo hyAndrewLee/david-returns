@@ -19,7 +19,7 @@ type NeighborhoodFeature = {
 	};
 };
 
-type NeighborhoodFeatureCollection = {w
+type NeighborhoodFeatureCollection = {
 	features: NeighborhoodFeature[];
 };
 
