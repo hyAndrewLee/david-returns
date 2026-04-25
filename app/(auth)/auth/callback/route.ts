@@ -91,6 +91,32 @@ export const GET = async (request: NextRequest) => {
       hasSession: !!data.session,
     })
 
+    if (data.user) {
+      const confirmedAt = data.user.email_confirmed_at ?? data.user.confirmed_at
+      const lastSignInAt = data.user.last_sign_in_at
+      const isFirstConfirm =
+        !!confirmedAt &&
+        (!lastSignInAt ||
+          Math.abs(new Date(lastSignInAt).getTime() - new Date(confirmedAt).getTime()) < 60_000)
+
+      console.log(`[v0] [${debugId}] signup notify check`, {
+        confirmedAt,
+        lastSignInAt,
+        isFirstConfirm,
+      })
+
+      if (isFirstConfirm) {
+        try {
+          await notifyUserSignedUp({
+            userId: data.user.id,
+            email: data.user.email ?? "",
+          })
+        } catch (notifyError) {
+          console.error(`[v0] [${debugId}] notifyUserSignedUp threw (should not happen):`, notifyError)
+        }
+      }
+    }
+
     return NextResponse.redirect(
       `${requestUrl.origin}/auth/confirm?status=success&reason=oauth_completed&debug_id=${debugId}`,
     )
