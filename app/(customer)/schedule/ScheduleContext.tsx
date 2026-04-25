@@ -284,6 +284,8 @@ type ScheduleContextValue = {
   discountCode: string
   setDiscountCode: React.Dispatch<React.SetStateAction<string>>
   discountApplied: boolean
+  showDiscountInput: boolean
+  setShowDiscountInput: React.Dispatch<React.SetStateAction<boolean>>
   applyDiscountCode: () => void
   removeDiscountCode: () => void
 
@@ -328,6 +330,7 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
   const [showInstantInfo, setShowInstantInfo] = useState(false)
   const [discountCode, setDiscountCode] = useState("")
   const [discountApplied, setDiscountApplied] = useState(false)
+  const [showDiscountInput, setShowDiscountInput] = useState(false)
 
   const [isMember, setIsMember] = useState(false)
   const [membershipChecked, setMembershipChecked] = useState(false)
@@ -1123,6 +1126,8 @@ export const ScheduleProvider = ({ children }: { children: React.ReactNode }) =>
     discountCode,
     setDiscountCode,
     discountApplied,
+    showDiscountInput,
+    setShowDiscountInput,
     applyDiscountCode,
     removeDiscountCode,
     calculateTotal,
