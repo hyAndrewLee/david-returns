@@ -62,6 +62,11 @@ export const AdminOrderDetailProvider = ({
   const updateStatusMutation = trpc.orders.updateStatus.useMutation()
 
   useEffect(() => {
+    setOrder(initialOrder)
+    setAdminNotes(initialOrder.adminNotes || "")
+  }, [initialOrder])
+
+  useEffect(() => {
     const supabase = createBrowserSupabaseClient()
 
     const channel = supabase
@@ -101,6 +106,8 @@ export const AdminOrderDetailProvider = ({
   }, [order.id, adminNotes, updateNotesMutation, router])
 
   const handleUpdateStatus = useCallback(async (status: OrderStatus) => {
+    const previousStatus = order.status
+    setOrder((prev) => ({ ...prev, status }))
     setIsUpdatingStatus(true)
     try {
       await updateStatusMutation.mutateAsync({
@@ -109,11 +116,12 @@ export const AdminOrderDetailProvider = ({
       })
       router.refresh()
     } catch (error) {
+      setOrder((prev) => ({ ...prev, status: previousStatus }))
       console.error("Error updating status:", error)
     } finally {
       setIsUpdatingStatus(false)
     }
-  }, [order.id, updateStatusMutation, router])
+  }, [order.id, order.status, updateStatusMutation, router])
 
   return (
     <AdminOrderDetailContext.Provider
