@@ -18,6 +18,13 @@ const requiredEnvVars = {
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
 } as const
 
+// Optional env vars — documented here for discoverability but NOT validated.
+// Services that read them must handle the unset case (graceful no-op).
+export const optionalEnvVars = {
+  // Slack Incoming Webhook for order notifications — unset = no-op in server/services/slack.ts.
+  SLACK_ORDER_WEBHOOK_URL: process.env.SLACK_ORDER_WEBHOOK_URL,
+} as const
+
 export const validateEnv = () => {
   // Only validate in production or if explicitly enabled
   if (process.env.NODE_ENV !== "production" && process.env.VALIDATE_ENV !== "true") {

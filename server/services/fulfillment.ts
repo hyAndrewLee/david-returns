@@ -3,11 +3,10 @@ import "server-only"
 import Stripe from "stripe"
 import { adminDb } from "@/server/db"
 import { orders, profiles, subscriptions } from "@/server/db/schema"
-import type { OrderAddress } from "@/server/db/schema/orders"
 import { eq } from "drizzle-orm"
 import { stripe } from "@/server/services/stripe"
 import { decodeOrderMetadata } from "@/server/services/stripeMetadata"
-import { sendOrderConfirmation, sendAdminOrderNotification } from "@/server/services/email"
+import { notifyOrderCreated } from "@/server/services/orderNotifications"
 import { createLogger } from "@/lib/logger"
 
 const log = createLogger("fulfillment")
@@ -125,59 +124,11 @@ export const fulfillCheckout = async (sessionId: string): Promise<FulfillResult>
     log.info({ userId: orderData.userId, subscriptionId: subscription.id }, "membership activated")
   }
 
-  try {
-    const [profile] = await adminDb
-      .select()
-      .from(profiles)
-      .where(eq(profiles.id, orderData.userId))
-      .limit(1)
-
-    const addr = orderData.address as OrderAddress
-    const customerEmail = session.customer_email || profile?.email
-    const customerName = profile?.fullName || addr.fullName || "Customer"
-    const emailAddress = {
-      street: addr.street || "",
-      apt: addr.apt ?? undefined,
-      city: addr.city || "",
-      zip: addr.zip || "",
-    }
-    const itemCount = Array.isArray(order.items) ? order.items.length : 0
-
-    if (customerEmail) {
-      await sendOrderConfirmation({
-        customerEmail,
-        customerName,
-        orderId: order.id,
-        pickupDate: String(order.pickupDate),
-        pickupTime: order.pickupTime,
-        pickupMethod: order.pickupMethod || "hand",
-        address: emailAddress,
-        itemCount,
-        total: totalAmount,
-        isInstant: order.isInstant === true,
-      })
-    }
-
-    try {
-      await sendAdminOrderNotification({
-        orderId: order.id,
-        customerName,
-        customerEmail: customerEmail || "No email provided",
-        customerPhone: addr.phone,
-        pickupDate: String(order.pickupDate),
-        pickupTime: order.pickupTime,
-        pickupMethod: order.pickupMethod || "hand",
-        address: emailAddress,
-        itemCount,
-        total: totalAmount,
-        isInstant: orderData.isInstant,
-      })
-    } catch (adminEmailError) {
-      log.error({ error: adminEmailError, orderId: order.id }, "failed to send admin notification email")
-    }
-  } catch (emailError) {
-    log.error({ error: emailError, orderId: order.id }, "failed to send confirmation email")
-  }
+  await notifyOrderCreated({
+    order,
+    isMembership,
+    sessionCustomerEmail: session.customer_email,
+  })
 
   return { success: true, orderId: order.id, isMembership }
 }

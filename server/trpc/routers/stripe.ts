@@ -5,6 +5,7 @@ import { authedProcedure } from "../middlewares"
 import { stripe } from "@/server/services/stripe"
 import { encodeOrderMetadata } from "@/server/services/stripeMetadata"
 import { fulfillCheckout } from "@/server/services/fulfillment"
+import { notifyOrderCreated } from "@/server/services/orderNotifications"
 import { adminDb } from "@/server/db"
 import { orders, subscriptions, profiles } from "@/server/db/schema"
 import { eq, and } from "drizzle-orm"
@@ -130,6 +131,12 @@ export const stripeRouter = createTRPCRouter({
           ])
           .returning()
 
+        await notifyOrderCreated({
+          order,
+          isMembership: false,
+          sessionCustomerEmail: userEmail,
+        })
+
         return { success: true, free: true, orderId: order.id }
       }
 
@@ -187,6 +194,14 @@ export const stripeRouter = createTRPCRouter({
             },
           ])
           .returning()
+
+        log.info({ userId, orderId: order.id }, "member order — no payment required")
+
+        await notifyOrderCreated({
+          order,
+          isMembership: true,
+          sessionCustomerEmail: userEmail,
+        })
 
         return { success: true, free: true, orderId: order.id }
       }

@@ -57,6 +57,8 @@ bun run lint       # ESLint
 
 Required: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `RESEND_API_KEY`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`
 
+Optional: `SLACK_ORDER_WEBHOOK_URL` (Slack Incoming Webhook — if unset, `server/services/slack.ts` no-ops silently)
+
 # Important Patterns
 
 - Admin auth uses both Supabase `profiles.is_admin` flag AND a session cookie (`admin_session`)
