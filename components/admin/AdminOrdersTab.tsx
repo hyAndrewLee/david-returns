@@ -23,6 +23,7 @@ import { Search, Eye, Trash2 } from "lucide-react"
 import { useAdminDashboard, statusColors, statusLabels } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
 import { ORDER_STATUSES, STATUS_LABELS } from "@/lib/constants"
 import { formatDateShort } from "@/lib/timezone"
+import { getOrderCustomer } from "@/lib/orderCustomer"
 
 export const AdminOrdersTab = () => {
   const {
@@ -122,7 +123,9 @@ export const AdminOrdersTab = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredOrders.map((order) => (
+                filteredOrders.map((order) => {
+                  const customer = getOrderCustomer(order)
+                  return (
                   <TableRow key={order.id}>
                     <TableCell>
                       <Checkbox
@@ -132,9 +135,9 @@ export const AdminOrdersTab = () => {
                     </TableCell>
                     <TableCell className="font-mono text-sm">{order.id.slice(0, 8)}</TableCell>
                     <TableCell>
-                      <div className="font-medium">{order.profiles?.fullName || "N/A"}</div>
+                      <div className="font-medium">{customer.fullName || "N/A"}</div>
                       <div className="text-xs text-muted-foreground">
-                        {order.profiles?.phone || order.profiles?.email}
+                        {customer.phone || customer.email}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -198,7 +201,8 @@ export const AdminOrdersTab = () => {
                       </div>
                     </TableCell>
                   </TableRow>
-                ))
+                  )
+                })
               )}
             </TableBody>
           </Table>

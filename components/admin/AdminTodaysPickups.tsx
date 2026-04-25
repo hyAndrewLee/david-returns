@@ -8,10 +8,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Clock, Eye, MapPin, Calendar } from "lucide-react"
 import { useAdminDashboard, statusColors, statusLabels } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
 import type { Order } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
+import { getOrderCustomer } from "@/lib/orderCustomer"
 
 const TIME_WINDOWS = ["8-11am", "11am-2pm", "2-5pm", "5-8pm"] as const
 
 const PickupRow = ({ order }: { order: Order }) => {
+  const customer = getOrderCustomer(order)
   return (
     <TableRow>
       <TableCell>
@@ -26,8 +28,8 @@ const PickupRow = ({ order }: { order: Order }) => {
         )}
       </TableCell>
       <TableCell>
-        <div className="font-medium">{order.profiles?.fullName || "N/A"}</div>
-        <div className="text-xs text-muted-foreground">{order.profiles?.phone}</div>
+        <div className="font-medium">{customer.fullName || "N/A"}</div>
+        <div className="text-xs text-muted-foreground">{customer.phone || ""}</div>
       </TableCell>
       <TableCell>
         <div className="flex items-start gap-1">
@@ -134,7 +136,9 @@ const UnassignedPickupsSection = ({ pickups }: { pickups: Order[] }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {pickups.map((order) => (
+              {pickups.map((order) => {
+                const customer = getOrderCustomer(order)
+                return (
                 <TableRow key={order.id}>
                   <TableCell>
                     <div className="font-medium">#{order.id.slice(0, 8)}</div>
@@ -148,8 +152,8 @@ const UnassignedPickupsSection = ({ pickups }: { pickups: Order[] }) => {
                     )}
                   </TableCell>
                   <TableCell>
-                    <div className="font-medium">{order.profiles?.fullName || "N/A"}</div>
-                    <div className="text-xs text-muted-foreground">{order.profiles?.phone}</div>
+                    <div className="font-medium">{customer.fullName || "N/A"}</div>
+                    <div className="text-xs text-muted-foreground">{customer.phone || ""}</div>
                   </TableCell>
                   <TableCell>
                     <div className="text-sm font-medium">{order.pickupTime || "Not set"}</div>
@@ -196,7 +200,8 @@ const UnassignedPickupsSection = ({ pickups }: { pickups: Order[] }) => {
                     </div>
                   </TableCell>
                 </TableRow>
-              ))}
+                )
+              })}
             </TableBody>
           </Table>
         </CardContent>
