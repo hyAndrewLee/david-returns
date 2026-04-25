@@ -3,7 +3,7 @@ import type { CookieOptions } from "@supabase/ssr"
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { notifyUserSignedUp } from "@/server/services/userNotifications"
+import { tryNotifySignup } from "@/server/services/userNotifications"
 
 const CANONICAL_DOMAIN = "www.davidreturns.com"
 
@@ -91,31 +91,7 @@ export const GET = async (request: NextRequest) => {
       hasSession: !!data.session,
     })
 
-    if (data.user) {
-      const confirmedAt = data.user.email_confirmed_at ?? data.user.confirmed_at
-      const lastSignInAt = data.user.last_sign_in_at
-      const isFirstConfirm =
-        !!confirmedAt &&
-        (!lastSignInAt ||
-          Math.abs(new Date(lastSignInAt).getTime() - new Date(confirmedAt).getTime()) < 60_000)
-
-      console.log(`[v0] [${debugId}] signup notify check`, {
-        confirmedAt,
-        lastSignInAt,
-        isFirstConfirm,
-      })
-
-      if (isFirstConfirm) {
-        try {
-          await notifyUserSignedUp({
-            userId: data.user.id,
-            email: data.user.email ?? "",
-          })
-        } catch (notifyError) {
-          console.error(`[v0] [${debugId}] notifyUserSignedUp threw (should not happen):`, notifyError)
-        }
-      }
-    }
+    await tryNotifySignup(data.user, debugId)
 
     return NextResponse.redirect(
       `${requestUrl.origin}/auth/confirm?status=success&reason=oauth_completed&debug_id=${debugId}`,
@@ -148,15 +124,8 @@ export const GET = async (request: NextRequest) => {
       hasSession: !!data.session,
     })
 
-    if (type === "signup" && data.user) {
-      try {
-        await notifyUserSignedUp({
-          userId: data.user.id,
-          email: data.user.email ?? "",
-        })
-      } catch (notifyError) {
-        console.error(`[v0] [${debugId}] notifyUserSignedUp threw (should not happen):`, notifyError)
-      }
+    if (type === "signup") {
+      await tryNotifySignup(data.user, debugId)
     }
 
     // Redirect to client page to handle profile/address setup
