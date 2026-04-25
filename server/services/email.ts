@@ -250,8 +250,18 @@ export const sendWelcomeEmail = async ({ customerEmail, customerName }: WelcomeE
                     </table>
                   </td></tr>
                 </table>
-                <table role="presentation" style="width:100%;border-collapse:collapse;margin-bottom:20px;">
-                  <tr><td align="center"><a href="${scheduleUrl}" style="display:inline-block;padding:14px 32px;background-color:#000;color:#fff;text-decoration:none;border-radius:6px;font-size:16px;font-weight:500;">Schedule a Pickup</a></td></tr>
+                <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="width:100%;border-collapse:collapse;margin-bottom:20px;">
+                  <tr>
+                    <td align="center" style="text-align:center;padding:0;">
+                      <table role="presentation" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse;margin:0 auto;">
+                        <tr>
+                          <td align="center" bgcolor="#000000" style="border-radius:6px;background-color:#000000;">
+                            <a href="${scheduleUrl}" target="_blank" style="display:inline-block;padding:14px 32px;color:#ffffff;text-decoration:none;font-size:16px;font-weight:500;">Schedule a Pickup</a>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
                 </table>
                 <p style="margin:20px 0 0;text-align:center;color:#666;font-size:14px;line-height:1.5;">Or visit your <a href="${dashboardUrl}" style="color:#000;text-decoration:underline;">dashboard</a>.</p>
                 <p style="margin:30px 0 0;color:#666;font-size:14px;line-height:1.5;">Questions? Just reply to this email.</p>
