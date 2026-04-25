@@ -160,3 +160,112 @@ export const sendSlackOrderNotification = async (props: SendSlackOrderNotificati
     log.error({ error, orderId: props.order.id }, "slack webhook request failed")
   }
 }
+
+export type SignupAddress = {
+  street: string | null
+  apt: string | null
+  city: string | null
+  zip: string | null
+}
+
+type SendSlackNewUserNotificationProps = {
+  userId: string
+  email: string
+  profile: Profile | null
+  address: SignupAddress | null
+}
+
+const getSupabaseProjectRef = (): string | null => {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  if (!url) return null
+  const match = url.match(/https?:\/\/([^.]+)\.supabase\.co/)
+  return match?.[1] ?? null
+}
+
+const buildSignupBlocks = ({
+  userId,
+  email,
+  profile,
+  address,
+}: SendSlackNewUserNotificationProps): { blocks: SlackBlock[]; fallback: string } => {
+  const fullName = profile?.fullName || null
+  const phone = profile?.phone || null
+  const userShort = userId.slice(0, 8)
+  const fallback = `New signup — ${fullName || email}`
+
+  const projectRef = getSupabaseProjectRef()
+  const supabaseUrl = projectRef
+    ? `https://supabase.com/dashboard/project/${projectRef}/auth/users?search=${encodeURIComponent(email)}`
+    : null
+
+  const blocks: SlackBlock[] = [
+    {
+      type: "header",
+      text: { type: "plain_text", text: ":wave: New User Signup", emoji: true },
+    },
+    {
+      type: "section",
+      fields: [
+        { type: "mrkdwn", text: `*Name*\n${fullName || "_(not provided)_"}` },
+        { type: "mrkdwn", text: `*Email*\n${email}` },
+        { type: "mrkdwn", text: `*Phone*\n${phone || "_(not provided)_"}` },
+        { type: "mrkdwn", text: `*User ID*\n\`${userShort}\`` },
+      ],
+    },
+  ]
+
+  if (address) {
+    const addressLine =
+      [address.street, address.apt, address.city, address.zip].filter((part) => Boolean(part)).join(", ") ||
+      "_(not provided)_"
+    blocks.push({
+      type: "section",
+      text: { type: "mrkdwn", text: `*Pickup Address*\n${addressLine}` },
+    })
+  }
+
+  if (supabaseUrl) {
+    blocks.push({
+      type: "actions",
+      elements: [
+        {
+          type: "button",
+          text: { type: "plain_text", text: "View in Supabase", emoji: true },
+          url: supabaseUrl,
+          style: "primary",
+        },
+      ],
+    })
+  }
+
+  blocks.push({ type: "divider" })
+
+  return { blocks, fallback }
+}
+
+export const sendSlackNewUserNotification = async (
+  props: SendSlackNewUserNotificationProps,
+): Promise<void> => {
+  const webhookUrl = process.env.SLACK_SIGNUP_WEBHOOK_URL
+  if (!webhookUrl) return
+
+  const { blocks, fallback } = buildSignupBlocks(props)
+
+  try {
+    const res = await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: fallback, blocks }),
+    })
+
+    if (!res.ok) {
+      const body = await res.text().catch(() => "")
+      log.error(
+        { status: res.status, body, userId: props.userId },
+        "slack signup webhook returned non-2xx",
+      )
+    }
+  } catch (error) {
+    log.error({ error, userId: props.userId }, "slack signup webhook request failed")
+  }
+}

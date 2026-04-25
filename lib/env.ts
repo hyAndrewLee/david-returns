@@ -23,6 +23,8 @@ const requiredEnvVars = {
 export const optionalEnvVars = {
   // Slack Incoming Webhook for order notifications — unset = no-op in server/services/slack.ts.
   SLACK_ORDER_WEBHOOK_URL: process.env.SLACK_ORDER_WEBHOOK_URL,
+  // Slack Incoming Webhook for new-user signup notifications — unset = no-op in server/services/slack.ts.
+  SLACK_SIGNUP_WEBHOOK_URL: process.env.SLACK_SIGNUP_WEBHOOK_URL,
 } as const
 
 export const validateEnv = () => {

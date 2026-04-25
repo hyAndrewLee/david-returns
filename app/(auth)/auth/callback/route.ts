@@ -3,6 +3,7 @@ import type { CookieOptions } from "@supabase/ssr"
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { notifyUserSignedUp } from "@/server/services/userNotifications"
 
 const CANONICAL_DOMAIN = "www.davidreturns.com"
 
@@ -120,6 +121,17 @@ export const GET = async (request: NextRequest) => {
       userId: data.user?.id,
       hasSession: !!data.session,
     })
+
+    if (type === "signup" && data.user) {
+      try {
+        await notifyUserSignedUp({
+          userId: data.user.id,
+          email: data.user.email ?? "",
+        })
+      } catch (notifyError) {
+        console.error(`[v0] [${debugId}] notifyUserSignedUp threw (should not happen):`, notifyError)
+      }
+    }
 
     // Redirect to client page to handle profile/address setup
     return NextResponse.redirect(

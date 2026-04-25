@@ -1,4 +1,5 @@
 import { createServerSupabaseClient } from "@/server/auth/supabase"
+import { notifyUserSignedUp } from "@/server/services/userNotifications"
 import { type NextRequest, NextResponse } from "next/server"
 import { randomUUID } from "crypto"
 
@@ -60,6 +61,15 @@ export const GET = async (request: NextRequest) => {
     }
 
     console.log(`[v0][${debugId}] Email confirmed successfully for user: ${data.user.id}`)
+
+    try {
+      await notifyUserSignedUp({
+        userId: data.user.id,
+        email: data.user.email ?? "",
+      })
+    } catch (notifyError) {
+      console.error(`[v0][${debugId}] notifyUserSignedUp threw (should not happen):`, notifyError)
+    }
 
     const redirectUrl = new URL("/auth/confirmed", baseUrl)
     redirectUrl.searchParams.set("status", "success")
