@@ -5,15 +5,28 @@ import { createDrizzleSupabaseClient } from "@/server/db"
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   const supabase = await createServerSupabaseClient()
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
 
-  const db = await createDrizzleSupabaseClient(session?.access_token)
+  // Authenticate with the Supabase Auth server — never trust cookies alone.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  // Only fetch the session for its access token after we've verified the user.
+  // Reading `session.access_token` (not `session.user`) does not trigger the
+  // insecure-session warning.
+  let accessToken: string | undefined
+  if (user) {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+    accessToken = session?.access_token
+  }
+
+  const db = await createDrizzleSupabaseClient(accessToken)
 
   return {
     db,
-    session,
+    user,
     supabase,
     ...opts,
   }

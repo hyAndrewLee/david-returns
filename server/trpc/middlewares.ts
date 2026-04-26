@@ -6,15 +6,14 @@ import { eq } from "drizzle-orm"
 import { cookies } from "next/headers"
 
 export const authedProcedure = baseProcedure.use(async ({ ctx, next }) => {
-  if (!ctx.session?.user) {
+  if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED", message: "Not authenticated" })
   }
 
   return next({
     ctx: {
       ...ctx,
-      session: ctx.session,
-      user: ctx.session.user,
+      user: ctx.user,
     },
   })
 })
@@ -27,14 +26,14 @@ export const adminProcedure = baseProcedure.use(async ({ ctx, next }) => {
     return next({ ctx })
   }
 
-  if (!ctx.session?.user) {
+  if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED", message: "Not authenticated" })
   }
 
   const [profile] = await adminDb
     .select({ isAdmin: profiles.isAdmin })
     .from(profiles)
-    .where(eq(profiles.id, ctx.session.user.id))
+    .where(eq(profiles.id, ctx.user.id))
     .limit(1)
 
   if (!profile?.isAdmin) {

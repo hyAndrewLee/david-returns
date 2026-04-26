@@ -22,10 +22,10 @@ const ConfirmedPageContent = () => {
       if (status === "success" && shouldContinue === "true") {
         const supabase = createBrowserSupabaseClient()
         const {
-          data: { session },
-        } = await supabase.auth.getSession()
+          data: { user },
+        } = await supabase.auth.getUser()
 
-        if (session?.user) {
+        if (user) {
           // Check for pending address
           const pendingAddress = localStorage.getItem("pendingAddress")
           if (pendingAddress) {
@@ -33,14 +33,14 @@ const ConfirmedPageContent = () => {
               const addressData = JSON.parse(pendingAddress)
 
               await supabase.from("profiles").upsert({
-                id: session.user.id,
-                email: session.user.email,
+                id: user.id,
+                email: user.email,
                 full_name: addressData.fullName,
                 phone: addressData.phone,
               })
 
               await supabase.from("addresses").insert({
-                user_id: session.user.id,
+                user_id: user.id,
                 label: "Home",
                 full_name: addressData.fullName,
                 phone: addressData.phone,
