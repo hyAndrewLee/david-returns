@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
 import { createTRPCRouter, publicProcedure } from '../init';
 import { adminProcedure } from '../middlewares';
 import { adminDb } from '@/server/db';
@@ -6,6 +7,32 @@ import { profiles, addresses, subscriptions, orders } from '@/server/db/schema';
 import { eq, desc } from 'drizzle-orm';
 import { createAdminSupabaseClient } from '@/server/auth/supabase';
 import { cookies } from 'next/headers';
+import {
+	ImpersonationError,
+	startImpersonation,
+	stopImpersonation,
+	type ImpersonationErrorCode,
+} from '@/server/services/impersonation';
+
+const IMPERSONATION_COOKIE = 'impersonating_user_id';
+const IMPERSONATION_MAX_AGE_SECONDS = 60 * 60 * 4;
+
+const mapImpersonationErrorCode = (
+	code: ImpersonationErrorCode,
+): 'NOT_FOUND' | 'BAD_REQUEST' | 'INTERNAL_SERVER_ERROR' => {
+	if (code === 'CUSTOMER_NOT_FOUND') return 'NOT_FOUND';
+	if (code === 'NO_EMAIL') return 'BAD_REQUEST';
+	return 'INTERNAL_SERVER_ERROR';
+};
+
+type AdminCtx = { user?: { id: string } | null; headers?: Headers };
+
+const getAdminIdentifier = (ctx: AdminCtx): string => ctx.user?.id ?? 'env_admin';
+
+const getRequestMeta = (ctx: AdminCtx) => ({
+	ipAddress: ctx.headers?.get('x-forwarded-for') ?? null,
+	userAgent: ctx.headers?.get('user-agent') ?? null,
+});
 
 export const adminRouter = createTRPCRouter({
 	login: publicProcedure.input(z.object({ username: z.string(), password: z.string() })).mutation(async ({ input }) => {
@@ -65,5 +92,47 @@ export const adminRouter = createTRPCRouter({
 		}
 
 		return { success: true };
+	}),
+
+	impersonate: adminProcedure
+		.input(z.object({ customerId: z.string().uuid() }))
+		.mutation(async ({ input, ctx }) => {
+			try {
+				const result = await startImpersonation({
+					customerId: input.customerId,
+					adminIdentifier: getAdminIdentifier(ctx),
+					...getRequestMeta(ctx),
+				});
+
+				const cookieStore = await cookies();
+				cookieStore.set(IMPERSONATION_COOKIE, result.customerId, {
+					httpOnly: true,
+					secure: true,
+					sameSite: 'lax',
+					maxAge: IMPERSONATION_MAX_AGE_SECONDS,
+					path: '/',
+				});
+
+				return { redirectUrl: result.redirectUrl };
+			} catch (e) {
+				if (e instanceof ImpersonationError) {
+					throw new TRPCError({ code: mapImpersonationErrorCode(e.code), message: e.message });
+				}
+				throw e;
+			}
+		}),
+
+	stopImpersonation: adminProcedure.mutation(async ({ ctx }) => {
+		const cookieStore = await cookies();
+		const customerId = cookieStore.get(IMPERSONATION_COOKIE)?.value ?? null;
+
+		const result = await stopImpersonation({
+			customerId,
+			adminIdentifier: getAdminIdentifier(ctx),
+			...getRequestMeta(ctx),
+		});
+
+		cookieStore.delete(IMPERSONATION_COOKIE);
+		return { redirectUrl: result.redirectUrl };
 	}),
 });

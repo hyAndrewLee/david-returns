@@ -6,6 +6,7 @@ import { Toaster } from "sonner"
 import "./globals.css"
 import { validateEnv } from "@/lib/env"
 import { TRPCProvider } from "@/lib/trpc"
+import { ImpersonationBanner } from "@/components/admin/ImpersonationBanner"
 
 validateEnv()
 
@@ -83,6 +84,7 @@ const RootLayout = ({
         {JSON.stringify(organizationJsonLd)}
       </script>
       <TRPCProvider>
+        <ImpersonationBanner />
         {children}
       </TRPCProvider>
       <Toaster position="bottom-right" richColors />

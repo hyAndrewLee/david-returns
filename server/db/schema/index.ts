@@ -9,3 +9,6 @@ export type { Subscription, NewSubscription } from "./subscriptions"
 
 export { addresses } from "./addresses"
 export type { Address, NewAddress } from "./addresses"
+
+export { impersonationAudit } from "./impersonationAudit"
+export type { ImpersonationAudit, NewImpersonationAudit, ImpersonationAuditAction } from "./impersonationAudit"

@@ -16,13 +16,20 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/AlertDialog"
-import { Search, MapPin, Trash2 } from "lucide-react"
+import { Search, MapPin, Trash2, UserCog } from "lucide-react"
 import { format } from "date-fns"
 import { useAdminDashboard } from "@/app/(admin)/manage/dashboard/AdminDashboardContext"
 
 export const AdminCustomersTab = () => {
-  const { filteredCustomers, customerSearchTerm, setCustomerSearchTerm, deletingCustomerId, handleDeleteCustomer } =
-    useAdminDashboard()
+  const {
+    filteredCustomers,
+    customerSearchTerm,
+    setCustomerSearchTerm,
+    deletingCustomerId,
+    handleDeleteCustomer,
+    impersonatingCustomerId,
+    handleImpersonate,
+  } = useAdminDashboard()
 
   return (
     <>
@@ -104,6 +111,16 @@ export const AdminCustomersTab = () => {
                         </div>
                       </TableCell>
                       <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="mr-1 text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                          onClick={() => handleImpersonate(customer.id)}
+                          disabled={impersonatingCustomerId === customer.id}
+                          title="View site as this customer"
+                        >
+                          <UserCog className="h-4 w-4" />
+                        </Button>
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
                             <Button

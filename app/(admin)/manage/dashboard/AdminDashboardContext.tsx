@@ -71,12 +71,14 @@ type AdminDashboardContextValue = {
   deletingCustomerId: string | null
   deletingOrderId: string | null
   isBulkDeleting: boolean
+  impersonatingCustomerId: string | null
 
   handleRefresh: () => void
   handleSignOut: () => Promise<void>
   handleDeleteOrder: (orderId: string) => Promise<void>
   handleDeleteCustomer: (customerId: string) => Promise<void>
   handleBulkDelete: () => Promise<void>
+  handleImpersonate: (customerId: string) => Promise<void>
   toggleOrderSelection: (orderId: string) => void
   toggleAllOrders: () => void
   clearSelection: () => void
@@ -112,11 +114,13 @@ export const AdminDashboardProvider = ({
   const [deletingOrderId, setDeletingOrderId] = useState<string | null>(null)
   const [selectedOrderIds, setSelectedOrderIds] = useState<Set<string>>(new Set())
   const [isBulkDeleting, setIsBulkDeleting] = useState(false)
+  const [impersonatingCustomerId, setImpersonatingCustomerId] = useState<string | null>(null)
   const router = useRouter()
 
   const deleteOrderMutation = trpc.orders.delete.useMutation()
   const bulkDeleteMutation = trpc.orders.bulkDelete.useMutation()
   const deleteCustomerMutation = trpc.admin.deleteCustomer.useMutation()
+  const impersonateMutation = trpc.admin.impersonate.useMutation()
 
   useEffect(() => {
     const supabase = createBrowserSupabaseClient()
@@ -186,6 +190,22 @@ export const AdminDashboardProvider = ({
       }
     },
     [deleteCustomerMutation, router],
+  )
+
+  const handleImpersonate = useCallback(
+    async (customerId: string) => {
+      setImpersonatingCustomerId(customerId)
+      try {
+        const { redirectUrl } = await impersonateMutation.mutateAsync({ customerId })
+        // Hard nav so Supabase browser client + tRPC cache pick up new sb-* cookies.
+        window.location.href = redirectUrl
+      } catch (error) {
+        setImpersonatingCustomerId(null)
+        const message = error instanceof Error ? error.message : "Unknown error"
+        alert(`Failed to impersonate customer: ${message}`)
+      }
+    },
+    [impersonateMutation],
   )
 
   const handleBulkDelete = useCallback(async () => {
@@ -299,11 +319,13 @@ export const AdminDashboardProvider = ({
       deletingCustomerId,
       deletingOrderId,
       isBulkDeleting,
+      impersonatingCustomerId,
       handleRefresh,
       handleSignOut,
       handleDeleteOrder,
       handleDeleteCustomer,
       handleBulkDelete,
+      handleImpersonate,
       toggleOrderSelection,
       toggleAllOrders,
       clearSelection,
@@ -311,9 +333,9 @@ export const AdminDashboardProvider = ({
     [
       orders, customers, filteredOrders, filteredCustomers, todaysPickups, stats, userEmail,
       searchQuery, statusFilter, customerSearchTerm, activeTab, selectedOrderIds, isRefreshing,
-      deletingCustomerId,       deletingOrderId, isBulkDeleting, handleRefresh,
-      handleSignOut, handleDeleteOrder, handleDeleteCustomer, handleBulkDelete,
-      toggleOrderSelection, toggleAllOrders, clearSelection,
+      deletingCustomerId, deletingOrderId, isBulkDeleting, impersonatingCustomerId,
+      handleRefresh, handleSignOut, handleDeleteOrder, handleDeleteCustomer, handleBulkDelete,
+      handleImpersonate, toggleOrderSelection, toggleAllOrders, clearSelection,
     ],
   )
 

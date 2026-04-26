@@ -35,6 +35,19 @@ export const updateSession = async (request: NextRequest) => {
     return NextResponse.redirect(url)
   }
 
+  // Block /manage/* while admin is impersonating a customer to prevent split-brain UX.
+  // Admin must explicitly Stop Impersonating to return to admin surfaces.
+  const impersonatingCookie = request.cookies.get("impersonating_user_id")
+  if (
+    impersonatingCookie?.value &&
+    request.nextUrl.pathname.startsWith("/manage") &&
+    !request.nextUrl.pathname.startsWith("/manage/login")
+  ) {
+    const url = request.nextUrl.clone()
+    url.pathname = "/dashboard"
+    return NextResponse.redirect(url)
+  }
+
   if (request.nextUrl.pathname.startsWith("/manage") && !request.nextUrl.pathname.startsWith("/manage/login")) {
     const adminSession = request.cookies.get("admin_session")
 
