@@ -103,6 +103,47 @@ export const POST = async (request: Request) => {
           .where(eq(subscriptions.stripeSubscriptionId, subscription.id))
         break
       }
+
+      // Invoice lifecycle events. We don't perform fulfillment here — that happens on
+      // `checkout.session.completed` for one-time pickups and via `customer.subscription.*`
+      // for membership renewals. These cases exist so the events are explicitly acknowledged
+      // and visible in our logs (rather than silently falling through the default case).
+      case "invoice.created":
+      case "invoice.finalized":
+      case "invoice.paid":
+      case "invoice.payment_succeeded": {
+        const invoice = event.data.object as Stripe.Invoice
+        log.info(
+          {
+            invoiceId: invoice.id,
+            customerId: invoice.customer,
+            amountPaid: invoice.amount_paid,
+            status: invoice.status,
+            hostedInvoiceUrl: invoice.hosted_invoice_url,
+          },
+          `invoice event: ${event.type}`,
+        )
+        break
+      }
+
+      case "invoice.payment_failed": {
+        const invoice = event.data.object as Stripe.Invoice
+        log.warn(
+          {
+            invoiceId: invoice.id,
+            customerId: invoice.customer,
+            amountDue: invoice.amount_due,
+            attemptCount: invoice.attempt_count,
+          },
+          "invoice payment failed — subscription status will update separately if applicable",
+        )
+        break
+      }
+
+      default: {
+        log.info({ eventType: event.type, eventId: event.id }, "webhook event ignored (no handler)")
+        break
+      }
     }
 
     log.info({ eventType: event.type, eventId: event.id }, "webhook processed successfully")

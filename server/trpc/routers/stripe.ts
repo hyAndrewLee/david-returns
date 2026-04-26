@@ -294,6 +294,23 @@ export const stripeRouter = createTRPCRouter({
         line_items: lineItems,
         mode,
         metadata,
+        ...(mode === "payment" && {
+          invoice_creation: {
+            enabled: true,
+            invoice_data: {
+              description: input.isInstant
+                ? `Instant pickup scheduled for ${input.pickupDate || "scheduled date"}`
+                : `Pickup scheduled for ${input.pickupDate || "scheduled date"}`,
+              metadata: {
+                user_id: userId,
+                order_type: input.isInstant ? "instant_pickup" : "pickup",
+                pickup_date: input.pickupDate || "",
+                pickup_time: input.pickupTime || "",
+              },
+              footer: "Thanks for using David Returns. Reply to this email or contact hello@davidreturns.com with any questions.",
+            },
+          },
+        }),
         ...(validatedCustomerId && !useCustomerEmail
           ? { customer: validatedCustomerId }
           : { customer_email: userEmail }),
