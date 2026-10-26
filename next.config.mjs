@@ -1,3 +1,5 @@
+import { withInterfere } from "@interfere/next/config"
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
@@ -6,4 +8,4 @@ const nextConfig = {
   serverExternalPackages: ["pino", "pino-pretty"],
 }
 
-export default nextConfig
+export default withInterfere(nextConfig)

@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata, Viewport } from "next"
 import { Inter, Noto_Serif, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { InterfereProvider } from "@interfere/next/provider"
 import { Toaster } from "sonner"
 import "./globals.css"
 import { validateEnv } from "@/lib/env"
@@ -83,12 +84,14 @@ const RootLayout = ({
       >
         {JSON.stringify(organizationJsonLd)}
       </script>
-      <TRPCProvider>
-        <ImpersonationBanner />
-        {children}
-      </TRPCProvider>
-      <Toaster position="bottom-right" richColors />
-      <Analytics />
+      <InterfereProvider consent={{ analytics: true, replay: false }}>
+        <TRPCProvider>
+          <ImpersonationBanner />
+          {children}
+        </TRPCProvider>
+        <Toaster position="bottom-right" richColors />
+        <Analytics />
+      </InterfereProvider>
     </body>
   </html>
 )
